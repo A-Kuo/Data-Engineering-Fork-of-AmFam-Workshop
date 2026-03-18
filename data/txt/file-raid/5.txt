@@ -1,0 +1,50 @@
+6
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+Back To RAID-0 Analysis
+Let us now evaluate the capacity, reliability, and performance of striping.
+From the perspective of capacity, it is perfect: given N disks each of size
+B blocks, striping delivers N ·B blocks of useful capacity. From the stand-
+point of reliability, striping is also perfect, but in the bad way: any disk
+failure will lead to data loss. Finally, performance is excellent: all disks
+are utilized, often in parallel, to service user I/O requests.
+Evaluating RAID Performance
+In analyzing RAID performance, one can consider two different perfor-
+mance metrics. The ﬁrst is single-request latency. Understanding the la-
+tency of a single I/O request to a RAID is useful as it reveals how much
+parallelism can exist during a single logical I/O operation. The second
+is steady-state throughput of the RAID, i.e., the total bandwidth of many
+concurrent requests. Because RAIDs are often used in high-performance
+environments, the steady-state bandwidth is critical, and thus will be the
+main focus of our analyses.
+To understand throughput in more detail, we need to put forth some
+workloads of interest. We will assume, for this discussion, that there
+are two types of workloads: sequential and random. With a sequential
+workload, we assume that requests to the array come in large contigu-
+ous chunks; for example, a request (or series of requests) that accesses
+1 MB of data, starting at block x and ending at block (x+1 MB), would be
+deemed sequential. Sequential workloads are common in many environ-
+ments (think of searching through a large ﬁle for a keyword), and thus
+are considered important.
+For random workloads, we assume that each request is rather small,
+and that each request is to a different random location on disk. For exam-
+ple, a random stream of requests may ﬁrst access 4KB at logical address
+10, then at logical address 550,000, then at 20,100, and so forth. Some im-
+portant workloads, such as transactional workloads on a database man-
+agement system (DBMS), exhibit this type of access pattern, and thus it is
+considered an important workload.
+Of course, real workloads are not so simple, and often have a mix
+of sequential and random-seeming components as well as behaviors in-
+between the two. For simplicity, we just consider these two possibilities.
+As you can tell, sequential and random workloads will result in widely
+different performance characteristics from a disk. With sequential access,
+a disk operates in its most efﬁcient mode, spending little time seeking and
+waiting for rotation and most of its time transferring data. With random
+access, just the opposite is true: most time is spent seeking and waiting
+for rotation and relatively little time is spent transferring data. To capture
+this difference in our analysis, we will assume that a disk can transfer
+data at S MB/s under a sequential workload, and R MB/s when under a
+random workload. In general, S is much greater than R (i.e., S ≫R).
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

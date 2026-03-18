@@ -1,0 +1,44 @@
+DATA INTEGRITY AND PROTECTION
+3
+Some additional ﬁndings about LSEs are:
+• Costly drives with more than one LSE are as likely to develop ad-
+ditional errors as cheaper drives
+• For most drives, annual error rate increases in year two
+• The number of LSEs increase with disk size
+• Most disks with LSEs have less than 50
+• Disks with LSEs are more likely to develop additional LSEs
+• There exists a signiﬁcant amount of spatial and temporal locality
+• Disk scrubbing is useful (most LSEs were found this way)
+Some ﬁndings about corruption:
+• Chance of corruption varies greatly across different drive models
+within the same drive class
+• Age effects are different across models
+• Workload and disk size have little impact on corruption
+• Most disks with corruption only have a few corruptions
+• Corruption is not independent within a disk or across disks in RAID
+• There exists spatial locality, and some temporal locality
+• There is a weak correlation with LSEs
+To learn more about these failures, you should likely read the original
+papers [B+07,B+08]. But hopefully the main point should be clear: if you
+really wish to build a reliable storage system, you must include machin-
+ery to detect and recover from both LSEs and block corruption.
+45.2 Handling Latent Sector Errors
+Given these two new modes of partial disk failure, we should now try
+to see what we can do about them. Let’s ﬁrst tackle the easier of the two,
+namely latent sector errors.
+CRUX: HOW TO HANDLE LATENT SECTOR ERRORS
+How should a storage system handle latent sector errors? How much
+extra machinery is needed to handle this form of partial failure?
+As it turns out, latent sector errors are rather straightforward to han-
+dle, as they are (by deﬁnition) easily detected. When a storage system
+tries to access a block, and the disk returns an error, the storage system
+should simply use whatever redundancy mechanism it has to return the
+correct data. In a mirrored RAID, for example, the system should access
+the alternate copy; in a RAID-4 or RAID-5 system based on parity, the
+system should reconstruct the block from the other blocks in the parity
+group. Thus, easily detected problems such as LSEs are readily recovered
+through standard redundancy mechanisms.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

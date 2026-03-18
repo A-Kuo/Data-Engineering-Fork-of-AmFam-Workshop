@@ -1,0 +1,45 @@
+10
+FILE SYSTEM IMPLEMENTATION
+ASIDE: FREE SPACE MANAGEMENT
+There are many ways to manage free space; bitmaps are just one way.
+Some early ﬁle systems used free lists, where a single pointer in the super
+block was kept to point to the ﬁrst free block; inside that block the next
+free pointer was kept, thus forming a list through the free blocks of the
+system. When a block was needed, the head block was used and the list
+updated accordingly.
+Modern ﬁle systems use more sophisticated data structures. For example,
+SGI’s XFS [S+96] uses some form of a B-tree to compactly represent which
+chunks of the disk are free. As with any data structure, different time-
+space trade-offs are possible.
+40.5 Free Space Management
+A ﬁle system must track which inodes and data blocks are free, and
+which are not, so that when a new ﬁle or directory is allocated, it can ﬁnd
+space for it. Thus free space management is important for all ﬁle systems.
+In vsfs, we have two simple bitmaps for this task.
+For example, when we create a ﬁle, we will have to allocate an inode
+for that ﬁle. The ﬁle system will thus search through the bitmap for an in-
+ode that is free, and allocate it to the ﬁle; the ﬁle system will have to mark
+the inode as used (with a 1) and eventually update the on-disk bitmap
+with the correct information. A similar set of activities take place when a
+data block is allocated.
+Some other considerations might also come into play when allocating
+data blocks for a new ﬁle. For example, some Linux ﬁle systems, such
+as ext2 and ext3, will look for a sequence of blocks (say 8) that are free
+when a new ﬁle is created and needs data blocks; by ﬁnding such a se-
+quence of free blocks, and then allocating them to the newly-created ﬁle,
+the ﬁle system guarantees that a portion of the ﬁle will be contiguous on
+the disk, thus improving performance. Such a pre-allocation policy is
+thus a commonly-used heuristic when allocating space for data blocks.
+40.6 Access Paths: Reading and Writing
+Now that we have some idea of how ﬁles and directories are stored on
+disk, we should be able to follow the ﬂow of operation during the activity
+of reading or writing a ﬁle. Understanding what happens on this access
+path is thus the second key in developing an understanding of how a ﬁle
+system works; pay attention!
+For the following examples, let us assume that the ﬁle system has been
+mounted and thus that the superblock is already in memory. Everything
+else (i.e., inodes, directories) is still on the disk.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,54 @@
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+7
+To make sure we understand this difference, let’s do a simple exercise.
+Speciﬁcally, let’s calculate S and R given the following disk characteris-
+tics. Assume a sequential transfer of size 10 MB on average, and a random
+transfer of 10 KB on average. Also, assume the following disk character-
+istics:
+Average seek time
+7 ms
+Average rotational delay
+3 ms
+Transfer rate of disk
+50 MB/s
+To compute S, we need to ﬁrst ﬁgure out how time is spent in a typical
+10 MB transfer. First, we spend 7 ms seeking, and then 3 ms rotating.
+Finally, transfer begins; 10 MB @ 50 MB/s leads to 1/5th of a second, or
+200 ms, spent in transfer. Thus, for each 10 MB request, we spend 210 ms
+completing the request. To compute S, we just need to divide:
+S = Amount of Data
+T ime to access
+= 10 MB
+210 ms = 47.62 MB/s
+As we can see, because of the large time spent transferring data, S is
+very near the peak bandwidth of the disk (the seek and rotational costs
+have been amortized).
+We can compute R similarly. Seek and rotation are the same; we then
+compute the time spent in transfer, which is 10 KB @ 50 MB/s, or 0.195
+ms.
+R = Amount of Data
+T ime to access =
+10 KB
+10.195 ms = 0.981 MB/s
+As we can see, R is less than 1 MB/s, and S/R is almost 50.
+Back To RAID-0 Analysis, Again
+Let’s now evaluate the performance of striping. As we said above, it is
+generally good. From a latency perspective, for example, the latency of a
+single-block request should be just about identical to that of a single disk;
+after all, RAID-0 will simply redirect that request to one of its disks.
+From the perspective of steady-state sequential throughput, we’d ex-
+pect to get the full bandwidth of the system. Thus, throughput equals
+N (the number of disks) multiplied by S (the sequential bandwidth of a
+single disk). For a large number of random I/Os, we can again use all of
+the disks, and thus obtain N · R MB/s. As we will see below, these val-
+ues are both the simplest to calculate and will serve as an upper bound in
+comparison with other RAID levels.
+38.5 RAID Level 1: Mirroring
+Our ﬁrst RAID level beyond striping is known as RAID level 1, or
+mirroring. With a mirrored system, we simply make more than one copy
+of each block in the system; each copy should be placed on a separate
+disk, of course. By doing so, we can tolerate disk failures.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

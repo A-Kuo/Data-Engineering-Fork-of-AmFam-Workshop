@@ -1,0 +1,33 @@
+38
+Redundant Arrays of Inexpensive Disks
+(RAIDs)
+When we use a disk, we sometimes wish it to be faster; I/O operations
+are slow and thus can be the bottleneck for the entire system. When we
+use a disk, we sometimes wish it to be larger; more and more data is being
+put online and thus our disks are getting fuller and fuller. When we use
+a disk, we sometimes wish for it to be more reliable; when a disk fails, if
+our data isn’t backed up, all that valuable data is gone.
+CRUX: HOW TO MAKE A LARGE, FAST, RELIABLE DISK
+How can we make a large, fast, and reliable storage system? What are
+the key techniques? What are trade-offs between different approaches?
+In this chapter, we introduce the Redundant Array of Inexpensive
+Disks better known as RAID [P+88], a technique to use multiple disks in
+concert to build a faster, bigger, and more reliable disk system. The term
+was introduced in the late 1980s by a group of researchers at U.C. Berke-
+ley (led by Professors David Patterson and Randy Katz and then student
+Garth Gibson); it was around this time that many different researchers si-
+multaneously arrived upon the basic idea of using multiple disks to build
+a better storage system [BG88, K86,K88,PB86,SG86].
+Externally, a RAID looks like a disk: a group of blocks one can read
+or write. Internally, the RAID is a complex beast, consisting of multiple
+disks, memory (both volatile and non-), and one or more processors to
+manage the system. A hardware RAID is very much like a computer
+system, specialized for the task of managing a group of disks.
+RAIDs offer a number of advantages over a single disk. One advan-
+tage is performance. Using multiple disks in parallel can greatly speed
+up I/O times. Another beneﬁt is capacity. Large data sets demand large
+disks. Finally, RAIDs can improve reliability; spreading data across mul-
+tiple disks (without RAID techniques) makes the data vulnerable to the
+loss of a single disk; with some form of redundancy, RAIDs can tolerate
+the loss of a disk and keep operating as if nothing were wrong.
+1

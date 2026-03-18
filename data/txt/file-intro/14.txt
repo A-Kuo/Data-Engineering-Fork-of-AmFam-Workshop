@@ -1,0 +1,74 @@
+INTERLUDE: FILES AND DIRECTORIES
+15
+struct stat {
+dev_t
+st_dev;
+// ID of device containing file
+ino_t
+st_ino;
+// inode number
+mode_t
+st_mode;
+// protection
+nlink_t
+st_nlink;
+// number of hard links
+uid_t
+st_uid;
+// user ID of owner
+gid_t
+st_gid;
+// group ID of owner
+dev_t
+st_rdev;
+// device ID (if special file)
+off_t
+st_size;
+// total size, in bytes
+blksize_t st_blksize; // blocksize for filesystem I/O
+blkcnt_t
+st_blocks;
+// number of blocks allocated
+time_t
+st_atime;
+// time of last access
+time_t
+st_mtime;
+// time of last modification
+time_t
+st_ctime;
+// time of last status change
+};
+Figure 39.5: The stat structure.
+Here is the output on Linux:
+prompt> echo hello > file
+prompt> stat file
+File: ‘file’
+Size: 6
+Blocks: 8
+IO Block: 4096
+regular file
+Device: 811h/2065d Inode: 67158084
+Links: 1
+Access: (0640/-rw-r-----) Uid: (30686/remzi)
+Gid: (30686/remzi)
+Access: 2011-05-03 15:50:20.157594748 -0500
+Modify: 2011-05-03 15:50:20.157594748 -0500
+Change: 2011-05-03 15:50:20.157594748 -0500
+Each ﬁle system usually keeps this type of information in a structure
+called an inode1. We’ll be learning a lot more about inodes when we
+talk about ﬁle system implementation. For now, you should just think
+of an inode as a persistent data structure kept by the ﬁle system that has
+information like we see above inside of it. All inodes reside on disk; a
+copy of active ones are usually cached in memory to speed up access.
+39.10 Removing Files
+At this point, we know how to create ﬁles and access them, either se-
+quentially or not. But how do you delete ﬁles? If you’ve used UNIX, you
+probably think you know: just run the program rm. But what system call
+does rm use to remove a ﬁle?
+1Some ﬁle systems call these structures similar, but slightly different, names, such as
+dnodes; the basic idea is similar however.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

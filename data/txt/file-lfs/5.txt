@@ -1,0 +1,47 @@
+6
+LOG-STRUCTURED FILE SYSTEMS
+TIP: USE A LEVEL OF INDIRECTION
+People often say that the solution to all problems in Computer Science is
+simply a level of indirection. This is clearly not true; it is just the solution
+to most problems (yes, this is still too strong of a comment, but you get the
+point). You certainly can think of every virtualization we have studied,
+e.g., virtual memory, or the notion of a ﬁle, as simply a level of indirection.
+And certainly the inode map in LFS is a virtualization of inode numbers.
+Hopefully you can see the great power of indirection in these examples,
+allowing us to freely move structures around (such as pages in the VM
+example, or inodes in LFS) without having to change every reference to
+them. Of course, indirection can have a downside too: extra overhead. So
+next time you have a problem, try solving it with indirection, but make
+sure to think about the overheads of doing so ﬁrst. As Wheeler famously
+said, “All problems in computer science can be solved by another level of
+indirection, except of course for the problem of too many indirections.”
+inode. Thus, you can imagine it would often be implemented as a simple
+array, with 4 bytes (a disk pointer) per entry. Any time an inode is written
+to disk, the imap is updated with its new location.
+The imap, unfortunately, needs to be kept persistent (i.e., written to
+disk); doing so allows LFS to keep track of the locations of inodes across
+crashes, and thus operate as desired. Thus, a question: where should the
+imap reside on disk?
+It could live on a ﬁxed part of the disk, of course. Unfortunately, as it
+gets updated frequently, this would then require updates to ﬁle structures
+to be followed by writes to the imap, and hence performance would suffer
+(i.e., there would be more disk seeks, between each update and the ﬁxed
+location of the imap).
+Instead, LFS places chunks of the inode map right next to where it is
+writing all of the other new information. Thus, when appending a data
+block to a ﬁle k, LFS actually writes the new data block, its inode, and a
+piece of the inode map all together onto the disk, as follows:
+D
+A0
+I[k]
+b[0]:A0
+A1
+imap
+m[k]:A1
+In this picture, the piece of the imap array stored in the block marked
+imap tells LFS that the inode k is at disk address A1; this inode, in turn,
+tells LFS that its data block D is at address A0.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

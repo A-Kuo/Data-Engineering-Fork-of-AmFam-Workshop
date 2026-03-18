@@ -1,0 +1,51 @@
+14
+CRASH CONSISTENCY: FSCK AND JOURNALING
+journaling), and it is nearly the same, except that user data is not writ-
+ten to the journal. Thus, when performing the same update as above, the
+following information would be written to the journal:
+Journal
+TxB
+I[v2]
+B[v2] TxE
+The data block Db, previously written to the log, would instead be
+written to the ﬁle system proper, avoiding the extra write; given that most
+I/O trafﬁc to the disk is data, not writing data twice substantially reduces
+the I/O load of journaling. The modiﬁcation does raise an interesting
+question, though: when should we write data blocks to disk?
+Let’s again consider our example append of a ﬁle to understand the
+problem better. The update consists of three blocks: I[v2], B[v2], and
+Db. The ﬁrst two are both metadata and will be logged and then check-
+pointed; the latter will only be written once to the ﬁle system. When
+should we write Db to disk? Does it matter?
+As it turns out, the ordering of the data write does matter for metadata-
+only journaling. For example, what if we write Db to disk after the trans-
+action (containing I[v2] and B[v2]) completes? Unfortunately, this ap-
+proach has a problem: the ﬁle system is consistent but I[v2] may end up
+pointing to garbage data. Speciﬁcally, consider the case where I[v2] and
+B[v2] are written but Db did not make it to disk. The ﬁle system will then
+try to recover. Because Db is not in the log, the ﬁle system will replay
+writes to I[v2] and B[v2], and produce a consistent ﬁle system (from the
+perspective of ﬁle-system metadata). However, I[v2] will be pointing to
+garbage data, i.e., at whatever was in the slot where Db was headed.
+To ensure this situation does not arise, some ﬁle systems (e.g., Linux
+ext3) write data blocks (of regular ﬁles) to the disk ﬁrst, before related
+metadata is written to disk. Speciﬁcally, the protocol is as follows:
+1. Data write: Write data to ﬁnal location; wait for completion
+(the wait is optional; see below for details).
+2. Journal metadata write: Write the begin block and metadata to the
+log; wait for writes to complete.
+3. Journal commit: Write the transaction commit block (containing
+TxE) to the log; wait for the write to complete; the transaction (in-
+cluding data) is now committed.
+4. Checkpoint metadata: Write the contents of the metadata update
+to their ﬁnal locations within the ﬁle system.
+5. Free: Later, mark the transaction free in journal superblock.
+By forcing the data write ﬁrst, a ﬁle system can guarantee that a pointer
+will never point to garbage. Indeed, this rule of “write the pointed-to
+object before the object that points to it” is at the core of crash consis-
+tency, and is exploited even further by other crash consistency schemes
+[GP94] (see below for details).
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

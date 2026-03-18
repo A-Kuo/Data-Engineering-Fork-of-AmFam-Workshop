@@ -1,0 +1,59 @@
+CRASH CONSISTENCY: FSCK AND JOURNALING
+19
+References
+[B07] “ZFS: The Last Word in File Systems” by Jeff Bonwick and Bill Moore. Available online:
+http://www.ostep.org/Citations/zfs_last.pdf. ZFS uses copy-on-write and journal-
+ing, actually, as in some cases, logging writes to disk will perform better.
+[C+12] “Consistency Without Ordering” by Vijay Chidambaram, Tushar Sharma, Andrea C.
+Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. FAST ’12, San Jose, California. A recent paper of
+ours about a new form of crash consistency based on back pointers. Read it for the exciting details!
+[C+13] “Optimistic Crash Consistency” by Vijay Chidambaram, Thanu S. Pillai, Andrea C.
+Arpaci-Dusseau, Remzi H. Arpaci-Dusseau . SOSP ’13, Nemacolin Woodlands Resort, PA,
+November 2013. Our work on a more optimistic and higher performance journaling protocol. For
+workloads that call fsync() a lot, performance can be greatly improved.
+[GP94] “Metadata Update Performance in File Systems” by Gregory R. Ganger and Yale N.
+Patt. OSDI ’94. A clever paper about using careful ordering of writes as the main way to achieve
+consistency. Implemented later in BSD-based systems.
+[G+08] “SQCK: A Declarative File System Checker” by Haryadi S. Gunawi, Abhishek Ra-
+jimwale, Andrea C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. OSDI ’08, San Diego, Califor-
+nia. Our own paper on a new and better way to build a ﬁle system checker using SQL queries. We also
+show some problems with the existing checker, ﬁnding numerous bugs and odd behaviors, a direct result
+of the complexity of fsck.
+[H87] “Reimplementing the Cedar File System Using Logging and Group Commit” by Robert
+Hagmann. SOSP ’87, Austin, Texas, November 1987. The ﬁrst work (that we know of) that applied
+write-ahead logging (a.k.a. journaling) to a ﬁle system.
+[M+13] “ffsck: The Fast File System Checker” by Ao Ma, Chris Dragga, Andrea C. Arpaci-
+Dusseau, Remzi H. Arpaci-Dusseau. FAST ’13, San Jose, California, February 2013. A recent
+paper of ours detailing how to make fsck an order of magnitude faster. Some of the ideas have already
+been incorporated into the BSD ﬁle system checker [MK96] and are deployed today.
+[MK96] “Fsck – The UNIX File System Check Program” by Marshall Kirk McKusick and T. J.
+Kowalski. Revised in 1996. Describes the ﬁrst comprehensive ﬁle-system checking tool, the epony-
+mous fsck. Written by some of the same people who brought you FFS.
+[MJLF84] “A Fast File System for UNIX” by Marshall K. McKusick, William N. Joy, Sam J.
+Lefﬂer, Robert S. Fabry. ACM Transactions on Computing Systems, Volume 2:3, August 1984.
+You already know enough about FFS, right? But come on, it is OK to re-reference important papers.
+[P+14] “All File Systems Are Not Created Equal: On the Complexity of Crafting Crash-Consistent
+Applications” by Thanumalayan Sankaranarayana Pillai, Vijay Chidambaram, Ramnatthan
+Alagappan, Samer Al-Kiswany, Andrea C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. OSDI
+’14, Broomﬁeld, Colorado, October 2014. A paper in which we study what ﬁle systems guarantee
+after crashes, and show that applications expect something different, leading to all sorts of interesting
+problems.
+[P+05] “IRON File Systems” by Vijayan Prabhakaran, Lakshmi N. Bairavasundaram, Nitin
+Agrawal, Haryadi S. Gunawi, Andrea C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. SOSP
+’05, Brighton, England, October 2005. A paper mostly focused on studying how ﬁle systems react
+to disk failures. Towards the end, we introduce a transaction checksum to speed up logging, which was
+eventually adopted into Linux ext4.
+[PAA05] “Analysis and Evolution of Journaling File Systems” by Vijayan Prabhakaran, Andrea
+C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. USENIX ’05, Anaheim, California, April 2005.
+An early paper we wrote analyzing how journaling ﬁle systems work.
+[R+11] “Coerced Cache Eviction and Discreet-Mode Journaling” by Abhishek Rajimwale, Vijay
+Chidambaram, Deepak Ramamurthi, Andrea C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau.
+DSN ’11, Hong Kong, China, June 2011. Our own paper on the problem of disks that buffer writes in
+a memory cache instead of forcing them to disk, even when explicitly told not to do that! Our solution
+to overcome this problem: if you want A to be written to disk before B, ﬁrst write A, then send a lot of
+“dummy” writes to disk, hopefully causing A to be forced to disk to make room for them in the cache. A
+neat if impractical solution.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

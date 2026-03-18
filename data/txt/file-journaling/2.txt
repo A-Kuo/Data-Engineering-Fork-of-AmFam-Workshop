@@ -1,0 +1,73 @@
+CRASH CONSISTENCY: FSCK AND JOURNALING
+3
+the ﬁle, Da), and all three other direct pointers are set to null (indicating
+that they are not used). Of course, real inodes have many more ﬁelds; see
+previous chapters for more information.
+When we append to the ﬁle, we are adding a new data block to it, and
+thus must update three on-disk structures: the inode (which must point
+to the new block and record the new larger size due to the append), the
+new data block Db, and a new version of the data bitmap (call it B[v2]) to
+indicate that the new data block has been allocated.
+Thus, in the memory of the system, we have three blocks which we
+must write to disk. The updated inode (inode version 2, or I[v2] for short)
+now looks like this:
+owner
+: remzi
+permissions : read-write
+size
+: 2
+pointer
+: 4
+pointer
+: 5
+pointer
+: null
+pointer
+: null
+The updated data bitmap (B[v2]) now looks like this: 00001100. Finally,
+there is the data block (Db), which is just ﬁlled with whatever it is users
+put into ﬁles. Stolen music, perhaps?
+What we would like is for the ﬁnal on-disk image of the ﬁle system to
+look like this:
+Bitmaps
+Inode Data
+Inodes
+Data Blocks
+I[v2]
+Da
+Db
+0
+1
+2
+3
+4
+5
+6
+7
+0
+1
+2
+3
+4
+5
+6
+7
+To achieve this transition, the ﬁle system must perform three sepa-
+rate writes to the disk, one each for the inode (I[v2]), bitmap (B[v2]), and
+data block (Db). Note that these writes usually don’t happen immedi-
+ately when the user issues a write() system call; rather, the dirty in-
+ode, bitmap, and new data will sit in main memory (in the page cache
+or buffer cache) for some time ﬁrst; then, when the ﬁle system ﬁnally
+decides to write them to disk (after say 5 seconds or 30 seconds), the ﬁle
+system will issue the requisite write requests to the disk. Unfortunately,
+a crash may occur and thus interfere with these updates to the disk. In
+particular, if a crash happens after one or two of these writes have taken
+place, but not all three, the ﬁle system could be left in a funny state.
+Crash Scenarios
+To understand the problem better, let’s look at some example crash sce-
+narios. Imagine only a single write succeeds; there are thus three possible
+outcomes, which we list here:
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

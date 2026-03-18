@@ -1,0 +1,49 @@
+DATA INTEGRITY AND PROTECTION
+5
+TIP: THERE’S NO FREE LUNCH
+There’s No Such Thing As A Free Lunch, or TNSTAAFL for short, is
+an old American idiom that implies that when you are seemingly get-
+ting something for free, in actuality you are likely paying some cost for
+it. It comes from the old days when diners would advertise a free lunch
+for customers, hoping to draw them in; only when you went in, did you
+realize that to acquire the “free” lunch, you had to purchase one or more
+alcoholic beverages. Of course, this may not actually be a problem, partic-
+ularly if you are an aspiring alcoholic (or typical undergraduate student).
+Common Checksum Functions
+A number of different functions are used to compute checksums, and
+vary in strength (i.e., how good they are at protecting data integrity) and
+speed (i.e., how quickly can they be computed). A trade-off that is com-
+mon in systems arises here: usually, the more protection you get, the
+costlier it is. There is no such thing as a free lunch.
+One simple checksum function that some use is based on exclusive
+or (XOR). With XOR-based checksums, the checksum is computed by
+XOR’ing each chunk of the data block being checksummed, thus produc-
+ing a single value that represents the XOR of the entire block.
+To make this more concrete, imagine we are computing a 4-byte check-
+sum over a block of 16 bytes (this block is of course too small to really be a
+disk sector or block, but it will serve for the example). The 16 data bytes,
+in hex, look like this:
+365e c4cd ba14 8a92 ecef 2c3a 40be f666
+If we view them in binary, we get the following:
+0011 0110 0101 1110
+1100 0100 1100 1101
+1011 1010 0001 0100
+1000 1010 1001 0010
+1110 1100 1110 1111
+0010 1100 0011 1010
+0100 0000 1011 1110
+1111 0110 0110 0110
+Because we’ve lined up the data in groups of 4 bytes per row, it is easy
+to see what the resulting checksum will be: perform an XOR over each
+column to get the ﬁnal checksum value:
+0010 0000 0001 1011
+1001 0100 0000 0011
+The result, in hex, is 0x201b9403.
+XOR is a reasonable checksum but has its limitations. If, for example,
+two bits in the same position within each checksummed unit change, the
+checksum will not detect the corruption. For this reason, people have
+investigated other checksum functions.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

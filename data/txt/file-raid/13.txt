@@ -1,0 +1,69 @@
+14
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+parallel, the parity disk prevents any parallelism from materializing; all
+writes to the system will be serialized because of the parity disk. Because
+the parity disk has to perform two I/Os (one read, one write) per logical
+I/O, we can compute the performance of small random writes in RAID-4
+by computing the parity disk’s performance on those two I/Os, and thus
+we achieve (R/2) MB/s. RAID-4 throughput under random small writes
+is terrible; it does not improve as you add disks to the system.
+We conclude by analyzing I/O latency in RAID-4. As you now know,
+a single read (assuming no failure) is just mapped to a single disk, and
+thus its latency is equivalent to the latency of a single disk request. The
+latency of a single write requires two reads and then two writes; the reads
+can happen in parallel, as can the writes, and thus total latency is about
+twice that of a single disk (with some differences because we have to wait
+for both reads to complete and thus get the worst-case positioning time,
+but then the updates don’t incur seek cost and thus may be a better-than-
+average positioning cost).
+38.7 RAID Level 5: Rotating Parity
+To address the small-write problem (at least, partially), Patterson, Gib-
+son, and Katz introduced RAID-5. RAID-5 works almost identically to
+RAID-4, except that it rotates the parity block across drives (Figure 38.7).
+Disk 0
+Disk 1
+Disk 2
+Disk 3
+Disk 4
+0
+1
+2
+3
+P0
+5
+6
+7
+P1
+4
+10
+11
+P2
+8
+9
+15
+P3
+12
+13
+14
+P4
+16
+17
+18
+19
+Figure 38.7: RAID-5 With Rotated Parity
+As you can see, the parity block for each stripe is now rotated across
+the disks, in order to remove the parity-disk bottleneck for RAID-4.
+RAID-5 Analysis
+Much of the analysis for RAID-5 is identical to RAID-4. For example, the
+effective capacity and failure tolerance of the two levels are identical. So
+are sequential read and write performance. The latency of a single request
+(whether a read or a write) is also the same as RAID-4.
+Random read performance is a little better, because we can now utilize
+all disks. Finally, random write performance improves noticeably over
+RAID-4, as it allows for parallelism across requests. Imagine a write to
+block 1 and a write to block 10; this will turn into requests to disk 1 and
+disk 4 (for block 1 and its parity) and requests to disk 0 and disk 2 (for
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

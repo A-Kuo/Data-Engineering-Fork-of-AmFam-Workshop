@@ -1,0 +1,56 @@
+CRASH CONSISTENCY: FSCK AND JOURNALING
+17
+Journal
+File System
+TxB
+Contents
+TxE
+Metadata
+Data
+(metadata)
+issue
+issue
+issue
+complete
+complete
+complete
+issue
+complete
+issue
+complete
+Figure 42.2: Metadata Journaling Timeline
+that the data write can logically be issued at the same time as the writes
+to the transaction begin and the contents of the journal; however, it must
+be issued and complete before the transaction end has been issued.
+Finally, note that the time of completion marked for each write in the
+timelines is arbitrary. In a real system, completion time is determined by
+the I/O subsystem, which may reorder writes to improve performance.
+The only guarantees about ordering that we have are those that must
+be enforced for protocol correctness (and are shown via the horizontal
+dashed lines in the ﬁgures).
+42.4 Solution #3: Other Approaches
+We’ve thus far described two options in keeping ﬁle system metadata
+consistent: a lazy approach based on fsck, and a more active approach
+known as journaling. However, these are not the only two approaches.
+One such approach, known as Soft Updates [GP94], was introduced by
+Ganger and Patt. This approach carefully orders all writes to the ﬁle sys-
+tem to ensure that the on-disk structures are never left in an inconsis-
+tent state. For example, by writing a pointed-to data block to disk before
+the inode that points to it, we can ensure that the inode never points to
+garbage; similar rules can be derived for all the structures of the ﬁle sys-
+tem. Implementing Soft Updates can be a challenge, however; whereas
+the journaling layer described above can be implemented with relatively
+little knowledge of the exact ﬁle system structures, Soft Updates requires
+intricate knowledge of each ﬁle system data structure and thus adds a fair
+amount of complexity to the system.
+Another approach is known as copy-on-write (yes, COW), and is used
+in a number of popular ﬁle systems, including Sun’s ZFS [B07]. This tech-
+nique never overwrites ﬁles or directories in place; rather, it places new
+updates to previously unused locations on disk. After a number of up-
+dates are completed, COW ﬁle systems ﬂip the root structure of the ﬁle
+system to include pointers to the newly updated structures. Doing so
+makes keeping the ﬁle system consistent straightforward. We’ll be learn-
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

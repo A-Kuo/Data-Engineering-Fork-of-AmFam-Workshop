@@ -1,0 +1,83 @@
+6
+FILE SYSTEM IMPLEMENTATION
+Size
+Name
+What is this inode ﬁeld for?
+2
+mode
+can this ﬁle be read/written/executed?
+2
+uid
+who owns this ﬁle?
+4
+size
+how many bytes are in this ﬁle?
+4
+time
+what time was this ﬁle last accessed?
+4
+ctime
+what time was this ﬁle’s inode changed?
+4
+mtime
+what time was this ﬁle last modiﬁed?
+4
+dtime
+what time was this inode deleted?
+2
+gid
+which group does this ﬁle belong to?
+2
+links count
+how many hard links are there to this ﬁle?
+4
+blocks
+how many blocks have been allocated to this ﬁle?
+4
+ﬂags
+how should ext2 use this inode?
+4
+osd1
+an OS-dependent ﬁeld
+60
+block
+a set of disk pointers (15 total)
+4
+generation
+ﬁle version (used by NFS)
+4
+ﬁle acl
+a new permissions model beyond mode bits
+4
+dir acl
+called access control lists
+Figure 40.1: Simpliﬁed Ext2 Inode
+as who can access it), some time information, including when the ﬁle was
+created, modiﬁed, or last accessed, as well as information about where its
+data blocks reside on disk (e.g., pointers of some kind). We refer to all
+such information about a ﬁle as metadata; in fact, any information inside
+the ﬁle system that isn’t pure user data is often referred to as such. An
+example inode from ext2 [P09] is shown in Figure 40.11.
+One of the most important decisions in the design of the inode is how
+it refers to where data blocks are. One simple approach would be to
+have one or more direct pointers (disk addresses) inside the inode; each
+pointer refers to one disk block that belongs to the ﬁle. Such an approach
+is limited: for example, if you want to have a ﬁle that is really big (e.g.,
+bigger than the block size multiplied by the number of direct pointers in
+the inode), you are out of luck.
+The Multi-Level Index
+To support bigger ﬁles, ﬁle system designers have had to introduce dif-
+ferent structures within inodes. One common idea is to have a special
+pointer known as an indirect pointer. Instead of pointing to a block that
+contains user data, it points to a block that contains more pointers, each
+of which point to user data. Thus, an inode may have some ﬁxed number
+of direct pointers (e.g., 12), and a single indirect pointer. If a ﬁle grows
+large enough, an indirect block is allocated (from the data-block region of
+the disk), and the inode’s slot for an indirect pointer is set to point to it.
+Assuming 4-KB blocks and 4-byte disk addresses, that adds another 1024
+pointers; the ﬁle can grow to be (12 + 1024) · 4K or 4144KB.
+1Type info is kept in the directory entry, and thus is not found in the inode itself.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

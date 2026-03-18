@@ -1,0 +1,47 @@
+14
+INTERLUDE: FILES AND DIRECTORIES
+prompt> mv foo bar
+Using strace, we can see that mv uses the system call rename(char
+*old, char *new), which takes precisely two arguments: the original
+name of the ﬁle (old) and the new name (new).
+One interesting guarantee provided by the rename() call is that it is
+(usually) implemented as an atomic call with respect to system crashes;
+if the system crashes during the renaming, the ﬁle will either be named
+the old name or the new name, and no odd in-between state can arise.
+Thus, rename() is critical for supporting certain kinds of applications
+that require an atomic update to ﬁle state.
+Let’s be a little more speciﬁc here. Imagine that you are using a ﬁle ed-
+itor (e.g., emacs), and you insert a line into the middle of a ﬁle. The ﬁle’s
+name, for the example, is foo.txt. The way the editor might update the
+ﬁle to guarantee that the new ﬁle has the original contents plus the line
+inserted is as follows (ignoring error-checking for simplicity):
+int fd = open("foo.txt.tmp", O_WRONLY|O_CREAT|O_TRUNC,
+S_IRUSR|S_IWUSR);
+write(fd, buffer, size); // write out new version of file
+fsync(fd);
+close(fd);
+rename("foo.txt.tmp", "foo.txt");
+What the editor does in this example is simple: write out the new
+version of the ﬁle under a temporary name (foo.txt.tmp), force it to
+disk with fsync(), and then, when the application is certain the new
+ﬁle metadata and contents are on the disk, rename the temporary ﬁle to
+the original ﬁle’s name. This last step atomically swaps the new ﬁle into
+place, while concurrently deleting the old version of the ﬁle, and thus an
+atomic ﬁle update is achieved.
+39.9 Getting Information About Files
+Beyond ﬁle access, we expect the ﬁle system to keep a fair amount
+of information about each ﬁle it is storing. We generally call such data
+about ﬁles metadata. To see the metadata for a certain ﬁle, we can use the
+stat() or fstat() system calls. These calls take a pathname (or ﬁle
+descriptor) to a ﬁle and ﬁll in a stat structure as seen in Figure 39.5.
+You can see that there is a lot of information kept about each ﬁle, in-
+cluding its size (in bytes), its low-level name (i.e., inode number), some
+ownership information, and some information about when the ﬁle was
+accessed or modiﬁed, among other things. To see this information, you
+can use the command line tool stat. In this example, we ﬁrst create
+a ﬁle (called file) and then use the stat command line tool to learn
+some things about the ﬁle.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

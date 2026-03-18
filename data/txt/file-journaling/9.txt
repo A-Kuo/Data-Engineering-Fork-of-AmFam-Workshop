@@ -1,0 +1,54 @@
+10
+CRASH CONSISTENCY: FSCK AND JOURNALING
+ASIDE: OPTIMIZING LOG WRITES
+You may have noticed a particular inefﬁciency of writing to the log.
+Namely, the ﬁle system ﬁrst has to write out the transaction-begin block
+and contents of the transaction; only after these writes complete can the
+ﬁle system send the transaction-end block to disk. The performance im-
+pact is clear, if you think about how a disk works: usually an extra rota-
+tion is incurred (think about why).
+One of our former graduate students, Vijayan Prabhakaran, had a simple
+idea to ﬁx this problem [P+05]. When writing a transaction to the journal,
+include a checksum of the contents of the journal in the begin and end
+blocks. Doing so enables the ﬁle system to write the entire transaction at
+once, without incurring a wait; if, during recovery, the ﬁle system sees
+a mismatch in the computed checksum versus the stored checksum in
+the transaction, it can conclude that a crash occurred during the write
+of the transaction and thus discard the ﬁle-system update. Thus, with a
+small tweak in the write protocol and recovery system, a ﬁle system can
+achieve faster common-case performance; on top of that, the system is
+slightly more reliable, as any reads from the journal are now protected by
+a checksum.
+This simple ﬁx was attractive enough to gain the notice of Linux ﬁle sys-
+tem developers, who then incorporated it into the next generation Linux
+ﬁle system, called (you guessed it!) Linux ext4. It now ships on mil-
+lions of machines worldwide, including the Android handheld platform.
+Thus, every time you write to disk on many Linux-based systems, a little
+code developed at Wisconsin makes your system a little faster and more
+reliable.
+To avoid this problem, the ﬁle system issues the transactional write in
+two steps. First, it writes all blocks except the TxE block to the journal,
+issuing these writes all at once. When these writes complete, the journal
+will look something like this (assuming our append workload again):
+Journal
+TxB
+id=1
+I[v2]
+B[v2]
+Db
+When those writes complete, the ﬁle system issues the write of the TxE
+block, thus leaving the journal in this ﬁnal, safe state:
+Journal
+TxB
+id=1
+I[v2]
+B[v2]
+Db
+TxE
+id=1
+An important aspect of this process is the atomicity guarantee pro-
+vided by the disk. It turns out that the disk guarantees that any 512-byte
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

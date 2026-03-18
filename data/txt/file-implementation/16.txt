@@ -1,0 +1,40 @@
+FILE SYSTEM IMPLEMENTATION
+17
+References
+[A+07] “A Five-Year Study of File-System Metadata” by Nitin Agrawal, William J. Bolosky,
+John R. Douceur, Jacob R. Lorch. FAST ’07, San Jose, California, February 2007. An excellent
+recent analysis of how ﬁle systems are actually used. Use the bibliography within to follow the trail of
+ﬁle-system analysis papers back to the early 1980s.
+[B07] “ZFS: The Last Word in File Systems” by Jeff Bonwick and Bill Moore. Available from:
+http://www.ostep.org/Citations/zfs_last.pdf. One of the most recent important ﬁle
+systems, full of features and awesomeness. We should have a chapter on it, and perhaps soon will.
+[B02] “The FAT File System” by Andries Brouwer.
+September, 2002.
+Available online at:
+http://www.win.tue.nl/%7eaeb/linux/fs/fat/fat.html. A nice clean description of
+FAT. The ﬁle system kind, not the bacon kind. Though you have to admit, bacon fat probably tastes
+better.
+[C94] “Inside the Windows NT File System” by Helen Custer. Microsoft Press, 1994. A short
+book about NTFS; there are probably ones with more technical details elsewhere.
+[H+88] “Scale and Performance in a Distributed File System” by John H. Howard, Michael
+L. Kazar, Sherri G. Menees, David A. Nichols, M. Satyanarayanan, Robert N. Sidebotham,
+Michael J. West.. ACM TOCS, Volume 6:1, February 1988. A classic distributed ﬁle system; we’ll
+be learning more about it later, don’t worry.
+[P09] “The Second Extended File System: Internal Layout” by Dave Poirier. 2009. Available:
+http://www.nongnu.org/ext2-doc/ext2.html. Some details on ext2, a very simple Linux
+ﬁle system based on FFS, the Berkeley Fast File System. We’ll be reading about it in the next chapter.
+[RT74] “The UNIX Time-Sharing System” by Dennis M. Ritchie, Ken Thompson. CACM Vol-
+ume 17:7, 1974. The original paper about UNIX. Read it to see the underpinnings of much of modern
+operating systems. It’s amazing how many things they simply got right!
+[S00] “UBC: An Efﬁcient Uniﬁed I/O and Memory Caching Subsystem for NetBSD” by Chuck
+Silvers. FREENIX, 2000. A nice paper about NetBSD’s integration of ﬁle-system buffer caching and
+the virtual-memory page cache. Many other systems do the same type of thing.
+[S+96] “Scalability in the XFS File System” by Adan Sweeney, Doug Doucette, Wei Hu, Curtis
+Anderson, Mike Nishimoto, Geoff Peck. USENIX ’96, January 1996, San Diego, California.
+The ﬁrst attempt to make scalability of operations, including things like having millions of ﬁles in a
+directory, a central focus. A great example of pushing an idea to the extreme. The key idea behind this
+ﬁle system: everything is a tree. We should have a chapter on this ﬁle system too.
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

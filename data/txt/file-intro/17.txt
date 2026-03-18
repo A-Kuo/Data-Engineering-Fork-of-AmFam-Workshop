@@ -1,0 +1,51 @@
+18
+INTERLUDE: FILES AND DIRECTORIES
+The declaration below shows the information available within each
+directory entry in the struct dirent data structure:
+struct dirent {
+char
+d_name[256]; // filename
+ino_t
+d_ino;
+// inode number
+off_t
+d_off;
+// offset to the next dirent
+unsigned short d_reclen;
+// length of this record
+unsigned char
+d_type;
+// type of file
+};
+Because directories are light on information (basically, just mapping
+the name to the inode number, along with a few other details), a program
+may want to call stat() on each ﬁle to get more information on each,
+such as its length or other detailed information. Indeed, this is exactly
+what ls does when you pass it the -l ﬂag; try strace on ls with and
+without that ﬂag to see for yourself.
+39.13 Deleting Directories
+Finally, you can delete a directory with a call to rmdir() (which is
+used by the program of the same name, rmdir). Unlike ﬁle deletion,
+however, removing directories is more dangerous, as you could poten-
+tially delete a large amount of data with a single command. Thus, rmdir()
+has the requirement that the directory be empty (i.e., only has “.” and “..”
+entries) before it is deleted. If you try to delete a non-empty directory, the
+call to rmdir() simply will fail.
+39.14 Hard Links
+We now come back to the mystery of why removing a ﬁle is performed
+via unlink(), by understanding a new way to make an entry in the
+ﬁle system tree, through a system call known as link(). The link()
+system call takes two arguments, an old pathname and a new one; when
+you “link” a new ﬁle name to an old one, you essentially create another
+way to refer to the same ﬁle. The command-line program ln is used to
+do this, as we see in this example:
+prompt> echo hello > file
+prompt> cat file
+hello
+prompt> ln file file2
+prompt> cat file2
+hello
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

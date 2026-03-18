@@ -1,0 +1,56 @@
+8
+LOG-STRUCTURED FILE SYSTEMS
+43.8 What About Directories?
+Thus far, we’ve simpliﬁed our discussion a bit by only considering in-
+odes and data blocks. However, to access a ﬁle in a ﬁle system (such as
+/home/remzi/foo, one of our favorite fake ﬁle names), some directo-
+ries must be accessed too. So how does LFS store directory data?
+Fortunately, directory structure is basically identical to classic UNIX
+ﬁle systems, in that a directory is just a collection of (name, inode number)
+mappings. For example, when creating a ﬁle on disk, LFS must both write
+a new inode, some data, as well as the directory data and its inode that
+refer to this ﬁle. Remember that LFS will do so sequentially on the disk
+(after buffering the updates for some time). Thus, creating a ﬁle foo in a
+directory would lead to the following new structures on disk:
+Dk
+A0
+I[k]
+b[0]:A0
+A1
+(foo, k)
+Ddir
+A2
+I[dir]
+b[0]:A2
+A3
+m[k]:A1
+m[dir]:A3
+imap
+The piece of the inode map contains the information for the location of
+both the directory ﬁle dir as well as the newly-created ﬁle f. Thus, when
+accessing ﬁle foo (with inode number k), you would ﬁrst look in the
+inode map (usually cached in memory) to ﬁnd the location of the inode
+of directory dir (A3); you then read the directory inode, which gives you
+the location of the directory data (A2); reading this data block gives you
+the name-to-inode-number mapping of (foo, k). You then consult the
+inode map again to ﬁnd the location of inode number k (A1), and ﬁnally
+read the desired data block at address A0.
+There is one other serious problem in LFS that the inode map solves,
+known as the recursive update problem [Z+12].
+The problem arises
+in any ﬁle system that never updates in place (such as LFS), but rather
+moves updates to new locations on the disk.
+Speciﬁcally, whenever an inode is updated, its location on disk changes.
+If we hadn’t been careful, this would have also entailed an update to
+the directory that points to this ﬁle, which then would have mandated
+a change to the parent of that directory, and so on, all the way up the ﬁle
+system tree.
+LFS cleverly avoids this problem with the inode map. Even though
+the location of an inode may change, the change is never reﬂected in the
+directory itself; rather, the imap structure is updated while the directory
+holds the same name-to-inode-number mapping. Thus, through indirec-
+tion, LFS avoids the recursive update problem.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,50 @@
+CRASH CONSISTENCY: FSCK AND JOURNALING
+5
+The Crash Consistency Problem
+Hopefully, from these crash scenarios, you can see the many problems
+that can occur to our on-disk ﬁle system image because of crashes: we can
+have inconsistency in ﬁle system data structures; we can have space leaks;
+we can return garbage data to a user; and so forth. What we’d like to do
+ideally is move the ﬁle system from one consistent state (e.g., before the
+ﬁle got appended to) to another atomically (e.g., after the inode, bitmap,
+and new data block have been written to disk). Unfortunately, we can’t
+do this easily because the disk only commits one write at a time, and
+crashes or power loss may occur between these updates. We call this
+general problem the crash-consistency problem (we could also call it the
+consistent-update problem).
+42.2 Solution #1: The File System Checker
+Early ﬁle systems took a simple approach to crash consistency. Basi-
+cally, they decided to let inconsistencies happen and then ﬁx them later
+(when rebooting). A classic example of this lazy approach is found in a
+tool that does this: fsck2. fsck is a UNIX tool for ﬁnding such incon-
+sistencies and repairing them [MK96]; similar tools to check and repair
+a disk partition exist on different systems. Note that such an approach
+can’t ﬁx all problems; consider, for example, the case above where the ﬁle
+system looks consistent but the inode points to garbage data. The only
+real goal is to make sure the ﬁle system metadata is internally consistent.
+The tool fsck operates in a number of phases, as summarized in
+McKusick and Kowalski’s paper [MK96]. It is run before the ﬁle system
+is mounted and made available (fsck assumes that no other ﬁle-system
+activity is on-going while it runs); once ﬁnished, the on-disk ﬁle system
+should be consistent and thus can be made accessible to users.
+Here is a basic summary of what fsck does:
+• Superblock: fsck ﬁrst checks if the superblock looks reasonable,
+mostly doing sanity checks such as making sure the ﬁle system size
+is greater than the number of blocks that have been allocated. Usu-
+ally the goal of these sanity checks is to ﬁnd a suspect (corrupt)
+superblock; in this case, the system (or administrator) may decide
+to use an alternate copy of the superblock.
+• Free blocks: Next, fsck scans the inodes, indirect blocks, double
+indirect blocks, etc., to build an understanding of which blocks are
+currently allocated within the ﬁle system. It uses this knowledge
+to produce a correct version of the allocation bitmaps; thus, if there
+is any inconsistency between bitmaps and inodes, it is resolved by
+trusting the information within the inodes. The same type of check
+is performed for all the inodes, making sure that all inodes that look
+like they are in use are marked as such in the inode bitmaps.
+2Pronounced either “eff-ess-see-kay”, “eff-ess-check”, or, if you don’t like the tool, “eff-
+suck”. Yes, serious professional people use this term.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

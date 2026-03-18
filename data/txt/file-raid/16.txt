@@ -1,0 +1,47 @@
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+17
+References
+[B+08] “An Analysis of Data Corruption in the Storage Stack” by Lakshmi N. Bairavasun-
+daram, Garth R. Goodson, Bianca Schroeder, Andrea C. Arpaci-Dusseau, Remzi H. Arpaci-
+Dusseau. FAST ’08, San Jose, CA, February 2008. Our own work analyzing how often disks actu-
+ally corrupt your data. Not often, but sometimes! And thus something a reliable storage system must
+consider.
+[BJ88] “Disk Shadowing” by D. Bitton and J. Gray. VLDB 1988. One of the ﬁrst papers to discuss
+mirroring, therein called “shadowing”.
+[CL95] “Striping in a RAID level 5 disk array” by Peter M. Chen and Edward K. Lee. SIGMET-
+RICS 1995. A nice analysis of some of the important parameters in a RAID-5 disk array.
+[C+04] “Row-Diagonal Parity for Double Disk Failure Correction” by P. Corbett, B. English, A.
+Goel, T. Grcanac, S. Kleiman, J. Leong, S. Sankar. FAST ’04, February 2004. Though not the ﬁrst
+paper on a RAID system with two disks for parity, it is a recent and highly-understandable version of
+said idea. Read it to learn more.
+[DAA05] “Journal-guided Resynchronization for Software RAID” by Timothy E. Denehy, A.
+Arpaci-Dusseau, R. Arpaci-Dusseau. FAST 2005. Our own work on the consistent-update problem.
+Here we solve it for Software RAID by integrating the journaling machinery of the ﬁle system above
+with the software RAID beneath it.
+[HLM94] “File System Design for an NFS File Server Appliance” by Dave Hitz, James Lau,
+Michael Malcolm. USENIX Winter 1994, San Francisco, California, 1994. The sparse paper intro-
+ducing a landmark product in storage, the write-anywhere ﬁle layout or WAFL ﬁle system that underlies
+the NetApp ﬁle server.
+[K86] “Synchronized Disk Interleaving” by M.Y. Kim. IEEE Transactions on Computers, Vol-
+ume C-35: 11, November 1986. Some of the earliest work on RAID is found here.
+[K88] “Small Disk Arrays – The Emerging Approach to High Performance” by F. Kurzweil.
+Presentation at Spring COMPCON ’88, March 1, 1988, San Francisco, California. Another early
+RAID reference.
+[P+88] “Redundant Arrays of Inexpensive Disks” by D. Patterson, G. Gibson, R. Katz. SIG-
+MOD 1988. This is considered the RAID paper, written by famous authors Patterson, Gibson, and
+Katz. The paper has since won many test-of-time awards and ushered in the RAID era, including the
+name RAID itself!
+[PB86] “Providing Fault Tolerance in Parallel Secondary Storage Systems” by A. Park, K. Bal-
+asubramaniam. Department of Computer Science, Princeton, CS-TR-O57-86, November 1986.
+Another early work on RAID.
+[SG86] “Disk Striping” by K. Salem, H. Garcia-Molina. IEEE International Conference on Data
+Engineering, 1986. And yes, another early RAID work. There are a lot of these, which kind of came
+out of the woodwork when the RAID paper was published in SIGMOD.
+[S84] “Byzantine Generals in Action: Implementing Fail-Stop Processors” by F.B. Schneider.
+ACM Transactions on Computer Systems, 2(2):145–154, May 1984. Finally, a paper that is not
+about RAID! This paper is actually about how systems fail, and how to make something behave in a
+fail-stop manner.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

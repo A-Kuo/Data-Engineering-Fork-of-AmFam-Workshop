@@ -1,0 +1,113 @@
+4
+FILE SYSTEM IMPLEMENTATION
+simple structure: each bit is used to indicate whether the corresponding
+object/block is free (0) or in-use (1). And thus our new on-disk layout,
+with an inode bitmap (i) and a data bitmap (d):
+0
+i d
+I
+I
+I
+I
+I
+7
+D
+8
+D D D D D D D
+15
+D
+16
+D D D D D D D
+23
+D
+24
+D D D D D D D
+31
+D
+32
+D D D D D D D
+39
+D
+40
+D D D D D D D
+47
+D
+48
+D D D D D D D
+55
+D
+56
+D D D D D D D
+63
+Data Region
+Data Region
+Inodes
+You may notice that it is a bit of overkill to use an entire 4-KB block for
+these bitmaps; such a bitmap can track whether 32K objects are allocated,
+and yet we only have 80 inodes and 56 data blocks. However, we just use
+an entire 4-KB block for each of these bitmaps for simplicity.
+The careful reader (i.e., the reader who is still awake) may have no-
+ticed there is one block left in the design of the on-disk structure of our
+very simple ﬁle system. We reserve this for the superblock, denoted by
+an S in the diagram below. The superblock contains information about
+this particular ﬁle system, including, for example, how many inodes and
+data blocks are in the ﬁle system (80 and 56, respectively in this instance),
+where the inode table begins (block 3), and so forth. It will likely also
+include a magic number of some kind to identify the ﬁle system type (in
+this case, vsfs).
+S
+0
+i d
+I
+I
+I
+I
+I
+7
+D
+8
+D D D D D D D
+15
+D
+16
+D D D D D D D
+23
+D
+24
+D D D D D D D
+31
+D
+32
+D D D D D D D
+39
+D
+40
+D D D D D D D
+47
+D
+48
+D D D D D D D
+55
+D
+56
+D D D D D D D
+63
+Data Region
+Data Region
+Inodes
+Thus, when mounting a ﬁle system, the operating system will read
+the superblock ﬁrst, to initialize various parameters, and then attach the
+volume to the ﬁle-system tree. When ﬁles within the volume are accessed,
+the system will thus know exactly where to look for the needed on-disk
+structures.
+40.3 File Organization: The Inode
+One of the most important on-disk structures of a ﬁle system is the
+inode; virtually all ﬁle systems have a structure similar to this. The name
+inode is short for index node, the historical term used in UNIX [RT74]
+and possibly earlier systems. The name reﬂects the fact that these nodes
+were originally stored in an array, which the system indexed into to access
+a particular inode.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

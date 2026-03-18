@@ -1,0 +1,14 @@
+DATA INTEGRITY AND PROTECTION
+11
+45.9 Summary
+We have discussed data protection in modern storage systems, focus-
+ing on checksum implementation and usage. Different checksums protect
+against different types of faults; as storage devices evolve, new failure
+modes will undoubtedly arise. Perhaps such change will force the re-
+search community and industry to revisit some of these basic approaches,
+or invent entirely new approaches altogether. Time will tell. Or it won’t.
+Time is funny that way.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,69 @@
+10
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+and 3, respectively. One might naively think that because we are utilizing
+all disks, we are achieving the full bandwidth of the array.
+To see that this is not (necessarily) the case, however, consider the
+requests a single disk receives (say disk 0). First, it gets a request for
+block 0; then, it gets a request for block 4 (skipping block 2). In fact, each
+disk receives a request for every other block. While it is rotating over the
+skipped block, it is not delivering useful bandwidth to the client. Thus,
+each disk will only deliver half its peak bandwidth. And thus, the se-
+quential read will only obtain a bandwidth of ( N
+2 · S) MB/s.
+Random reads are the best case for a mirrored RAID. In this case, we
+can distribute the reads across all the disks, and thus obtain the full pos-
+sible bandwidth. Thus, for random reads, RAID-1 delivers N · R MB/s.
+Finally, random writes perform as you might expect: N
+2 ·R MB/s. Each
+logical write must turn into two physical writes, and thus while all the
+disks will be in use, the client will only perceive this as half the available
+bandwidth. Even though a write to logical block x turns into two parallel
+writes to two different physical disks, the bandwidth of many small re-
+quests only achieves half of what we saw with striping. As we will soon
+see, getting half the available bandwidth is actually pretty good!
+38.6 RAID Level 4: Saving Space With Parity
+We now present a different method of adding redundancy to a disk ar-
+ray known as parity. Parity-based approaches attempt to use less capac-
+ity and thus overcome the huge space penalty paid by mirrored systems.
+They do so at a cost, however: performance.
+Disk 0
+Disk 1
+Disk 2
+Disk 3
+Disk 4
+0
+1
+2
+3
+P0
+4
+5
+6
+7
+P1
+8
+9
+10
+11
+P2
+12
+13
+14
+15
+P3
+Figure 38.4: RAID-4 With Parity
+Here is an example ﬁve-disk RAID-4 system (Figure 38.4). For each
+stripe of data, we have added a single parity block that stores the redun-
+dant information for that stripe of blocks. For example, parity block P1
+has redundant information that it calculated from blocks 4, 5, 6, and 7.
+To compute parity, we need to use a mathematical function that en-
+ables us to withstand the loss of any one block from our stripe. It turns
+out the simple function XOR does the trick quite nicely. For a given set of
+bits, the XOR of all of those bits returns a 0 if there are an even number of
+1’s in the bits, and a 1 if there are an odd number of 1’s. For example:
+In the ﬁrst row (0,0,1,1), there are two 1’s (C2, C3), and thus XOR of
+all of those values will be 0 (P); similarly, in the second row there is only
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

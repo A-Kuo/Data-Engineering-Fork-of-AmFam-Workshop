@@ -1,0 +1,42 @@
+2
+INTERLUDE: FILES AND DIRECTORIES
+/
+foo
+bar.txt
+bar
+foo
+bar
+bar.txt
+Figure 39.1: An Example Directory Tree
+name (as we will see). For historical reasons, the low-level name of a ﬁle
+is often referred to as its inode number (i-number). We’ll be learning a
+lot more about inodes in future chapters; for now, just assume that each
+ﬁle has an inode number associated with it.
+In most systems, the OS does not know much about the structure of
+the ﬁle (e.g., whether it is a picture, or a text ﬁle, or C code); rather, the
+responsibility of the ﬁle system is simply to store such data persistently
+on disk and make sure that when you request the data again, you get
+what you put there in the ﬁrst place. Doing so is not as simple as it seems!
+The second abstraction is that of a directory. A directory, like a ﬁle,
+also has a low-level name (i.e., an inode number), but its contents are
+quite speciﬁc: it contains a list of (user-readable name, low-level name)
+pairs. For example, let’s say there is a ﬁle with the low-level name “10”,
+and it is referred to by the user-readable name of “foo”. The directory
+that “foo” resides in thus would have an entry (“foo”, “10”) that maps
+the user-readable name to the low-level name. Each entry in a directory
+refers to either ﬁles or other directories. By placing directories within
+other directories, users are able to build an arbitrary directory tree (or
+directory hierarchy), under which all ﬁles and directories are stored.
+The directory hierarchy starts at a root directory (in UNIX-based sys-
+tems, the root directory is simply referred to as /) and uses some kind
+of separator to name subsequent sub-directories until the desired ﬁle or
+directory is named. For example, if a user created a directory foo in the
+root directory /, and then created a ﬁle bar.txt in the directory foo,
+we could refer to the ﬁle by its absolute pathname, which in this case
+would be /foo/bar.txt. See Figure 39.1 for a more complex directory
+tree; valid directories in the example are /, /foo, /bar, /bar/bar,
+/bar/foo and valid ﬁles are /foo/bar.txt and /bar/foo/bar.txt.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

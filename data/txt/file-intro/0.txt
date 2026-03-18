@@ -1,0 +1,30 @@
+39
+Interlude: Files and Directories
+Thus far we have seen the development of two key operating system ab-
+stractions: the process, which is a virtualization of the CPU, and the ad-
+dress space, which is a virtualization of memory. In tandem, these two
+abstractions allow a program to run as if it is in its own private, isolated
+world; as if it has its own processor (or processors); as if it has its own
+memory. This illusion makes programming the system much easier and
+thus is prevalent today not only on desktops and servers but increasingly
+on all programmable platforms including mobile phones and the like.
+In this section, we add one more critical piece to the virtualization puz-
+zle: persistent storage. A persistent-storage device, such as a classic hard
+disk drive or a more modern solid-state storage device, stores informa-
+tion permanently (or at least, for a long time). Unlike memory, whose
+contents are lost when there is a power loss, a persistent-storage device
+keeps such data intact. Thus, the OS must take extra care with such a
+device: this is where users keep data that they really care about.
+CRUX: HOW TO MANAGE A PERSISTENT DEVICE
+How should the OS manage a persistent device? What are the APIs?
+What are the important aspects of the implementation?
+Thus, in the next few chapters, we will explore critical techniques for
+managing persistent data, focusing on methods to improve performance
+and reliability. We begin, however, with an overview of the API: the in-
+terfaces you’ll expect to see when interacting with a UNIX ﬁle system.
+39.1 Files And Directories
+Two key abstractions have developed over time in the virtualization
+of storage. The ﬁrst is the ﬁle. A ﬁle is simply a linear array of bytes,
+each of which you can read or write. Each ﬁle has some kind of low-level
+name, usually a number of some kind; often, the user is not aware of this
+1

@@ -1,0 +1,48 @@
+LOG-STRUCTURED FILE SYSTEMS
+15
+Homework (Simulation)
+This section introduces lfs.py, a simple LFS simulator you can use
+to understand better how an LFS-based ﬁle system works.
+Read the
+README for details on how to run the simulator.
+Questions
+1. Run ./lfs.py -n 3, perhaps varying the seed (-s). Can you ﬁg-
+ure out which commands were run to generate the ﬁnal ﬁle system
+contents? Can you tell which order those commands were issued?
+Finally, can you determine the liveness of each block in the ﬁnal
+ﬁle system state? Use -o to show which commands were run, and
+-c to show the liveness of the ﬁnal ﬁle system state. How much
+harder does the task become for you as you increase the number of
+commands issued (i.e., change -n 3 to -n 5)?
+2. If you ﬁnd the above painful, you can help yourself a little bit by
+showing the set of updates caused by each speciﬁc command. To do
+so, run ./lfs.py -n 3 -i. Now see if it is easier to understand
+what each command must have been. Change the random seed to
+get different commands to interpret (e.g., -s 1, -s 2, -s 3, etc.).
+3. To further test your ability to ﬁgure out what updates are made to
+disk by each command, run the following: ./lfs.py -o -F -s
+100 (and perhaps a few other random seeds). This just shows a
+set of commands and does NOT show you the ﬁnal state of the ﬁle
+system. Can you reason about what the ﬁnal state of the ﬁle system
+must be?
+4. Now see if you can determine which ﬁles and directories are live
+after a number of ﬁle and directory operations. Run tt ./lfs.py
+-n 20 -s 1 and then examine the ﬁnal ﬁle system state. Can you
+ﬁgure out which pathnames are valid? Run tt ./lfs.py -n 20
+-s 1 -c -v to see the results. Run with -o to see if your answers
+match up given the series of random commands. Use different ran-
+dom seeds to get more problems.
+5. Now let’s issue some speciﬁc commands. First, let’s create a ﬁle
+and write to it repeatedly. To do so, use the -L ﬂag, which lets you
+specify speciﬁc commands to execute. Let’s create the ﬁle ”/foo”
+and write to it four times:
+-L c,/foo:w,/foo,0,1:w,/foo,1,1:w,/foo,2,1:w,/foo,3,1
+-o. See if you can determine the liveness of the ﬁnal ﬁle system
+state; use -c to check your answers.
+6. Now, let’s do the same thing, but with a single write operation in-
+stead of four. Run ./lfs.py -o -L c,/foo:w,/foo,0,4 to
+create ﬁle ”/foo” and write 4 blocks with a single write operation.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

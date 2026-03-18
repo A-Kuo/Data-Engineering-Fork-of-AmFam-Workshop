@@ -1,0 +1,52 @@
+CRASH CONSISTENCY: FSCK AND JOURNALING
+7
+mencing a search-the-entire-house-for-keys recovery algorithm, starting in
+the basement and working your way through every room. It works but is
+wasteful. Thus, as disks (and RAIDs) grew, researchers and practitioners
+started to look for other solutions.
+42.3 Solution #2: Journaling (or Write-Ahead Logging)
+Probably the most popular solution to the consistent update problem
+is to steal an idea from the world of database management systems. That
+idea, known as write-ahead logging, was invented to address exactly this
+type of problem. In ﬁle systems, we usually call write-ahead logging jour-
+naling for historical reasons. The ﬁrst ﬁle system to do this was Cedar
+[H87], though many modern ﬁle systems use the idea, including Linux
+ext3 and ext4, reiserfs, IBM’s JFS, SGI’s XFS, and Windows NTFS.
+The basic idea is as follows. When updating the disk, before over-
+writing the structures in place, ﬁrst write down a little note (somewhere
+else on the disk, in a well-known location) describing what you are about
+to do. Writing this note is the “write ahead” part, and we write it to a
+structure that we organize as a “log”; hence, write-ahead logging.
+By writing the note to disk, you are guaranteeing that if a crash takes
+places during the update (overwrite) of the structures you are updating,
+you can go back and look at the note you made and try again; thus, you
+will know exactly what to ﬁx (and how to ﬁx it) after a crash, instead
+of having to scan the entire disk. By design, journaling thus adds a bit
+of work during updates to greatly reduce the amount of work required
+during recovery.
+We’ll now describe how Linux ext3, a popular journaling ﬁle system,
+incorporates journaling into the ﬁle system. Most of the on-disk struc-
+tures are identical to Linux ext2, e.g., the disk is divided into block groups,
+and each block group contains an inode bitmap, data bitmap, inodes, and
+data blocks. The new key structure is the journal itself, which occupies
+some small amount of space within the partition or on another device.
+Thus, an ext2 ﬁle system (without journaling) looks like this:
+Super
+Group 0
+Group 1
+. . .
+Group N
+Assuming the journal is placed within the same ﬁle system image
+(though sometimes it is placed on a separate device, or as a ﬁle within
+the ﬁle system), an ext3 ﬁle system with a journal looks like this:
+Super Journal
+Group 0
+Group 1
+. . .
+Group N
+The real difference is just the presence of the journal, and of course,
+how it is used.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

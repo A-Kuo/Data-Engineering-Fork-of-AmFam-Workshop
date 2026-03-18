@@ -1,0 +1,44 @@
+DATA INTEGRITY AND PROTECTION
+9
+You can see from the on-disk format that there is now a fair amount of
+redundancy on disk: for each block, the disk number is repeated within
+each block, and the offset of the block in question is also kept next to the
+block itself. The presence of redundant information should be no sur-
+prise, though; redundancy is the key to error detection (in this case) and
+recovery (in others). A little extra information, while not strictly needed
+with perfect disks, can go a long ways in helping detect problematic situ-
+ations should they arise.
+45.6 One Last Problem: Lost Writes
+Unfortunately, misdirected writes are not the last problem we will
+address. Speciﬁcally, some modern storage devices also have an issue
+known as a lost write, which occurs when the device informs the up-
+per layer that a write has completed but in fact it never is persisted; thus,
+what remains is the old contents of the block rather than the updated new
+contents.
+The obvious question here is: do any of our checksumming strategies
+from above (e.g., basic checksums, or physical identity) help to detect
+lost writes? Unfortunately, the answer is no: the old block likely has a
+matching checksum, and the physical ID used above (disk number and
+block offset) will also be correct. Thus our ﬁnal problem:
+CRUX: HOW TO HANDLE LOST WRITES
+How should a storage system or disk controller detect lost writes?
+What additional features are required from the checksum?
+There are a number of possible solutions that can help [K+08]. One
+classic approach [BS04] is to perform a write verify or read-after-write;
+by immediately reading back the data after a write, a system can ensure
+that the data indeed reached the disk surface. This approach, however, is
+quite slow, doubling the number of I/Os needed to complete a write.
+Some systems add a checksum elsewhere in the system to detect lost
+writes. For example, Sun’s Zettabyte File System (ZFS) includes a check-
+sum in each ﬁle system inode and indirect block for every block included
+within a ﬁle. Thus, even if the write to a data block itself is lost, the check-
+sum within the inode will not match the old data. Only if the writes to
+both the inode and the data are lost simultaneously will such a scheme
+fail, an unlikely (but unfortunately, possible!) situation.
+45.7 Scrubbing
+Given all of this discussion, you might be wondering: when do these
+checksums actually get checked? Of course, some amount of checking
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

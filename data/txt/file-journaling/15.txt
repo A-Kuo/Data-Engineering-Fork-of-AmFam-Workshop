@@ -1,0 +1,58 @@
+16
+CRASH CONSISTENCY: FSCK AND JOURNALING
+Journal
+File System
+TxB
+Contents
+TxE
+Metadata
+Data
+(metadata)
+(data)
+issue
+issue
+issue
+complete
+complete
+complete
+issue
+complete
+issue
+issue
+complete
+complete
+Figure 42.1: Data Journaling Timeline
+Now assume a crash occurs and all of this information is still in the
+log. During replay, the recovery process simply replays everything in the
+log, including the write of directory data in block 1000; the replay thus
+overwrites the user data of current ﬁle bar with old directory contents!
+Clearly this is not a correct recovery action, and certainly it will be a sur-
+prise to the user when reading the ﬁle bar.
+There are a number of solutions to this problem. One could, for ex-
+ample, never reuse blocks until the delete of said blocks is checkpointed
+out of the journal. What Linux ext3 does instead is to add a new type
+of record to the journal, known as a revoke record. In the case above,
+deleting the directory would cause a revoke record to be written to the
+journal. When replaying the journal, the system ﬁrst scans for such re-
+voke records; any such revoked data is never replayed, thus avoiding the
+problem mentioned above.
+Wrapping Up Journaling: A Timeline
+Before ending our discussion of journaling, we summarize the protocols
+we have discussed with timelines depicting each of them. Figure 42.1
+shows the protocol when journaling data and metadata, whereas Figure
+42.2 shows the protocol when journaling only metadata.
+In each ﬁgure, time increases in the downward direction, and each row
+in the ﬁgure shows the logical time that a write can be issued or might
+complete. For example, in the data journaling protocol (Figure 42.1), the
+writes of the transaction begin block (TxB) and the contents of the trans-
+action can logically be issued at the same time, and thus can be completed
+in any order; however, the write to the transaction end block (TxE) must
+not be issued until said previous writes complete. Similarly, the check-
+pointing writes to data and metadata blocks cannot begin until the trans-
+action end block has committed. Horizontal dashed lines show where
+write-ordering requirements must be obeyed.
+A similar timeline is shown for the metadata journaling protocol. Note
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

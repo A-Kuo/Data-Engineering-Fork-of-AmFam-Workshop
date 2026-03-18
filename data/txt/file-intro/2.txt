@@ -1,0 +1,43 @@
+INTERLUDE: FILES AND DIRECTORIES
+3
+TIP: THINK CAREFULLY ABOUT NAMING
+Naming is an important aspect of computer systems [SK09]. In UNIX
+systems, virtually everything that you can think of is named through the
+ﬁle system. Beyond just ﬁles, devices, pipes, and even processes [K84]
+can be found in what looks like a plain old ﬁle system. This uniformity
+of naming eases your conceptual model of the system, and makes the
+system simpler and more modular. Thus, whenever creating a system or
+interface, think carefully about what names you are using.
+Directories and ﬁles can have the same name as long as they are in dif-
+ferent locations in the ﬁle-system tree (e.g., there are two ﬁles named
+bar.txt in the ﬁgure, /foo/bar.txt and /bar/foo/bar.txt).
+You may also notice that the ﬁle name in this example often has two
+parts: bar and txt, separated by a period. The ﬁrst part is an arbitrary
+name, whereas the second part of the ﬁle name is usually used to indi-
+cate the type of the ﬁle, e.g., whether it is C code (e.g., .c), or an image
+(e.g., .jpg), or a music ﬁle (e.g., .mp3). However, this is usually just a
+convention: there is usually no enforcement that the data contained in a
+ﬁle named main.c is indeed C source code.
+Thus, we can see one great thing provided by the ﬁle system: a conve-
+nient way to name all the ﬁles we are interested in. Names are important
+in systems as the ﬁrst step to accessing any resource is being able to name
+it. In UNIX systems, the ﬁle system thus provides a uniﬁed way to access
+ﬁles on disk, USB stick, CD-ROM, many other devices, and in fact many
+other things, all located under the single directory tree.
+39.2 The File System Interface
+Let’s now discuss the ﬁle system interface in more detail. We’ll start
+with the basics of creating, accessing, and deleting ﬁles. You may think
+this is straightforward, but along the way we’ll discover the mysterious
+call that is used to remove ﬁles, known as unlink(). Hopefully, by the
+end of this chapter, this mystery won’t be so mysterious to you!
+39.3 Creating Files
+We’ll start with the most basic of operations: creating a ﬁle. This can be
+accomplished with the open system call; by calling open() and passing
+it the O CREAT ﬂag, a program can create a new ﬁle. Here is some exam-
+ple code to create a ﬁle called “foo” in the current working directory:
+int fd = open("foo", O_CREAT|O_WRONLY|O_TRUNC,
+S_IRUSR|S_IWUSR);
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

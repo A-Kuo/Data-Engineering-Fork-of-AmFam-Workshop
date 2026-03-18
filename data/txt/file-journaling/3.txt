@@ -1,0 +1,46 @@
+4
+CRASH CONSISTENCY: FSCK AND JOURNALING
+• Just the data block (Db) is written to disk. In this case, the data is
+on disk, but there is no inode that points to it and no bitmap that
+even says the block is allocated. Thus, it is as if the write never
+occurred. This case is not a problem at all, from the perspective of
+ﬁle-system crash consistency1.
+• Just the updated inode (I[v2]) is written to disk. In this case, the
+inode points to the disk address (5) where Db was about to be writ-
+ten, but Db has not yet been written there. Thus, if we trust that
+pointer, we will read garbage data from the disk (the old contents
+of disk address 5).
+Further, we have a new problem, which we call a ﬁle-system in-
+consistency. The on-disk bitmap is telling us that data block 5 has
+not been allocated, but the inode is saying that it has. The disagree-
+ment between the bitmap and the inode is an inconsistency in the
+data structures of the ﬁle system; to use the ﬁle system, we must
+somehow resolve this problem (more on that below).
+• Just the updated bitmap (B[v2]) is written to disk. In this case, the
+bitmap indicates that block 5 is allocated, but there is no inode that
+points to it. Thus the ﬁle system is inconsistent again; if left unre-
+solved, this write would result in a space leak, as block 5 would
+never be used by the ﬁle system.
+There are also three more crash scenarios in this attempt to write three
+blocks to disk. In these cases, two writes succeed and the last one fails:
+• The inode (I[v2]) and bitmap (B[v2]) are written to disk, but not
+data (Db). In this case, the ﬁle system metadata is completely con-
+sistent: the inode has a pointer to block 5, the bitmap indicates that
+5 is in use, and thus everything looks OK from the perspective of
+the ﬁle system’s metadata. But there is one problem: 5 has garbage
+in it again.
+• The inode (I[v2]) and the data block (Db) are written, but not the
+bitmap (B[v2]). In this case, we have the inode pointing to the cor-
+rect data on disk, but again have an inconsistency between the in-
+ode and the old version of the bitmap (B1). Thus, we once again
+need to resolve the problem before using the ﬁle system.
+• The bitmap (B[v2]) and data block (Db) are written, but not the
+inode (I[v2]). In this case, we again have an inconsistency between
+the inode and the data bitmap. However, even though the block
+was written and the bitmap indicates its usage, we have no idea
+which ﬁle it belongs to, as no inode points to the ﬁle.
+1However, it might be a problem for the user, who just lost some data!
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

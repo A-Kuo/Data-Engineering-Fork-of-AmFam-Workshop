@@ -1,0 +1,50 @@
+12
+LOG-STRUCTURED FILE SYSTEMS
+43.12 Crash Recovery And The Log
+One ﬁnal problem: what happens if the system crashes while LFS is
+writing to disk? As you may recall in the previous chapter about jour-
+naling, crashes during updates are tricky for ﬁle systems, and thus some-
+thing LFS must consider as well.
+During normal operation, LFS buffers writes in a segment, and then
+(when the segment is full, or when some amount of time has elapsed),
+writes the segment to disk. LFS organizes these writes in a log, i.e., the
+checkpoint region points to a head and tail segment, and each segment
+points to the next segment to be written. LFS also periodically updates the
+checkpoint region. Crashes could clearly happen during either of these
+operations (write to a segment, write to the CR). So how does LFS handle
+crashes during writes to these structures?
+Let’s cover the second case ﬁrst. To ensure that the CR update happens
+atomically, LFS actually keeps two CRs, one at either end of the disk, and
+writes to them alternately. LFS also implements a careful protocol when
+updating the CR with the latest pointers to the inode map and other infor-
+mation; speciﬁcally, it ﬁrst writes out a header (with timestamp), then the
+body of the CR, and then ﬁnally one last block (also with a timestamp). If
+the system crashes during a CR update, LFS can detect this by seeing an
+inconsistent pair of timestamps. LFS will always choose to use the most
+recent CR that has consistent timestamps, and thus consistent update of
+the CR is achieved.
+Let’s now address the ﬁrst case. Because LFS writes the CR every 30
+seconds or so, the last consistent snapshot of the ﬁle system may be quite
+old. Thus, upon reboot, LFS can easily recover by simply reading in the
+checkpoint region, the imap pieces it points to, and subsequent ﬁles and
+directories; however, the last many seconds of updates would be lost.
+To improve upon this, LFS tries to rebuild many of those segments
+through a technique known as roll forward in the database community.
+The basic idea is to start with the last checkpoint region, ﬁnd the end of
+the log (which is included in the CR), and then use that to read through
+the next segments and see if there are any valid updates within it. If there
+are, LFS updates the ﬁle system accordingly and thus recovers much of
+the data and metadata written since the last checkpoint. See Rosenblum’s
+award-winning dissertation for details [R92].
+43.13 Summary
+LFS introduces a new approach to updating the disk. Instead of over-
+writing ﬁles in places, LFS always writes to an unused portion of the
+disk, and then later reclaims that old space through cleaning. This ap-
+proach, which in database systems is called shadow paging [L77] and in
+ﬁle-system-speak is sometimes called copy-on-write, enables highly efﬁ-
+cient writing, as LFS can gather all updates into an in-memory segment
+and then write them out together sequentially.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

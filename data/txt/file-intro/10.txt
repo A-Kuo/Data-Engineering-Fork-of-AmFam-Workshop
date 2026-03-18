@@ -1,0 +1,40 @@
+INTERLUDE: FILES AND DIRECTORIES
+11
+Parent
+File
+Descriptors
+3:
+Child
+File
+Descriptors
+3:
+Open File Table
+refcnt: 2
+off: 10
+inode: 
+Inode #1000
+(file.txt)
+Figure 39.3: Processes Sharing An Open File Table Entry
+One other interesting, and perhaps more useful, case of sharing occurs
+with the dup() system call (and its cousins, dup2() and dup3()).
+The dup() call allows a process to create a new ﬁle descriptor that
+refers to the same underlying open ﬁle as an existing descriptor. Figure
+39.4 shows a small code snippet that shows how dup() can be used.
+The dup() call (and, in particular, dup2()) is useful when writing
+a UNIX shell and performing operations like output redirection; spend
+some time and think about why! And now, you are thinking: why didn’t
+they tell me this when I was doing the shell project? Oh well, you can’t get
+everything in the right order, even in an incredible book about operating
+systems. Sorry!
+int main(int argc, char *argv[]) {
+int fd = open("README", O_RDONLY);
+assert(fd >= 0);
+int fd2 = dup(fd);
+// now fd and fd2 can be used interchangeably
+return 0;
+}
+Figure 39.4: Shared File Table Entry With dup() (dup.c)
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

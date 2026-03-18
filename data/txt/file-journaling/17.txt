@@ -1,0 +1,43 @@
+18
+CRASH CONSISTENCY: FSCK AND JOURNALING
+ing more about this technique when we discuss the log-structured ﬁle
+system (LFS) in a future chapter; LFS is an early example of a COW.
+Another approach is one we just developed here at Wisconsin. In this
+technique, entitled backpointer-based consistency (or BBC), no ordering
+is enforced between writes. To achieve consistency, an additional back
+pointer is added to every block in the system; for example, each data
+block has a reference to the inode to which it belongs. When accessing
+a ﬁle, the ﬁle system can determine if the ﬁle is consistent by checking if
+the forward pointer (e.g., the address in the inode or direct block) points
+to a block that refers back to it. If so, everything must have safely reached
+disk and thus the ﬁle is consistent; if not, the ﬁle is inconsistent, and an
+error is returned. By adding back pointers to the ﬁle system, a new form
+of lazy crash consistency can be attained [C+12].
+Finally, we also have explored techniques to reduce the number of
+times a journal protocol has to wait for disk writes to complete. Entitled
+optimistic crash consistency [C+13], this new approach issues as many
+writes to disk as possible by using a generalized form of the transaction
+checksum [P+05], and includes a few other techniques to detect incon-
+sistencies should they arise. For some workloads, these optimistic tech-
+niques can improve performance by an order of magnitude. However, to
+truly function well, a slightly different disk interface is required [C+13].
+42.5 Summary
+We have introduced the problem of crash consistency, and discussed
+various approaches to attacking this problem.
+The older approach of
+building a ﬁle system checker works but is likely too slow to recover on
+modern systems. Thus, many ﬁle systems now use journaling. Journaling
+reduces recovery time from O(size-of-the-disk-volume) to O(size-of-the-
+log), thus speeding recovery substantially after a crash and restart. For
+this reason, many modern ﬁle systems use journaling. We have also seen
+that journaling can come in many different forms; the most commonly
+used is ordered metadata journaling, which reduces the amount of trafﬁc
+to the journal while still preserving reasonable consistency guarantees for
+both ﬁle system metadata and user data. In the end, strong guarantees
+on user data are probably one of the most important things to provide;
+oddly enough, as recent research has shown, this area remains a work in
+progress [P+14].
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

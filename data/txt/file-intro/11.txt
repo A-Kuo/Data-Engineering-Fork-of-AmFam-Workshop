@@ -1,0 +1,48 @@
+12
+INTERLUDE: FILES AND DIRECTORIES
+39.7 Writing Immediately With fsync()
+Most times when a program calls write(), it is just telling the ﬁle
+system: please write this data to persistent storage, at some point in the
+future. The ﬁle system, for performance reasons, will buffer such writes
+in memory for some time (say 5 seconds, or 30); at that later point in
+time, the write(s) will actually be issued to the storage device. From the
+perspective of the calling application, writes seem to complete quickly,
+and only in rare cases (e.g., the machine crashes after the write() call
+but before the write to disk) will data be lost.
+However, some applications require something more than this even-
+tual guarantee. For example, in a database management system (DBMS),
+development of a correct recovery protocol requires the ability to force
+writes to disk from time to time.
+To support these types of applications, most ﬁle systems provide some
+additional control APIs. In the UNIX world, the interface provided to ap-
+plications is known as fsync(int fd). When a process calls fsync()
+for a particular ﬁle descriptor, the ﬁle system responds by forcing all dirty
+(i.e., not yet written) data to disk, for the ﬁle referred to by the speciﬁed
+ﬁle descriptor. The fsync() routine returns once all of these writes are
+complete.
+Here is a simple example of how to use fsync(). The code opens
+the ﬁle foo, writes a single chunk of data to it, and then calls fsync()
+to ensure the writes are forced immediately to disk. Once the fsync()
+returns, the application can safely move on, knowing that the data has
+been persisted (if fsync() is correctly implemented, that is).
+int fd = open("foo", O_CREAT|O_WRONLY|O_TRUNC,
+S_IRUSR|S_IWUSR);
+assert(fd > -1);
+int rc = write(fd, buffer, size);
+assert(rc == size);
+rc = fsync(fd);
+assert(rc == 0);
+Interestingly, this sequence does not guarantee everything that you
+might expect; in some cases, you also need to fsync() the directory that
+contains the ﬁle foo. Adding this step ensures not only that the ﬁle itself
+is on disk, but that the ﬁle, if newly created, also is durably a part of the
+directory. Not surprisingly, this type of detail is often overlooked, leading
+to many application-level bugs [P+13,P+14].
+39.8 Renaming Files
+Once we have a ﬁle, it is sometimes useful to be able to give a ﬁle a
+different name. When typing at the command line, this is accomplished
+with mv command; in this example, the ﬁle foo is renamed bar:
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

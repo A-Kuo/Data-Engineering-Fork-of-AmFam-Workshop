@@ -1,0 +1,41 @@
+2
+LOG-STRUCTURED FILE SYSTEMS
+TIP: DETAILS MATTER
+All interesting systems are comprised of a few general ideas and a num-
+ber of details. Sometimes, when you are learning about these systems,
+you think to yourself “Oh, I get the general idea; the rest is just details,”
+and you use this to only half-learn how things really work. Don’t do this!
+Many times, the details are critical. As we’ll see with LFS, the general idea
+is easy to understand, but to really build a working system, you have to
+think through all of the tricky cases.
+An ideal ﬁle system would thus focus on write performance, and try
+to make use of the sequential bandwidth of the disk. Further, it would
+perform well on common workloads that not only write out data but also
+update on-disk metadata structures frequently. Finally, it would work
+well on RAIDs as well as single disks.
+The new type of ﬁle system Rosenblum and Ousterhout introduced
+was called LFS, short for the Log-structured File System. When writ-
+ing to disk, LFS ﬁrst buffers all updates (including metadata!) in an in-
+memory segment; when the segment is full, it is written to disk in one
+long, sequential transfer to an unused part of the disk. LFS never over-
+writes existing data, but rather always writes segments to free locations.
+Because segments are large, the disk (or RAID) is used efﬁciently, and
+performance of the ﬁle system approaches its zenith.
+THE CRUX:
+HOW TO MAKE ALL WRITES SEQUENTIAL WRITES?
+How can a ﬁle system transform all writes into sequential writes? For
+reads, this task is impossible, as the desired block to be read may be any-
+where on disk. For writes, however, the ﬁle system always has a choice,
+and it is exactly this choice we hope to exploit.
+43.1 Writing To Disk Sequentially
+We thus have our ﬁrst challenge: how do we transform all updates to
+ﬁle-system state into a series of sequential writes to disk? To understand
+this better, let’s use a simple example. Imagine we are writing a data block
+D to a ﬁle. Writing the data block to disk might result in the following
+on-disk layout, with D written at disk address A0:
+D
+A0
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

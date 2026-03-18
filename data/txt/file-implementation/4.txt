@@ -1,0 +1,81 @@
+FILE SYSTEM IMPLEMENTATION
+5
+ASIDE: DATA STRUCTURE — THE INODE
+The inode is the generic name that is used in many ﬁle systems to de-
+scribe the structure that holds the metadata for a given ﬁle, such as its
+length, permissions, and the location of its constituent blocks. The name
+goes back at least as far as UNIX (and probably further back to Multics
+if not earlier systems); it is short for index node, as the inode number is
+used to index into an array of on-disk inodes in order to ﬁnd the inode
+of that number. As we’ll see, design of the inode is one key part of ﬁle
+system design. Most modern systems have some kind of structure like
+this for every ﬁle they track, but perhaps call them different things (such
+as dnodes, fnodes, etc.).
+Each inode is implicitly referred to by a number (called the i-number),
+which we’ve earlier called the low-level name of the ﬁle. In vsfs (and
+other simple ﬁle systems), given an i-number, you should directly be able
+to calculate where on the disk the corresponding inode is located. For ex-
+ample, take the inode table of vsfs as above: 20KB in size (ﬁve 4KB blocks)
+and thus consisting of 80 inodes (assuming each inode is 256 bytes); fur-
+ther assume that the inode region starts at 12KB (i.e, the superblock starts
+at 0KB, the inode bitmap is at address 4KB, the data bitmap at 8KB, and
+thus the inode table comes right after). In vsfs, we thus have the following
+layout for the beginning of the ﬁle system partition (in closeup view):
+Super
+i-bmap d-bmap
+0KB
+4KB
+8KB
+12KB
+16KB
+20KB
+24KB
+28KB
+32KB
+The Inode Table (Closeup)
+0 1 2 3
+4 5 6 7
+8 9 1011
+12131415
+16171819
+20212223
+24252627
+28293031
+32333435
+36373839
+40414243
+44454647
+48495051
+52535455
+56575859
+60616263
+64656667
+68697071
+72737475
+76777879
+iblock 0
+iblock 1
+iblock 2
+iblock 3
+iblock 4
+To read inode number 32, the ﬁle system would ﬁrst calculate the off-
+set into the inode region (32 · sizeof(inode) or 8192), add it to the start
+address of the inode table on disk (inodeStartAddr = 12KB), and thus
+arrive upon the correct byte address of the desired block of inodes: 20KB.
+Recall that disks are not byte addressable, but rather consist of a large
+number of addressable sectors, usually 512 bytes. Thus, to fetch the block
+of inodes that contains inode 32, the ﬁle system would issue a read to sec-
+tor 20×1024
+512
+, or 40, to fetch the desired inode block. More generally, the
+sector address sector of the inode block can be calculated as follows:
+blk
+= (inumber * sizeof(inode_t)) / blockSize;
+sector = ((blk * blockSize) + inodeStartAddr) / sectorSize;
+Inside each inode is virtually all of the information you need about a
+ﬁle: its type (e.g., regular ﬁle, directory, etc.), its size, the number of blocks
+allocated to it, protection information (such as who owns the ﬁle, as well
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

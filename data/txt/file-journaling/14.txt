@@ -1,0 +1,64 @@
+CRASH CONSISTENCY: FSCK AND JOURNALING
+15
+In most systems, metadata journaling (akin to ordered journaling of
+ext3) is more popular than full data journaling. For example, Windows
+NTFS and SGI’s XFS both use some form of metadata journaling. Linux
+ext3 gives you the option of choosing either data, ordered, or unordered
+modes (in unordered mode, data can be written at any time). All of these
+modes keep metadata consistent; they vary in their semantics for data.
+Finally, note that forcing the data write to complete (Step 1) before is-
+suing writes to the journal (Step 2) is not required for correctness, as indi-
+cated in the protocol above. Speciﬁcally, it would be ﬁne to concurrently
+issue writes to data, the transaction-begin block, and journaled metadata;
+the only real requirement is that Steps 1 and 2 complete before the issuing
+of the journal commit block (Step 3).
+Tricky Case: Block Reuse
+There are some interesting corner cases that make journaling more tricky,
+and thus are worth discussing. A number of them revolve around block
+reuse; as Stephen Tweedie (one of the main forces behind ext3) said:
+“What’s the hideous part of the entire system? ... It’s deleting ﬁles.
+Everything to do with delete is hairy. Everything to do with delete...
+you have nightmares around what happens if blocks get deleted and
+then reallocated.” [T00]
+The particular example Tweedie gives is as follows. Suppose you are
+using some form of metadata journaling (and thus data blocks for ﬁles
+are not journaled). Let’s say you have a directory called foo. The user
+adds an entry to foo (say by creating a ﬁle), and thus the contents of
+foo (because directories are considered metadata) are written to the log;
+assume the location of the foo directory data is block 1000. The log thus
+contains something like this:
+Journal
+TxB
+id=1
+I[foo]
+ptr:1000
+D[foo]
+[final addr:1000]
+TxE
+id=1
+At this point, the user deletes everything in the directory and the di-
+rectory itself, freeing up block 1000 for reuse. Finally, the user creates a
+new ﬁle (say bar), which ends up reusing the same block (1000) that used
+to belong to foo. The inode of bar is committed to disk, as is its data;
+note, however, because metadata journaling is in use, only the inode of
+bar is committed to the journal; the newly-written data in block 1000 in
+the ﬁle bar is not journaled.
+Journal
+TxB
+id=1
+I[foo]
+ptr:1000
+D[foo]
+[final addr:1000]
+TxE
+id=1
+TxB
+id=2
+I[bar]
+ptr:1000
+TxE
+id=2
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,73 @@
+FILE SYSTEM IMPLEMENTATION
+13
+data
+inode
+root
+foo
+bar
+root
+foo
+bar
+bar
+bar
+bitmap bitmap inode inode inode data
+data
+data
+data
+data
+[0]
+[1]
+[2]
+read
+read
+read
+read
+create
+read
+(/foo/bar)
+write
+write
+read
+write
+write
+read
+read
+write()
+write
+write
+write
+read
+read
+write()
+write
+write
+write
+read
+read
+write()
+write
+write
+write
+Figure 40.4: File Creation Timeline (Time Increasing Downward)
+which block to allocate to the ﬁle and thus update other structures of the
+disk accordingly (e.g., the data bitmap and inode). Thus, each write to a
+ﬁle logically generates ﬁve I/Os: one to read the data bitmap (which is
+then updated to mark the newly-allocated block as used), one to write the
+bitmap (to reﬂect its new state to disk), two more to read and then write
+the inode (which is updated with the new block’s location), and ﬁnally
+one to write the actual block itself.
+The amount of write trafﬁc is even worse when one considers a sim-
+ple and common operation such as ﬁle creation. To create a ﬁle, the ﬁle
+system must not only allocate an inode, but also allocate space within
+the directory containing the new ﬁle. The total amount of I/O trafﬁc to
+do so is quite high: one read to the inode bitmap (to ﬁnd a free inode),
+one write to the inode bitmap (to mark it allocated), one write to the new
+inode itself (to initialize it), one to the data of the directory (to link the
+high-level name of the ﬁle to its inode number), and one read and write
+to the directory inode to update it. If the directory needs to grow to ac-
+commodate the new entry, additional I/Os (i.e., to the data bitmap, and
+the new directory block) will be needed too. All that just to create a ﬁle!
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

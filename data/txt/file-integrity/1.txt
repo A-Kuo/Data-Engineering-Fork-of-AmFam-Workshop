@@ -1,0 +1,55 @@
+2
+DATA INTEGRITY AND PROTECTION
+Cheap
+Costly
+LSEs
+9.40%
+1.40%
+Corruption
+0.50%
+0.05%
+Figure 45.1: Frequency Of LSEs And Block Corruption
+LSEs arise when a disk sector (or group of sectors) has been damaged
+in some way. For example, if the disk head touches the surface for some
+reason (a head crash, something which shouldn’t happen during nor-
+mal operation), it may damage the surface, making the bits unreadable.
+Cosmic rays can also ﬂip bits, leading to incorrect contents. Fortunately,
+in-disk error correcting codes (ECC) are used by the drive to determine
+whether the on-disk bits in a block are good, and in some cases, to ﬁx
+them; if they are not good, and the drive does not have enough informa-
+tion to ﬁx the error, the disk will return an error when a request is issued
+to read them.
+There are also cases where a disk block becomes corrupt in a way not
+detectable by the disk itself. For example, buggy disk ﬁrmware may write
+a block to the wrong location; in such a case, the disk ECC indicates the
+block contents are ﬁne, but from the client’s perspective the wrong block
+is returned when subsequently accessed. Similarly, a block may get cor-
+rupted when it is transferred from the host to the disk across a faulty bus;
+the resulting corrupt data is stored by the disk, but it is not what the client
+desires. These types of faults are particularly insidious because they are
+silent faults; the disk gives no indication of the problem when returning
+the faulty data.
+Prabhakaran et al. describes this more modern view of disk failure as
+the fail-partial disk failure model [P+05]. In this view, disks can still fail
+in their entirety (as was the case in the traditional fail-stop model); how-
+ever, disks can also seemingly be working and have one or more blocks
+become inaccessible (i.e., LSEs) or hold the wrong contents (i.e., corrup-
+tion). Thus, when accessing a seemingly-working disk, once in a while
+it may either return an error when trying to read or write a given block
+(a non-silent partial fault), and once in a while it may simply return the
+wrong data (a silent partial fault).
+Both of these types of faults are somewhat rare, but just how rare? Fig-
+ure 45.1 summarizes some of the ﬁndings from the two Bairavasundaram
+studies [B+07,B+08].
+The ﬁgure shows the percent of drives that exhibited at least one LSE
+or block corruption over the course of the study (about 3 years, over
+1.5 million disk drives). The ﬁgure further sub-divides the results into
+“cheap” drives (usually SATA drives) and “costly” drives (usually SCSI
+or Fibre Channel). As you can see, while buying better drives reduces
+the frequency of both types of problem (by about an order of magnitude),
+they still happen often enough that you need to think carefully about how
+to handle them in your storage system.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

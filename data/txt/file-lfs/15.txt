@@ -1,0 +1,47 @@
+16
+LOG-STRUCTURED FILE SYSTEMS
+Compute the liveness again, and check if you are right with -c.
+What is the main difference between writing a ﬁle all at once (as
+we do here) versus doing it one block at a time (as above)? What
+does this tell you about the importance of buffering updates in main
+memory as the real LFS does?
+7. Let’s do another speciﬁc example. First, run the following: ./lfs.py
+-L c,/foo:w,/foo,0,1. What does this set of commands do?
+Now, run ./lfs.py -L c,/foo:w,/foo,7,1. What does this
+set of commands do? How are the two different? What can you tell
+about the size ﬁeld in the inode from these two sets of commands?
+8. Now let’s look explicitly at ﬁle creation versus directory creation.
+Run simulations ./lfs.py -L c,/foo and ./lfs.py -L d,/foo
+to create a ﬁle and then a directory. What is similar about these runs,
+and what is different?
+9. The LFS simulator supports hard links as well. Run the following
+to study how they work:
+./lfs.py -L c,/foo:l,/foo,/bar:l,/foo,/goo -o -i.
+What blocks are written out when a hard link is created? How is
+this similar to just creating a new ﬁle, and how is it different? How
+does the reference count ﬁeld change as links are created?
+10. LFS makes many different policy decisions.
+We do not explore
+many of them here – perhaps something left for the future – but here
+is a simple one we do explore: the choice of inode number. First, run
+./lfs.py -p c100 -n 10 -o -a s to show the usual behav-
+ior with the ”sequential” allocation policy, which tries to use free
+inode numbers nearest to zero. Then, change to a ”random” policy
+by running ./lfs.py -p c100 -n 10 -o -a r (the -p c100
+ﬂag ensures 100 percent of the random operations are ﬁle creations).
+What on-disk differences does a random policy versus a sequential
+policy result in? What does this say about the importance of choos-
+ing inode numbers in a real LFS?
+11. One last thing we’ve been assuming is that the LFS simulator al-
+ways updates the checkpoint region after each update. In the real
+LFS, that isn’t the case: it is updated periodically to avoid long
+seeks. Run ./lfs.py -N -i -o -s 1000 to see some opera-
+tions and the intermediate and ﬁnal states of the ﬁle system when
+the checkpoint region isn’t forced to disk. What would happen if
+the checkpoint region is never updated? What if it is updated peri-
+odically? Could you ﬁgure out how to recover the ﬁle system to the
+latest state by rolling forward in the log?
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

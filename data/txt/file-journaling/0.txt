@@ -1,0 +1,32 @@
+42
+Crash Consistency: FSCK and Journaling
+As we’ve seen thus far, the ﬁle system manages a set of data structures to
+implement the expected abstractions: ﬁles, directories, and all of the other
+metadata needed to support the basic abstraction that we expect from a
+ﬁle system. Unlike most data structures (for example, those found in
+memory of a running program), ﬁle system data structures must persist,
+i.e., they must survive over the long haul, stored on devices that retain
+data despite power loss (such as hard disks or ﬂash-based SSDs).
+One major challenge faced by a ﬁle system is how to update persis-
+tent data structures despite the presence of a power loss or system crash.
+Speciﬁcally, what happens if, right in the middle of updating on-disk
+structures, someone trips over the power cord and the machine loses
+power? Or the operating system encounters a bug and crashes? Because
+of power losses and crashes, updating a persistent data structure can be
+quite tricky, and leads to a new and interesting problem in ﬁle system
+implementation, known as the crash-consistency problem.
+This problem is quite simple to understand. Imagine you have to up-
+date two on-disk structures, A and B, in order to complete a particular
+operation. Because the disk only services a single request at a time, one
+of these requests will reach the disk ﬁrst (either A or B). If the system
+crashes or loses power after one write completes, the on-disk structure
+will be left in an inconsistent state. And thus, we have a problem that all
+ﬁle systems need to solve:
+THE CRUX: HOW TO UPDATE THE DISK DESPITE CRASHES
+The system may crash or lose power between any two writes, and
+thus the on-disk state may only partially get updated. After the crash,
+the system boots and wishes to mount the ﬁle system again (in order to
+access ﬁles and such). Given that crashes can occur at arbitrary points
+in time, how do we ensure the ﬁle system keeps the on-disk image in a
+reasonable state?
+1

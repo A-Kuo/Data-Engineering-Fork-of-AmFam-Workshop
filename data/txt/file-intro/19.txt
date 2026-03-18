@@ -1,0 +1,52 @@
+20
+INTERLUDE: FILES AND DIRECTORIES
+name (the ﬁle that is being deleted) to the given inode number, and decre-
+ments the reference count; only when the reference count reaches zero
+does the ﬁle system also free the inode and related data blocks, and thus
+truly “delete” the ﬁle.
+You can see the reference count of a ﬁle using stat() of course. Let’s
+see what it is when we create and delete hard links to a ﬁle. In this exam-
+ple, we’ll create three links to the same ﬁle, and then delete them. Watch
+the link count!
+prompt> echo hello > file
+prompt> stat file
+... Inode: 67158084
+Links: 1 ...
+prompt> ln file file2
+prompt> stat file
+... Inode: 67158084
+Links: 2 ...
+prompt> stat file2
+... Inode: 67158084
+Links: 2 ...
+prompt> ln file2 file3
+prompt> stat file
+... Inode: 67158084
+Links: 3 ...
+prompt> rm file
+prompt> stat file2
+... Inode: 67158084
+Links: 2 ...
+prompt> rm file2
+prompt> stat file3
+... Inode: 67158084
+Links: 1 ...
+prompt> rm file3
+39.15 Symbolic Links
+There is one other type of link that is really useful, and it is called a
+symbolic link or sometimes a soft link. Hard links are somewhat limited:
+you can’t create one to a directory (for fear that you will create a cycle in
+the directory tree); you can’t hard link to ﬁles in other disk partitions
+(because inode numbers are only unique within a particular ﬁle system,
+not across ﬁle systems); etc. Thus, a new type of link called the symbolic
+link was created [MJLF84].
+To create such a link, you can use the same program ln, but with the
+-s ﬂag. Here is an example:
+prompt> echo hello > file
+prompt> ln -s file file2
+prompt> cat file2
+hello
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

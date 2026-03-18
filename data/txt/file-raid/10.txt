@@ -1,0 +1,70 @@
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+11
+C0
+C1
+C2
+C3
+P
+0
+0
+1
+1
+XOR(0,0,1,1) = 0
+0
+1
+0
+0
+XOR(0,1,0,0) = 1
+one 1 (C1), and thus the XOR must be 1 (P). You can remember this in a
+simple way: that the number of 1s in any row, including the parity bit,
+must be an even (not odd) number; that is the invariant that the RAID
+must maintain in order for parity to be correct.
+From the example above, you might also be able to guess how parity
+information can be used to recover from a failure. Imagine the column la-
+beled C2 is lost. To ﬁgure out what values must have been in the column,
+we simply have to read in all the other values in that row (including the
+XOR’d parity bit) and reconstruct the right answer. Speciﬁcally, assume
+the ﬁrst row’s value in column C2 is lost (it is a 1); by reading the other
+values in that row (0 from C0, 0 from C1, 1 from C3, and 0 from the parity
+column P), we get the values 0, 0, 1, and 0. Because we know that XOR
+keeps an even number of 1’s in each row, we know what the missing data
+must be: a 1. And that is how reconstruction works in a XOR-based par-
+ity scheme! Note also how we compute the reconstructed value: we just
+XOR the data bits and the parity bits together, in the same way that we
+calculated the parity in the ﬁrst place.
+Now you might be wondering: we are talking about XORing all of
+these bits, and yet from above we know that the RAID places 4KB (or
+larger) blocks on each disk; how do we apply XOR to a bunch of blocks
+to compute the parity? It turns out this is easy as well. Simply perform a
+bitwise XOR across each bit of the data blocks; put the result of each bit-
+wise XOR into the corresponding bit slot in the parity block. For example,
+if we had blocks of size 4 bits (yes, this is still quite a bit smaller than a
+4KB block, but you get the picture), they might look something like this:
+Block0
+Block1
+Block2
+Block3
+Parity
+00
+10
+11
+10
+11
+10
+01
+00
+01
+10
+As you can see from the ﬁgure, the parity is computed for each bit of
+each block and the result placed in the parity block.
+RAID-4 Analysis
+Let us now analyze RAID-4. From a capacity standpoint, RAID-4 uses 1
+disk for parity information for every group of disks it is protecting. Thus,
+our useful capacity for a RAID group is (N −1) · B.
+Reliability is also quite easy to understand: RAID-4 tolerates 1 disk
+failure and no more. If more than one disk is lost, there is simply no way
+to reconstruct the lost data.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

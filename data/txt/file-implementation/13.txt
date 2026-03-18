@@ -1,0 +1,48 @@
+14
+FILE SYSTEM IMPLEMENTATION
+Let’s look at a speciﬁc example, where the ﬁle /foo/bar is created,
+and three blocks are written to it. Figure 40.4 (page 13) shows what hap-
+pens during the open() (which creates the ﬁle) and during each of three
+4KB writes.
+In the ﬁgure, reads and writes to the disk are grouped under which
+system call caused them to occur, and the rough ordering they might take
+place in goes from top to bottom of the ﬁgure. You can see how much
+work it is to create the ﬁle: 10 I/Os in this case, to walk the pathname and
+then ﬁnally create the ﬁle2. You can also see that each allocating write
+costs 5 I/Os: a pair to read and update the inode, another pair to read
+and update the data bitmap, and then ﬁnally the write of the data itself.
+How can a ﬁle system accomplish any of this with reasonable efﬁciency?
+THE CRUX: HOW TO REDUCE FILE SYSTEM I/O COSTS
+Even the simplest of operations like opening, reading, or writing a ﬁle
+incurs a huge number of I/O operations, scattered over the disk. What
+can a ﬁle system do to reduce the high costs of doing so many I/Os?
+40.7 Caching and Buffering
+As the examples above show, reading and writing ﬁles can be expen-
+sive, incurring many I/Os to the (slow) disk. To remedy what would
+clearly be a huge performance problem, most ﬁle systems aggressively
+use system memory (DRAM) to cache important blocks.
+Imagine the open example above: without caching, every ﬁle open
+would require at least two reads for every level in the directory hierarchy
+(one to read the inode of the directory in question, and at least one to read
+its data). With a long pathname (e.g., /1/2/3/ ... /100/ﬁle.txt), the ﬁle
+system would literally perform hundreds of reads just to open the ﬁle!
+Early ﬁle systems thus introduced a ﬁxed-size cache to hold popular
+blocks. As in our discussion of virtual memory, strategies such as LRU
+and different variants would decide which blocks to keep in cache. This
+ﬁxed-size cache would usually be allocated at boot time to be roughly
+10% of total memory.
+This static partitioning of memory, however, can be wasteful; what
+if the ﬁle system doesn’t need 10% of memory at a given point in time?
+With the ﬁxed-size approach described above, unused pages in the ﬁle
+cache cannot be re-purposed for some other use, and thus go to waste.
+Modern systems, in contrast, employ a dynamic partitioning approach.
+Speciﬁcally, many modern operating systems integrate virtual memory
+pages and ﬁle system pages into a uniﬁed page cache [S00]. In this way,
+2One surprise here is that there is a read associated with the creation of the bar inode,
+even though it is not yet initialized; can you guess why? (think...) Answer: this read occurs
+because an inode (which is small) is contained within a larger block (e.g., 4KB). Thus, the
+system performs a read-modify-write to update the newly allocated inode within the block.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

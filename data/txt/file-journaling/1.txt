@@ -1,0 +1,71 @@
+2
+CRASH CONSISTENCY: FSCK AND JOURNALING
+In this chapter, we’ll describe this problem in more detail, and look
+at some methods ﬁle systems have used to overcome it. We’ll begin by
+examining the approach taken by older ﬁle systems, known as fsck or the
+ﬁle system checker. We’ll then turn our attention to another approach,
+known as journaling (also known as write-ahead logging), a technique
+which adds a little bit of overhead to each write but recovers more quickly
+from crashes or power losses. We will discuss the basic machinery of
+journaling, including a few different ﬂavors of journaling that Linux ext3
+[T98,PAA05] (a relatively modern journaling ﬁle system) implements.
+42.1 A Detailed Example
+To kick off our investigation of journaling, let’s look at an example.
+We’ll need to use a workload that updates on-disk structures in some
+way. Assume here that the workload is simple: the append of a single
+data block to an existing ﬁle. The append is accomplished by opening the
+ﬁle, calling lseek() to move the ﬁle offset to the end of the ﬁle, and then
+issuing a single 4KB write to the ﬁle before closing it.
+Let’s also assume we are using standard simple ﬁle system structures
+on the disk, similar to ﬁle systems we have seen before. This tiny example
+includes an inode bitmap (with just 8 bits, one per inode), a data bitmap
+(also 8 bits, one per data block), inodes (8 total, numbered 0 to 7, and
+spread across four blocks), and data blocks (8 total, numbered 0 to 7).
+Here is a diagram of this ﬁle system:
+Bitmaps
+Inode Data
+Inodes
+Data Blocks
+I[v1]
+Da
+0
+1
+2
+3
+4
+5
+6
+7
+0
+1
+2
+3
+4
+5
+6
+7
+If you look at the structures in the picture, you can see that a single inode
+is allocated (inode number 2), which is marked in the inode bitmap, and a
+single allocated data block (data block 4), also marked in the data bitmap.
+The inode is denoted I[v1], as it is the ﬁrst version of this inode; it will
+soon be updated (due to the workload described above).
+Let’s peek inside this simpliﬁed inode too. Inside of I[v1], we see:
+owner
+: remzi
+permissions : read-write
+size
+: 1
+pointer
+: 4
+pointer
+: null
+pointer
+: null
+pointer
+: null
+In this simpliﬁed inode, the size of the ﬁle is 1 (it has one block al-
+located), the ﬁrst direct pointer points to block 4 (the ﬁrst data block of
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

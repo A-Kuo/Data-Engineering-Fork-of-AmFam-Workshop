@@ -1,0 +1,35 @@
+43
+Log-structured File Systems
+In the early 90’s, a group at Berkeley led by Professor John Ousterhout
+and graduate student Mendel Rosenblum developed a new ﬁle system
+known as the log-structured ﬁle system [RO91]. Their motivation to do
+so was based on the following observations:
+• System memories are growing: As memory gets bigger, more data
+can be cached in memory. As more data is cached, disk trafﬁc in-
+creasingly consists of writes, as reads are serviced by the cache.
+Thus, ﬁle system performance is largely determined by its write
+performance.
+• There is a large gap between random I/O performance and se-
+quential I/O performance: Hard-drive transfer bandwidth has in-
+creased a great deal over the years [P98]; as more bits are packed
+into the surface of a drive, the bandwidth when accessing said bits
+increases. Seek and rotational delay costs, however, have decreased
+slowly; it is challenging to make cheap and small motors spin the
+platters faster or move the disk arm more quickly. Thus, if you are
+able to use disks in a sequential manner, you gain a sizeable perfor-
+mance advantage over approaches that cause seeks and rotations.
+• Existing ﬁle systems perform poorly on many common workloads:
+For example, FFS [MJLF84] would perform a large number of writes
+to create a new ﬁle of size one block: one for a new inode, one to
+update the inode bitmap, one to the directory data block that the
+ﬁle is in, one to the directory inode to update it, one to the new data
+block that is a part of the new ﬁle, and one to the data bitmap to
+mark the data block as allocated. Thus, although FFS places all of
+these blocks within the same block group, FFS incurs many short
+seeks and subsequent rotational delays and thus performance falls
+far short of peak sequential bandwidth.
+• File systems are not RAID-aware: For example, both RAID-4 and
+RAID-5 have the small-write problem where a logical write to a
+single block causes 4 physical I/Os to take place. Existing ﬁle sys-
+tems do not try to avoid this worst-case RAID writing behavior.
+1

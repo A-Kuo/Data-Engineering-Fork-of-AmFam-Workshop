@@ -1,0 +1,48 @@
+FILE SYSTEM IMPLEMENTATION
+9
+ASIDE: LINKED-BASED APPROACHES
+Another simpler approach in designing inodes is to use a linked list.
+Thus, inside an inode, instead of having multiple pointers, you just need
+one, to point to the ﬁrst block of the ﬁle. To handle larger ﬁles, add an-
+other pointer at the end of that data block, and so on, and thus you can
+support large ﬁles.
+As you might have guessed, linked ﬁle allocation performs poorly for
+some workloads; think about reading the last block of a ﬁle, for example,
+or just doing random access. Thus, to make linked allocation work better,
+some systems will keep an in-memory table of link information, instead
+of storing the next pointers with the data blocks themselves. The table
+is indexed by the address of a data block D; the content of an entry is
+simply D’s next pointer, i.e., the address of the next block in a ﬁle which
+follows D. A null-value could be there too (indicating an end-of-ﬁle), or
+some other marker to indicate that a particular block is free. Having such
+a table of next pointers makes it so that a linked allocation scheme can
+effectively do random ﬁle accesses, simply by ﬁrst scanning through the
+(in memory) table to ﬁnd the desired block, and then accessing (on disk)
+it directly.
+Does such a table sound familiar? What we have described is the basic
+structure of what is known as the ﬁle allocation table, or FAT ﬁle system.
+Yes, this classic old Windows ﬁle system, before NTFS [C94], is based on a
+simple linked-based allocation scheme. There are other differences from
+a standard UNIX ﬁle system too; for example, there are no inodes per se,
+but rather directory entries which store metadata about a ﬁle and refer
+directly to the ﬁrst block of said ﬁle, which makes creating hard links
+impossible. See Brouwer [B02] for more of the inelegant details.
+delete is one reason the record length is used: a new entry may reuse an
+old, bigger entry and thus have extra space within.
+You might be wondering where exactly directories are stored. Often,
+ﬁle systems treat directories as a special type of ﬁle. Thus, a directory has
+an inode, somewhere in the inode table (with the type ﬁeld of the inode
+marked as “directory” instead of “regular ﬁle”). The directory has data
+blocks pointed to by the inode (and perhaps, indirect blocks); these data
+blocks live in the data block region of our simple ﬁle system. Our on-disk
+structure thus remains unchanged.
+We should also note again that this simple linear list of directory en-
+tries is not the only way to store such information. As before, any data
+structure is possible. For example, XFS [S+96] stores directories in B-tree
+form, making ﬁle create operations (which have to ensure that a ﬁle name
+has not been used before creating it) faster than systems with simple lists
+that must be scanned in their entirety.
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

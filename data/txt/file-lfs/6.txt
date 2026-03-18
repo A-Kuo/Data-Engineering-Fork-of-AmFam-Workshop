@@ -1,0 +1,53 @@
+LOG-STRUCTURED FILE SYSTEMS
+7
+43.6 Completing The Solution: The Checkpoint Region
+The clever reader (that’s you, right?) might have noticed a problem
+here. How do we ﬁnd the inode map, now that pieces of it are also now
+spread across the disk? In the end, there is no magic: the ﬁle system must
+have some ﬁxed and known location on disk to begin a ﬁle lookup.
+LFS has just such a ﬁxed place on disk for this, known as the check-
+point region (CR). The checkpoint region contains pointers to (i.e., ad-
+dresses of) the latest pieces of the inode map, and thus the inode map
+pieces can be found by reading the CR ﬁrst. Note the checkpoint region
+is only updated periodically (say every 30 seconds or so), and thus perfor-
+mance is not ill-affected. Thus, the overall structure of the on-disk layout
+contains a checkpoint region (which points to the latest pieces of the in-
+ode map); the inode map pieces each contain addresses of the inodes; the
+inodes point to ﬁles (and directories) just like typical UNIX ﬁle systems.
+Here is an example of the checkpoint region (note it is all the way at
+the beginning of the disk, at address 0), and a single imap chunk, inode,
+and data block. A real ﬁle system would of course have a much bigger
+CR (indeed, it would have two, as we’ll come to understand later), many
+imap chunks, and of course many more inodes, data blocks, etc.
+imap
+[k...k+N]:
+A2
+CR
+0
+D
+A0
+I[k]
+b[0]:A0
+A1
+imap
+m[k]:A1
+A2
+43.7 Reading A File From Disk: A Recap
+To make sure you understand how LFS works, let us now walk through
+what must happen to read a ﬁle from disk. Assume we have nothing in
+memory to begin. The ﬁrst on-disk data structure we must read is the
+checkpoint region. The checkpoint region contains pointers (i.e., disk ad-
+dresses) to the entire inode map, and thus LFS then reads in the entire in-
+ode map and caches it in memory. After this point, when given an inode
+number of a ﬁle, LFS simply looks up the inode-number to inode-disk-
+address mapping in the imap, and reads in the most recent version of the
+inode. To read a block from the ﬁle, at this point, LFS proceeds exactly
+as a typical UNIX ﬁle system, by using direct pointers or indirect pointers
+or doubly-indirect pointers as need be. In the common case, LFS should
+perform the same number of I/Os as a typical ﬁle system when reading a
+ﬁle from disk; the entire imap is cached and thus the extra work LFS does
+during a read is to look up the inode’s address in the imap.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

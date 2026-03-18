@@ -1,0 +1,30 @@
+45
+Data Integrity and Protection
+Beyond the basic advances found in the ﬁle systems we have studied thus
+far, a number of features are worth studying. In this chapter, we focus on
+reliability once again (having previously studied storage system reliabil-
+ity in the RAID chapter). Speciﬁcally, how should a ﬁle system or storage
+system ensure that data is safe, given the unreliable nature of modern
+storage devices?
+This general area is referred to as data integrity or data protection.
+Thus, we will now investigate techniques used to ensure that the data
+you put into your storage system is the same when the storage system
+returns it to you.
+CRUX: HOW TO ENSURE DATA INTEGRITY
+How should systems ensure that the data written to storage is pro-
+tected? What techniques are required? How can such techniques be made
+efﬁcient, with both low space and time overheads?
+45.1 Disk Failure Modes
+As you learned in the chapter about RAID, disks are not perfect, and
+can fail (on occasion). In early RAID systems, the model of failure was
+quite simple: either the entire disk is working, or it fails completely, and
+the detection of such a failure is straightforward. This fail-stop model of
+disk failure makes building RAID relatively simple [S90].
+What you didn’t learn is about all of the other types of failure modes
+modern disks exhibit. Speciﬁcally, as Bairavasundaram et al. studied
+in great detail [B+07, B+08], modern disks will occasionally seem to be
+mostly working but have trouble successfully accessing one or more blocks.
+Speciﬁcally, two types of single-block failures are common and worthy of
+consideration: latent sector errors (LSEs) and block corruption. We’ll
+now discuss each in more detail.
+1

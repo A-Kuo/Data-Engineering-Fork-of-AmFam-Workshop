@@ -1,0 +1,58 @@
+14
+LOG-STRUCTURED FILE SYSTEMS
+References
+[AD14] “Operating Systems: Three Easy Pieces” (Chapter: Flash-based Solid State Drives)
+by Remzi Arpaci-Dusseau and Andrea Arpaci-Dusseau. Arpaci-Dusseau Books, 2014. A bit
+gauche to refer you to another chapter in this very book, but who are we to judge?
+[B07] “ZFS: The Last Word in File Systems” by Jeff Bonwick and Bill Moore. Copy Available:
+http://www.ostep.org/Citations/zfs_last.pdf. Slides on ZFS; unfortunately, there
+is no great ZFS paper (yet). Maybe you will write one, so we can cite it here?
+[HK+17] “The Unwritten Contract of of Solid State Drives” by Jun He, Sudarsun Kannan, An-
+drea C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. EuroSys ’17, April 2017. Which unwritten
+rules one must follow to extract high performance from an SSD? Interestingly, both request scale (large
+or parallel requests) and locality still matter, even on SSDs. The more things change ...
+[HLM94] “File System Design for an NFS File Server Appliance” by Dave Hitz, James Lau,
+Michael Malcolm. USENIX Spring ’94. WAFL takes many ideas from LFS and RAID and puts it
+into a high-speed NFS appliance for the multi-billion dollar storage company NetApp.
+[L77] “Physical Integrity in a Large Segmented Database” by R. Lorie. ACM Transactions on
+Databases, Volume 2:1, 1977. The original idea of shadow paging is presented here.
+[MJLF84] “A Fast File System for UNIX” by Marshall K. McKusick, William N. Joy, Sam J.
+Lefﬂer, Robert S. Fabry. ACM TOCS, Volume 2:3, August 1984. The original FFS paper; see the
+chapter on FFS for more details.
+[MR+97] “Improving the Performance of Log-structured File Systems with Adaptive Meth-
+ods” by Jeanna Neefe Matthews, Drew Roselli, Adam M. Costello, Randolph Y. Wang, Thomas
+E. Anderson. SOSP 1997, pages 238-251, October, Saint Malo, France. A more recent paper detail-
+ing better policies for cleaning in LFS.
+[M94] “A Better Update Policy” by Jeffrey C. Mogul. USENIX ATC ’94, June 1994. In this paper,
+Mogul ﬁnds that read workloads can be harmed by buffering writes for too long and then sending them
+to the disk in a big burst. Thus, he recommends sending writes more frequently and in smaller batches.
+[P98] “Hardware Technology Trends and Database Opportunities” by David A. Patterson.
+ACM SIGMOD ’98 Keynote, 1998. Available online here: http://www.cs.berkeley.edu/
+˜pattrsn/talks/keynote.html. A great set of slides on technology trends in computer sys-
+tems. Hopefully, Patterson will create another of these sometime soon.
+[R+13] “BTRFS: The Linux B-Tree Filesystem” by Ohad Rodeh, Josef Bacik, Chris Mason. ACM
+Transactions on Storage, Volume 9 Issue 3, August 2013. Finally, a good paper on BTRFS, a
+modern take on copy-on-write ﬁle systems.
+[RO91] “Design and Implementation of the Log-structured File System” by Mendel Rosen-
+blum and John Ousterhout. SOSP ’91, Paciﬁc Grove, CA, October 1991. The original SOSP
+paper about LFS, which has been cited by hundreds of other papers and inspired many real systems.
+[R92] “Design and Implementation of the Log-structured File System” by Mendel Rosenblum.
+http://www.eecs.berkeley.edu/Pubs/TechRpts/1992/CSD-92-696.pdf. The award-winning dis-
+sertation about LFS, with many of the details missing from the paper.
+[SS+95] “File system logging versus clustering: a performance comparison” by Margo Seltzer,
+Keith A. Smith, Hari Balakrishnan, Jacqueline Chang, Sara McMains, Venkata Padmanabhan.
+USENIX 1995 Technical Conference, New Orleans, Louisiana, 1995. A paper that showed the LFS
+performance sometimes has problems, particularly for workloads with many calls to fsync() (such as
+database workloads). The paper was controversial at the time.
+[SO90] “Write-Only Disk Caches” by Jon A. Solworth, Cyril U. Orji. SIGMOD ’90, Atlantic
+City, New Jersey, May 1990. An early study of write buffering and its beneﬁts. However, buffering
+for too long can be harmful: see Mogul [M94] for details.
+[Z+12] “De-indirection for Flash-based SSDs with Nameless Writes” by Yiying Zhang, Leo
+Prasath Arulraj, Andrea C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. FAST ’13, San Jose,
+California, February 2013. Our paper on a new way to build ﬂash-based storage devices, to avoid
+redundant mappings in the ﬁle system and FTL. The idea is for the device to pick the physical location
+of a write, and return the address to the ﬁle system, which stores the mapping.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

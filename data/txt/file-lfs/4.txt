@@ -1,0 +1,58 @@
+LOG-STRUCTURED FILE SYSTEMS
+5
+At this point, we can solve for D:
+Reffective =
+D
+Tposition +
+D
+Rpeak
+= F × Rpeak
+(43.3)
+D = F × Rpeak × (Tposition +
+D
+Rpeak )
+(43.4)
+D = (F × Rpeak × Tposition) + (F × Rpeak ×
+D
+Rpeak )
+(43.5)
+D =
+F
+1 −F × Rpeak × Tposition
+(43.6)
+Let’s do an example, with a disk with a positioning time of 10 mil-
+liseconds and peak transfer rate of 100 MB/s; assume we want an ef-
+fective bandwidth of 90% of peak (F = 0.9). In this case, D =
+0.9
+0.1 ×
+100 MB/s × 0.01 seconds = 9 MB. Try some different values to see
+how much we need to buffer in order to approach peak bandwidth. How
+much is needed to reach 95% of peak? 99%?
+43.4 Problem: Finding Inodes
+To understand how we ﬁnd an inode in LFS, let us brieﬂy review how
+to ﬁnd an inode in a typical UNIX ﬁle system. In a typical ﬁle system such
+as FFS, or even the old UNIX ﬁle system, ﬁnding inodes is easy, because
+they are organized in an array and placed on disk at ﬁxed locations.
+For example, the old UNIX ﬁle system keeps all inodes at a ﬁxed por-
+tion of the disk. Thus, given an inode number and the start address, to
+ﬁnd a particular inode, you can calculate its exact disk address simply by
+multiplying the inode number by the size of an inode, and adding that
+to the start address of the on-disk array; array-based indexing, given an
+inode number, is fast and straightforward.
+Finding an inode given an inode number in FFS is only slightly more
+complicated, because FFS splits up the inode table into chunks and places
+a group of inodes within each cylinder group. Thus, one must know how
+big each chunk of inodes is and the start addresses of each. After that, the
+calculations are similar and also easy.
+In LFS, life is more difﬁcult. Why? Well, we’ve managed to scatter the
+inodes all throughout the disk! Worse, we never overwrite in place, and
+thus the latest version of an inode (i.e., the one we want) keeps moving.
+43.5 Solution Through Indirection: The Inode Map
+To remedy this, the designers of LFS introduced a level of indirection
+between inode numbers and the inodes through a data structure called
+the inode map (imap). The imap is a structure that takes an inode number
+as input and produces the disk address of the most recent version of the
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,52 @@
+CRASH CONSISTENCY: FSCK AND JOURNALING
+13
+oldest and newest non-checkpointed transactions in the log in a journal
+superblock; all other space is free. Here is a graphical depiction:
+Journal
+Journal
+Super
+Tx1
+Tx2
+Tx3
+Tx4
+Tx5
+...
+In the journal superblock (not to be confused with the main ﬁle system
+superblock), the journaling system records enough information to know
+which transactions have not yet been checkpointed, and thus reduces re-
+covery time as well as enables re-use of the log in a circular fashion. And
+thus we add another step to our basic protocol:
+1. Journal write: Write the contents of the transaction (containing TxB
+and the contents of the update) to the log; wait for these writes to
+complete.
+2. Journal commit: Write the transaction commit block (containing
+TxE) to the log; wait for the write to complete; the transaction is
+now committed.
+3. Checkpoint: Write the contents of the update to their ﬁnal locations
+within the ﬁle system.
+4. Free: Some time later, mark the transaction free in the journal by
+updating the journal superblock.
+Thus we have our ﬁnal data journaling protocol. But there is still a
+problem: we are writing each data block to the disk twice, which is a
+heavy cost to pay, especially for something as rare as a system crash. Can
+you ﬁgure out a way to retain consistency without writing data twice?
+Metadata Journaling
+Although recovery is now fast (scanning the journal and replaying a few
+transactions as opposed to scanning the entire disk), normal operation
+of the ﬁle system is slower than we might desire. In particular, for each
+write to disk, we are now also writing to the journal ﬁrst, thus doubling
+write trafﬁc; this doubling is especially painful during sequential write
+workloads, which now will proceed at half the peak write bandwidth of
+the drive. Further, between writes to the journal and writes to the main
+ﬁle system, there is a costly seek, which adds noticeable overhead for
+some workloads.
+Because of the high cost of writing every data block to disk twice, peo-
+ple have tried a few different things in order to speed up performance.
+For example, the mode of journaling we described above is often called
+data journaling (as in Linux ext3), as it journals all user data (in addition
+to the metadata of the ﬁle system). A simpler (and more common) form
+of journaling is sometimes called ordered journaling (or just metadata
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

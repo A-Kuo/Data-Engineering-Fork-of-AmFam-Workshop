@@ -1,0 +1,76 @@
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+13
+C0
+C1
+C2
+C3
+P
+0
+0
+1
+1
+XOR(0,0,1,1) = 0
+Let’s imagine that we wish to overwrite bit C2 with a new value which
+we will call C2new. The subtractive method works in three steps. First,
+we read in the old data at C2 (C2old = 1) and the old parity (Pold = 0).
+Then, we compare the old data and the new data; if they are the same
+(e.g., C2new = C2old), then we know the parity bit will also remain the
+same (i.e., Pnew = Pold). If, however, they are different, then we must ﬂip
+the old parity bit to the opposite of its current state, that is, if (Pold == 1),
+Pnew will be set to 0; if (Pold == 0), Pnew will be set to 1. We can express
+this whole mess neatly with XOR (where ⊕is the XOR operator):
+Pnew = (Cold ⊕Cnew) ⊕Pold
+(38.1)
+Because we are dealing with blocks, not bits, we perform this calcula-
+tion over all the bits in the block (e.g., 4096 bytes in each block multiplied
+by 8 bits per byte). Thus, in most cases, the new block will be different
+than the old block and thus the new parity block will too.
+You should now be able to ﬁgure out when we would use the additive
+parity calculation and when we would use the subtractive method. Think
+about how many disks would need to be in the system so that the additive
+method performs fewer I/Os than the subtractive method; what is the
+cross-over point?
+For this performance analysis, let us assume we are using the subtrac-
+tive method. Thus, for each write, the RAID has to perform 4 physical
+I/Os (two reads and two writes). Now imagine there are lots of writes
+submitted to the RAID; how many can RAID-4 perform in parallel? To
+understand, let us again look at the RAID-4 layout (Figure 38.6).
+Disk 0
+Disk 1
+Disk 2
+Disk 3
+Disk 4
+0
+1
+2
+3
+P0
+∗4
+5
+6
+7
++P1
+8
+9
+10
+11
+P2
+12
+∗13
+14
+15
++P3
+Figure 38.6: Example: Writes To 4, 13, And Respective Parity Blocks
+Now imagine there were 2 small writes submitted to the RAID-4 at
+about the same time, to blocks 4 and 13 (marked with ∗in the diagram).
+The data for those disks is on disks 0 and 1, and thus the read and write
+to data could happen in parallel, which is good. The problem that arises
+is with the parity disk; both the requests have to read the related parity
+blocks for 4 and 13, parity blocks 1 and 3 (marked with +). Hopefully, the
+issue is now clear: the parity disk is a bottleneck under this type of work-
+load; we sometimes thus call this the small-write problem for parity-
+based RAIDs. Thus, even though the data disks could be accessed in
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

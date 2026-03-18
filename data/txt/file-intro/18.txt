@@ -1,0 +1,48 @@
+INTERLUDE: FILES AND DIRECTORIES
+19
+Here we created a ﬁle with the word “hello” in it, and called the ﬁle
+file2. We then create a hard link to that ﬁle using the ln program. After
+this, we can examine the ﬁle by either opening file or file2.
+The way link() works is that it simply creates another name in the
+directory you are creating the link to, and refers it to the same inode num-
+ber (i.e., low-level name) of the original ﬁle. The ﬁle is not copied in any
+way; rather, you now just have two human-readable names (file and
+file2) that both refer to the same ﬁle. We can even see this in the direc-
+tory itself, by printing out the inode number of each ﬁle:
+prompt> ls -i file file2
+67158084 file
+67158084 file2
+prompt>
+By passing the -i ﬂag to ls, it prints out the inode number of each ﬁle
+(as well as the ﬁle name). And thus you can see what link really has done:
+just make a new reference to the same exact inode number (67158084 in
+this example).
+By now you might be starting to see why unlink() is called unlink().
+When you create a ﬁle, you are really doing two things. First, you are
+making a structure (the inode) that will track virtually all relevant infor-
+mation about the ﬁle, including its size, where its blocks are on disk, and
+so forth. Second, you are linking a human-readable name to that ﬁle, and
+putting that link into a directory.
+After creating a hard link to a ﬁle, the ﬁle system perceives no dif-
+ference between the original ﬁle name (file) and the newly created ﬁle
+name (file2); indeed, they are both just links to the underlying meta-
+data about the ﬁle, which is found in inode number 67158084.
+Thus, to remove a ﬁle from the ﬁle system, we call unlink(). In the
+example above, we could for example remove the ﬁle named file, and
+still access the ﬁle without difﬁculty:
+prompt> rm file
+removed ‘file’
+prompt> cat file2
+hello
+The reason this works is because when the ﬁle system unlinks ﬁle, it
+checks a reference count within the inode number. This reference count
+(sometimes called the link count) allows the ﬁle system to track how
+many different ﬁle names have been linked to this particular inode. When
+unlink() is called, it removes the “link” between the human-readable
+2Note again how creative the authors of this book are. We also used to have a cat named
+“Cat” (true story). However, she died, and we now have a hamster named “Hammy.” Update:
+Hammy is now dead too. The pet bodies are piling up.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

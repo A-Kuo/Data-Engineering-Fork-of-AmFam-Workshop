@@ -1,0 +1,46 @@
+LOG-STRUCTURED FILE SYSTEMS
+3
+However, when a user writes a data block, it is not only data that gets
+written to disk; there is also other metadata that needs to be updated.
+In this case, let’s also write the inode (I) of the ﬁle to disk, and have it
+point to the data block D. When written to disk, the data block and inode
+would look something like this (note that the inode looks as big as the
+data block, which generally isn’t the case; in most systems, data blocks
+are 4 KB in size, whereas an inode is much smaller, around 128 bytes):
+D
+A0
+I
+b[0]:A0
+This basic idea, of simply writing all updates (such as data blocks,
+inodes, etc.) to the disk sequentially, sits at the heart of LFS. If you un-
+derstand this, you get the basic idea. But as with all complicated systems,
+the devil is in the details.
+43.2 Writing Sequentially And Effectively
+Unfortunately, writing to disk sequentially is not (alone) enough to
+guarantee efﬁcient writes. For example, imagine if we wrote a single
+block to address A, at time T. We then wait a little while, and write to
+the disk at address A + 1 (the next block address in sequential order),
+but at time T + δ. In-between the ﬁrst and second writes, unfortunately,
+the disk has rotated; when you issue the second write, it will thus wait
+for most of a rotation before being committed (speciﬁcally, if the rotation
+takes time Trotation, the disk will wait Trotation −δ before it can commit
+the second write to the disk surface). And thus you can hopefully see
+that simply writing to disk in sequential order is not enough to achieve
+peak performance; rather, you must issue a large number of contiguous
+writes (or one large write) to the drive in order to achieve good write
+performance.
+To achieve this end, LFS uses an ancient technique known as write
+buffering1. Before writing to the disk, LFS keeps track of updates in
+memory; when it has received a sufﬁcient number of updates, it writes
+them to disk all at once, thus ensuring efﬁcient use of the disk.
+The large chunk of updates LFS writes at one time is referred to by
+the name of a segment. Although this term is over-used in computer
+systems, here it just means a large-ish chunk which LFS uses to group
+writes. Thus, when writing to disk, LFS buffers updates in an in-memory
+1Indeed, it is hard to ﬁnd a good citation for this idea, since it was likely invented by many
+and very early on in the history of computing. For a study of the beneﬁts of write buffering,
+see Solworth and Orji [SO90]; to learn about its potential harms, see Mogul [M94].
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,85 @@
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+15
+RAID-0
+RAID-1
+RAID-4
+RAID-5
+Capacity
+N · B
+(N · B)/2
+(N −1) · B
+(N −1) · B
+Reliability
+0
+1 (for sure)
+1
+1
+N
+2 (if lucky)
+Throughput
+Sequential Read
+N · S
+(N/2) · S1
+(N −1) · S
+(N −1) · S
+Sequential Write
+N · S
+(N/2) · S1
+(N −1) · S
+(N −1) · S
+Random Read
+N · R
+N · R
+(N −1) · R
+N · R
+Random Write
+N · R
+(N/2) · R
+1
+2 · R
+N
+4 R
+Latency
+Read
+T
+T
+T
+T
+Write
+T
+T
+2T
+2T
+Figure 38.8: RAID Capacity, Reliability, and Performance
+block 10 and its parity). Thus, they can proceed in parallel. In fact, we
+can generally assume that given a large number of random requests, we
+will be able to keep all the disks about evenly busy. If that is the case,
+then our total bandwidth for small writes will be N
+4 · R MB/s. The factor
+of four loss is due to the fact that each RAID-5 write still generates 4 total
+I/O operations, which is simply the cost of using parity-based RAID.
+Because RAID-5 is basically identical to RAID-4 except in the few cases
+where it is better, it has almost completely replaced RAID-4 in the market-
+place. The only place where it has not is in systems that know they will
+never perform anything other than a large write, thus avoiding the small-
+write problem altogether [HLM94]; in those cases, RAID-4 is sometimes
+used as it is slightly simpler to build.
+38.8 RAID Comparison: A Summary
+We now summarize our simpliﬁed comparison of RAID levels in Fig-
+ure 38.8. Note that we have omitted a number of details to simplify our
+analysis. For example, when writing in a mirrored system, the average
+seek time is a little higher than when writing to just a single disk, because
+the seek time is the max of two seeks (one on each disk). Thus, random
+write performance to two disks will generally be a little less than random
+write performance of a single disk. Also, when updating the parity disk
+in RAID-4/5, the ﬁrst read of the old parity will likely cause a full seek
+and rotation, but the second write of the parity will only result in rotation.
+Finally, sequential I/O to mirrored RAIDs pay a 2× performance penalty
+as compared to other approaches1.
+1The 1/2 penalty assumes a naive read/write pattern for mirroring; a more sophisticated
+approach that issued large I/O requests to differing parts of each mirror could potentially
+achieve full bandwidth. Think about this to see if you can ﬁgure out why.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

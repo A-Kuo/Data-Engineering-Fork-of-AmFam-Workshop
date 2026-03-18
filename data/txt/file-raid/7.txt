@@ -1,0 +1,65 @@
+8
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+In a typical mirrored system, we will assume that for each logical
+block, the RAID keeps two physical copies of it. Here is an example:
+Disk 0
+Disk 1
+Disk 2
+Disk 3
+0
+0
+1
+1
+2
+2
+3
+3
+4
+4
+5
+5
+6
+6
+7
+7
+Figure 38.3: Simple RAID-1: Mirroring
+In the example, disk 0 and disk 1 have identical contents, and disk 2
+and disk 3 do as well; the data is striped across these mirror pairs. In
+fact, you may have noticed that there are a number of different ways to
+place block copies across the disks. The arrangement above is a common
+one and is sometimes called RAID-10 (or RAID 1+0, stripe of mirrors)
+because it uses mirrored pairs (RAID-1) and then stripes (RAID-0) on top
+of them; another common arrangement is RAID-01 (or RAID 0+1, mir-
+ror of stripes), which contains two large striping (RAID-0) arrays, and
+then mirrors (RAID-1) on top of them. For now, we will just talk about
+mirroring assuming the above layout.
+When reading a block from a mirrored array, the RAID has a choice: it
+can read either copy. For example, if a read to logical block 5 is issued to
+the RAID, it is free to read it from either disk 2 or disk 3. When writing
+a block, though, no such choice exists: the RAID must update both copies
+of the data, in order to preserve reliability. Do note, though, that these
+writes can take place in parallel; for example, a write to logical block 5
+could proceed to disks 2 and 3 at the same time.
+RAID-1 Analysis
+Let us assess RAID-1. From a capacity standpoint, RAID-1 is expensive;
+with the mirroring level = 2, we only obtain half of our peak useful ca-
+pacity. With N disks of B blocks, RAID-1 useful capacity is (N · B)/2.
+From a reliability standpoint, RAID-1 does well. It can tolerate the fail-
+ure of any one disk. You may also notice RAID-1 can actually do better
+than this, with a little luck. Imagine, in the ﬁgure above, that disk 0 and
+disk 2 both failed. In such a situation, there is no data loss! More gen-
+erally, a mirrored system (with mirroring level of 2) can tolerate 1 disk
+failure for certain, and up to N/2 failures depending on which disks fail.
+In practice, we generally don’t like to leave things like this to chance; thus
+most people consider mirroring to be good for handling a single failure.
+Finally, we analyze performance. From the perspective of the latency
+of a single read request, we can see it is the same as the latency on a single
+disk; all the RAID-1 does is direct the read to one of its copies. A write
+is a little different: it requires two physical writes to complete before it
+is done. These two writes happen in parallel, and thus the time will be
+roughly equivalent to the time of a single write; however, because the
+logical write must wait for both physical writes to complete, it suffers the
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

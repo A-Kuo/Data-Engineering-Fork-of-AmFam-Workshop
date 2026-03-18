@@ -1,0 +1,52 @@
+CRASH CONSISTENCY: FSCK AND JOURNALING
+9
+ASIDE: FORCING WRITES TO DISK
+To enforce ordering between two disk writes, modern ﬁle systems have
+to take a few extra precautions. In olden times, forcing ordering between
+two writes, A and B, was easy: just issue the write of A to the disk, wait
+for the disk to interrupt the OS when the write is complete, and then issue
+the write of B.
+Things got slightly more complex due to the increased use of write caches
+within disks. With write buffering enabled (sometimes called immediate
+reporting), a disk will inform the OS the write is complete when it simply
+has been placed in the disk’s memory cache, and has not yet reached
+disk. If the OS then issues a subsequent write, it is not guaranteed to
+reach the disk after previous writes; thus ordering between writes is not
+preserved. One solution is to disable write buffering. However, more
+modern systems take extra precautions and issue explicit write barriers;
+such a barrier, when it completes, guarantees that all writes issued before
+the barrier will reach disk before any writes issued after the barrier.
+All of this machinery requires a great deal of trust in the correct oper-
+ation of the disk. Unfortunately, recent research shows that some disk
+manufacturers, in an effort to deliver “higher performing” disks, explic-
+itly ignore write-barrier requests, thus making the disks seemingly run
+faster but at the risk of incorrect operation [C+13, R+11]. As Kahan said,
+the fast almost always beats out the slow, even if the fast is wrong.
+all ﬁve block writes at once, as this would turn ﬁve writes into a single
+sequential write and thus be faster. However, this is unsafe, for the fol-
+lowing reason: given such a big write, the disk internally may perform
+scheduling and complete small pieces of the big write in any order. Thus,
+the disk internally may (1) write TxB, I[v2], B[v2], and TxE and only later
+(2) write Db. Unfortunately, if the disk loses power between (1) and (2),
+this is what ends up on disk:
+Journal
+TxB
+id=1
+I[v2]
+B[v2]
+??
+TxE
+id=1
+Why is this a problem? Well, the transaction looks like a valid trans-
+action (it has a begin and an end with matching sequence numbers). Fur-
+ther, the ﬁle system can’t look at that fourth block and know it is wrong;
+after all, it is arbitrary user data. Thus, if the system now reboots and
+runs recovery, it will replay this transaction, and ignorantly copy the con-
+tents of the garbage block ’??’ to the location where Db is supposed to
+live. This is bad for arbitrary user data in a ﬁle; it is much worse if it hap-
+pens to a critical piece of ﬁle system, such as the superblock, which could
+render the ﬁle system unmountable.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

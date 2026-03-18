@@ -1,0 +1,70 @@
+12
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+Disk 0
+Disk 1
+Disk 2
+Disk 3
+Disk 4
+0
+1
+2
+3
+P0
+4
+5
+6
+7
+P1
+8
+9
+10
+11
+P2
+12
+13
+14
+15
+P3
+Figure 38.5: Full-stripe Writes In RAID-4
+Finally, there is performance. This time, let us start by analyzing steady-
+state throughput. Sequential read performance can utilize all of the disks
+except for the parity disk, and thus deliver a peak effective bandwidth of
+(N −1) · S MB/s (an easy case).
+To understand the performance of sequential writes, we must ﬁrst un-
+derstand how they are done. When writing a big chunk of data to disk,
+RAID-4 can perform a simple optimization known as a full-stripe write.
+For example, imagine the case where the blocks 0, 1, 2, and 3 have been
+sent to the RAID as part of a write request (Figure 38.5).
+In this case, the RAID can simply calculate the new value of P0 (by
+performing an XOR across the blocks 0, 1, 2, and 3) and then write all of
+the blocks (including the parity block) to the ﬁve disks above in parallel
+(highlighted in gray in the ﬁgure). Thus, full-stripe writes are the most
+efﬁcient way for RAID-4 to write to disk.
+Once we understand the full-stripe write, calculating the performance
+of sequential writes on RAID-4 is easy; the effective bandwidth is also
+(N −1)·S MB/s. Even though the parity disk is constantly in use during
+the operation, the client does not gain performance advantage from it.
+Now let us analyze the performance of random reads. As you can also
+see from the ﬁgure above, a set of 1-block random reads will be spread
+across the data disks of the system but not the parity disk. Thus, the
+effective performance is: (N −1) · R MB/s.
+Random writes, which we have saved for last, present the most in-
+teresting case for RAID-4. Imagine we wish to overwrite block 1 in the
+example above. We could just go ahead and overwrite it, but that would
+leave us with a problem: the parity block P0 would no longer accurately
+reﬂect the correct parity value of the stripe; in this example, P0 must also
+be updated. How can we update it both correctly and efﬁciently?
+It turns out there are two methods. The ﬁrst, known as additive parity,
+requires us to do the following. To compute the value of the new parity
+block, read in all of the other data blocks in the stripe in parallel (in the
+example, blocks 0, 2, and 3) and XOR those with the new block (1). The
+result is your new parity block. To complete the write, you can then write
+the new data and new parity to their respective disks, also in parallel.
+The problem with this technique is that it scales with the number of
+disks, and thus in larger RAIDs requires a high number of reads to com-
+pute parity. Thus, the subtractive parity method.
+For example, imagine this string of bits (4 data bits, one parity):
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

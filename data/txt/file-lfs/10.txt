@@ -1,0 +1,51 @@
+LOG-STRUCTURED FILE SYSTEMS
+11
+(N, T) = SegmentSummary[A];
+inode
+= Read(imap[N]);
+if (inode[T] == A)
+// block D is alive
+else
+// block D is garbage
+Here is a diagram depicting the mechanism, in which the segment
+summary block (marked SS) records that the data block at address A0
+is actually a part of ﬁle k at offset 0. By checking the imap for k, you can
+ﬁnd the inode, and see that it does indeed point to that location.
+D
+A0
+I[k]
+b[0]:A0
+A1
+imap
+m[k]:A1
+A0:
+(k,0)
+ss
+There are some shortcuts LFS takes to make the process of determining
+liveness more efﬁcient. For example, when a ﬁle is truncated or deleted,
+LFS increases its version number and records the new version number in
+the imap. By also recording the version number in the on-disk segment,
+LFS can short circuit the longer check described above simply by compar-
+ing the on-disk version number with a version number in the imap, thus
+avoiding extra reads.
+43.11 A Policy Question: Which Blocks To Clean, And When?
+On top of the mechanism described above, LFS must include a set of
+policies to determine both when to clean and which blocks are worth
+cleaning. Determining when to clean is easier; either periodically, dur-
+ing idle time, or when you have to because the disk is full.
+Determining which blocks to clean is more challenging, and has been
+the subject of many research papers. In the original LFS paper [RO91], the
+authors describe an approach which tries to segregate hot and cold seg-
+ments. A hot segment is one in which the contents are being frequently
+over-written; thus, for such a segment, the best policy is to wait a long
+time before cleaning it, as more and more blocks are getting over-written
+(in new segments) and thus being freed for use. A cold segment, in con-
+trast, may have a few dead blocks but the rest of its contents are relatively
+stable. Thus, the authors conclude that one should clean cold segments
+sooner and hot segments later, and develop a heuristic that does exactly
+that. However, as with most policies, this policy isn’t perfect; later ap-
+proaches show how to do better [MR+97].
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

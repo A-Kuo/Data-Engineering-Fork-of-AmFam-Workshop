@@ -1,0 +1,50 @@
+6
+DATA INTEGRITY AND PROTECTION
+Another basic checksum function is addition. This approach has the
+advantage of being fast; computing it just requires performing 2’s-complement
+addition over each chunk of the data, ignoring overﬂow. It can detect
+many changes in data, but is not good if the data, for example, is shifted.
+A slightly more complex algorithm is known as the Fletcher check-
+sum, named (as you might guess) for the inventor, John G. Fletcher [F82].
+It is quite simple to compute and involves the computation of two check
+bytes, s1 and s2. Speciﬁcally, assume a block D consists of bytes d1 ...
+dn; s1 is deﬁned as follows: s1 = (s1 + di) mod 255 (computed over all
+di); s2 in turn is: s2 = (s2 + s1) mod 255 (again over all di) [F04]. The
+Fletcher checksum is almost as strong as the CRC (see below), detecting
+all single-bit, double-bit errors, and many burst errors [F04].
+One ﬁnal commonly-used checksum is known as a cyclic redundancy
+check (CRC). Assume you wish to compute the checksum over a data
+block D. All you do is treat D as if it is a large binary number (it is just
+a string of bits after all) and divide it by an agreed upon value (k). The
+remainder of this division is the value of the CRC. As it turns out, one
+can implement this binary modulo operation rather efﬁciently, and hence
+the popularity of the CRC in networking as well. See elsewhere for more
+details [M13].
+Whatever the method used, it should be obvious that there is no per-
+fect checksum: it is possible two data blocks with non-identical contents
+will have identical checksums, something referred to as a collision. This
+fact should be intuitive: after all, computing a checksum is taking some-
+thing large (e.g., 4KB) and producing a summary that is much smaller
+(e.g., 4 or 8 bytes). In choosing a good checksum function, we are thus
+trying to ﬁnd one that minimizes the chance of collisions while remain-
+ing easy to compute.
+Checksum Layout
+Now that you understand a bit about how to compute a checksum, let’s
+next analyze how to use checksums in a storage system. The ﬁrst question
+we must address is the layout of the checksum, i.e., how should check-
+sums be stored on disk?
+The most basic approach simply stores a checksum with each disk sec-
+tor (or block). Given a data block D, let us call the checksum over that
+data C(D). Thus, without checksums, the disk layout looks like this:
+D0
+D1
+D2
+D3
+D4
+D5
+D6
+With checksums, the layout adds a single checksum for every block:
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,58 @@
+DATA INTEGRITY AND PROTECTION
+7
+C[D0]
+D0
+C[D1]
+D1
+C[D2]
+D2
+C[D3]
+D3
+C[D4]
+D4
+Because checksums are usually small (e.g., 8 bytes), and disks only can
+write in sector-sized chunks (512 bytes) or multiples thereof, one problem
+that arises is how to achieve the above layout. One solution employed by
+drive manufacturers is to format the drive with 520-byte sectors; an extra
+8 bytes per sector can be used to store the checksum.
+In disks that don’t have such functionality, the ﬁle system must ﬁgure
+out a way to store the checksums packed into 512-byte blocks. One such
+possibility is as follows:
+C[D0]
+C[D1]
+C[D2]
+C[D3]
+C[D4]
+D0
+D1
+D2
+D3
+D4
+In this scheme, the n checksums are stored together in a sector, fol-
+lowed by n data blocks, followed by another checksum sector for the
+next n blocks, and so forth. This approach has the beneﬁt of working
+on all disks, but can be less efﬁcient; if the ﬁle system, for example, wants
+to overwrite block D1, it has to read in the checksum sector containing
+C(D1), update C(D1) in it, and then write out the checksum sector and
+new data block D1 (thus, one read and two writes). The earlier approach
+(of one checksum per sector) just performs a single write.
+45.4 Using Checksums
+With a checksum layout decided upon, we can now proceed to actu-
+ally understand how to use the checksums. When reading a block D, the
+client (i.e., ﬁle system or storage controller) also reads its checksum from
+disk Cs(D), which we call the stored checksum (hence the subscript Cs).
+The client then computes the checksum over the retrieved block D, which
+we call the computed checksum Cc(D). At this point, the client com-
+pares the stored and computed checksums; if they are equal (i.e., Cs(D)
+== Cc(D), the data has likely not been corrupted, and thus can be safely
+returned to the user. If they do not match (i.e., Cs(D) != Cc(D)), this im-
+plies the data has changed since the time it was stored (since the stored
+checksum reﬂects the value of the data at that time). In this case, we have
+a corruption, which our checksum has helped us to detect.
+Given a corruption, the natural question is what should we do about
+it? If the storage system has a redundant copy, the answer is easy: try to
+use it instead. If the storage system has no such copy, the likely answer is
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

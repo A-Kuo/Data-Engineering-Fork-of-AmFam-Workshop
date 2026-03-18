@@ -1,0 +1,62 @@
+8
+DATA INTEGRITY AND PROTECTION
+to return an error. In either case, realize that corruption detection is not a
+magic bullet; if there is no other way to get the non-corrupted data, you
+are simply out of luck.
+45.5 A New Problem: Misdirected Writes
+The basic scheme described above works well in the general case of
+corrupted blocks. However, modern disks have a couple of unusual fail-
+ure modes that require different solutions.
+The ﬁrst failure mode of interest is called a misdirected write. This
+arises in disk and RAID controllers which write the data to disk correctly,
+except in the wrong location. In a single-disk system, this means that the
+disk wrote block Dx not to address x (as desired) but rather to address
+y (thus “corrupting” Dy); in addition, within a multi-disk system, the
+controller may also write Di,x not to address x of disk i but rather to
+some other disk j. Thus our question:
+CRUX: HOW TO HANDLE MISDIRECTED WRITES
+How should a storage system or disk controller detect misdirected
+writes? What additional features are required from the checksum?
+The answer, not surprisingly, is simple: add a little more information
+to each checksum. In this case, adding a physical identiﬁer (physical ID)
+is quite helpful. For example, if the stored information now contains the
+checksum C(D) and both the disk and sector numbers of the block, it is
+easy for the client to determine whether the correct information resides
+within a particular locale. Speciﬁcally, if the client is reading block 4 on
+disk 10 (D10,4), the stored information should include that disk number
+and sector offset, as shown below. If the information does not match, a
+misdirected write has taken place, and a corruption is now detected. Here
+is an example of what this added information would look like on a two-
+disk system. Note that this ﬁgure, like the others before it, is not to scale,
+as the checksums are usually small (e.g., 8 bytes) whereas the blocks are
+much larger (e.g., 4 KB or bigger):
+Disk 0
+Disk 1
+C[D0]
+disk=0
+block=0
+D0
+C[D1]
+disk=0
+block=1
+D1
+C[D2]
+disk=0
+block=2
+D2
+C[D0]
+disk=1
+block=0
+D0
+C[D1]
+disk=1
+block=1
+D1
+C[D2]
+disk=1
+block=2
+D2
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

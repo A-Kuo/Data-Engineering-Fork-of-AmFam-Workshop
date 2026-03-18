@@ -1,0 +1,68 @@
+4
+LOG-STRUCTURED FILE SYSTEMS
+segment, and then writes the segment all at once to the disk. As long as
+the segment is large enough, these writes will be efﬁcient.
+Here is an example, in which LFS buffers two sets of updates into a
+small segment; actual segments are larger (a few MB). The ﬁrst update is
+of four block writes to ﬁle j; the second is one block being added to ﬁle k.
+LFS then commits the entire segment of seven blocks to disk at once. The
+resulting on-disk layout of these blocks is as follows:
+Dj,0
+A0
+Dj,1
+A1
+Dj,2
+A2
+Dj,3
+A3
+b[0]:A0
+b[1]:A1
+b[2]:A2
+b[3]:A3
+Inode j
+Dk,0
+A5
+b[0]:A5
+Inode k
+43.3 How Much To Buffer?
+This raises the following question: how many updates should LFS
+buffer before writing to disk? The answer, of course, depends on the disk
+itself, speciﬁcally how high the positioning overhead is in comparison to
+the transfer rate; see the FFS chapter for a similar analysis.
+For example, assume that positioning (i.e., rotation and seek over-
+heads) before each write takes roughly Tposition seconds. Assume further
+that the disk transfer rate is Rpeak MB/s. How much should LFS buffer
+before writing when running on such a disk?
+The way to think about this is that every time you write, you pay a
+ﬁxed overhead of the positioning cost. Thus, how much do you have
+to write in order to amortize that cost? The more you write, the better
+(obviously), and the closer you get to achieving peak bandwidth.
+To obtain a concrete answer, let’s assume we are writing out D MB.
+The time to write out this chunk of data (Twrite) is the positioning time
+Tposition plus the time to transfer D (
+D
+Rpeak ), or:
+Twrite = Tposition +
+D
+Rpeak
+(43.1)
+And thus the effective rate of writing (Reffective), which is just the
+amount of data written divided by the total time to write it, is:
+Reffective =
+D
+Twrite =
+D
+Tposition +
+D
+Rpeak
+.
+(43.2)
+What we’re interested in is getting the effective rate (Reffective) close
+to the peak rate. Speciﬁcally, we want the effective rate to be some fraction
+F of the peak rate, where 0 < F < 1 (a typical F might be 0.9, or 90% of
+the peak rate). In mathematical form, this means we want Reffective =
+F × Rpeak.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

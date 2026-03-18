@@ -1,0 +1,51 @@
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+9
+ASIDE: THE RAID CONSISTENT-UPDATE PROBLEM
+Before analyzing RAID-1, let us ﬁrst discuss a problem that arises in
+any multi-disk RAID system, known as the consistent-update problem
+[DAA05]. The problem occurs on a write to any RAID that has to up-
+date multiple disks during a single logical operation. In this case, let us
+assume we are considering a mirrored disk array.
+Imagine the write is issued to the RAID, and then the RAID decides that
+it must be written to two disks, disk 0 and disk 1. The RAID then issues
+the write to disk 0, but just before the RAID can issue the request to disk
+1, a power loss (or system crash) occurs. In this unfortunate case, let us
+assume that the request to disk 0 completed (but clearly the request to
+disk 1 did not, as it was never issued).
+The result of this untimely power loss is that the two copies of the block
+are now inconsistent; the copy on disk 0 is the new version, and the copy
+on disk 1 is the old. What we would like to happen is for the state of both
+disks to change atomically, i.e., either both should end up as the new
+version or neither.
+The general way to solve this problem is to use a write-ahead log of some
+kind to ﬁrst record what the RAID is about to do (i.e., update two disks
+with a certain piece of data) before doing it. By taking this approach, we
+can ensure that in the presence of a crash, the right thing will happen; by
+running a recovery procedure that replays all pending transactions to the
+RAID, we can ensure that no two mirrored copies (in the RAID-1 case)
+are out of sync.
+One last note: because logging to disk on every write is prohibitively
+expensive, most RAID hardware includes a small amount of non-volatile
+RAM (e.g., battery-backed) where it performs this type of logging. Thus,
+consistent update is provided without the high cost of logging to disk.
+worst-case seek and rotational delay of the two requests, and thus (on
+average) will be slightly higher than a write to a single disk.
+To analyze steady-state throughput, let us start with the sequential
+workload. When writing out to disk sequentially, each logical write must
+result in two physical writes; for example, when we write logical block
+0 (in the ﬁgure above), the RAID internally would write it to both disk
+0 and disk 1. Thus, we can conclude that the maximum bandwidth ob-
+tained during sequential writing to a mirrored array is ( N
+2 · S), or half the
+peak bandwidth.
+Unfortunately, we obtain the exact same performance during a se-
+quential read. One might think that a sequential read could do better,
+because it only needs to read one copy of the data, not both. However,
+let’s use an example to illustrate why this doesn’t help much. Imagine we
+need to read blocks 0, 1, 2, 3, 4, 5, 6, and 7. Let’s say we issue the read of
+0 to disk 0, the read of 1 to disk 2, the read of 2 to disk 1, and the read of
+3 to disk 3. We continue by issuing reads to 4, 5, 6, and 7 to disks 0, 2, 1,
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

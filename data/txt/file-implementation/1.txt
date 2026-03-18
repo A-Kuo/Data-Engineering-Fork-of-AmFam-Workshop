@@ -1,0 +1,51 @@
+2
+FILE SYSTEM IMPLEMENTATION
+ASIDE: MENTAL MODELS OF FILE SYSTEMS
+As we’ve discussed before, mental models are what you are really trying
+to develop when learning about systems. For ﬁle systems, your mental
+model should eventually include answers to questions like: what on-disk
+structures store the ﬁle system’s data and metadata? What happens when
+a process opens a ﬁle? Which on-disk structures are accessed during a
+read or write? By working on and improving your mental model, you
+develop an abstract understanding of what is going on, instead of just
+trying to understand the speciﬁcs of some ﬁle-system code (though that
+is also useful, of course!).
+more sophisticated ﬁle systems, like SGI’s XFS, use more complicated
+tree-based structures [S+96].
+The second aspect of a ﬁle system is its access methods. How does
+it map the calls made by a process, such as open(), read(), write(),
+etc., onto its structures? Which structures are read during the execution
+of a particular system call? Which are written? How efﬁciently are all of
+these steps performed?
+If you understand the data structures and access methods of a ﬁle sys-
+tem, you have developed a good mental model of how it truly works, a
+key part of the systems mindset. Try to work on developing your mental
+model as we delve into our ﬁrst implementation.
+40.2 Overall Organization
+We now develop the overall on-disk organization of the data struc-
+tures of the vsfs ﬁle system. The ﬁrst thing we’ll need to do is divide the
+disk into blocks; simple ﬁle systems use just one block size, and that’s
+exactly what we’ll do here. Let’s choose a commonly-used size of 4 KB.
+Thus, our view of the disk partition where we’re building our ﬁle sys-
+tem is simple: a series of blocks, each of size 4 KB. The blocks are ad-
+dressed from 0 to N −1, in a partition of size N 4-KB blocks. Assume we
+have a really small disk, with just 64 blocks:
+0
+7
+8
+15 16
+23 24
+31
+32
+39 40
+47 48
+55 56
+63
+Let’s now think about what we need to store in these blocks to build
+a ﬁle system. Of course, the ﬁrst thing that comes to mind is user data.
+In fact, most of the space in any ﬁle system is (and should be) user data.
+Let’s call the region of the disk we use for user data the data region, and,
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

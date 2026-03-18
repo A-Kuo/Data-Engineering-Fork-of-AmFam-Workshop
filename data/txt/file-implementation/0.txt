@@ -1,0 +1,31 @@
+40
+File System Implementation
+In this chapter, we introduce a simple ﬁle system implementation,
+known as vsfs (the Very Simple File System). This ﬁle system is a sim-
+pliﬁed version of a typical UNIX ﬁle system and thus serves to introduce
+some of the basic on-disk structures, access methods, and various policies
+that you will ﬁnd in many ﬁle systems today.
+The ﬁle system is pure software; unlike our development of CPU and
+memory virtualization, we will not be adding hardware features to make
+some aspect of the ﬁle system work better (though we will want to pay at-
+tention to device characteristics to make sure the ﬁle system works well).
+Because of the great ﬂexibility we have in building a ﬁle system, many
+different ones have been built, literally from AFS (the Andrew File Sys-
+tem) [H+88] to ZFS (Sun’s Zettabyte File System) [B07]. All of these ﬁle
+systems have different data structures and do some things better or worse
+than their peers. Thus, the way we will be learning about ﬁle systems is
+through case studies: ﬁrst, a simple ﬁle system (vsfs) in this chapter to
+introduce most concepts, and then a series of studies of real ﬁle systems
+to understand how they can differ in practice.
+THE CRUX: HOW TO IMPLEMENT A SIMPLE FILE SYSTEM
+How can we build a simple ﬁle system? What structures are needed
+on the disk? What do they need to track? How are they accessed?
+40.1 The Way To Think
+To think about ﬁle systems, we usually suggest thinking about two
+different aspects of them; if you understand both of these aspects, you
+probably understand how the ﬁle system basically works.
+The ﬁrst is the data structures of the ﬁle system. In other words, what
+types of on-disk structures are utilized by the ﬁle system to organize its
+data and metadata? The ﬁrst ﬁle systems we’ll see (including vsfs below)
+employ simple structures, like arrays of blocks or other objects, whereas
+1

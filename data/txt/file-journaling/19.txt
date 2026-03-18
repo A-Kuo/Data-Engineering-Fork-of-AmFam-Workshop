@@ -1,0 +1,19 @@
+20
+CRASH CONSISTENCY: FSCK AND JOURNALING
+[T98] “Journaling the Linux ext2fs File System” by Stephen C. Tweedie. The Fourth Annual
+Linux Expo, May 1998. Tweedie did much of the heavy lifting in adding journaling to the Linux ext2
+ﬁle system; the result, not surprisingly, is called ext3. Some nice design decisions include the strong
+focus on backwards compatibility, e.g., you can just add a journaling ﬁle to an existing ext2 ﬁle system
+and then mount it as an ext3 ﬁle system.
+[T00] “EXT3, Journaling Filesystem” by Stephen Tweedie. Talk at the Ottawa Linux Sympo-
+sium, July 2000. olstrans.sourceforge.net/release/OLS2000-ext3/OLS2000-ext3.html A tran-
+script of a talk given by Tweedie on ext3.
+[T01] “The Linux ext2 File System” by Theodore Ts’o, June, 2001..
+Available online here:
+http://e2fsprogs.sourceforge.net/ext2.html. A simple Linux ﬁle system based on
+the ideas found in FFS. For a while it was quite heavily used; now it is really just in the kernel as an
+example of a simple ﬁle system.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

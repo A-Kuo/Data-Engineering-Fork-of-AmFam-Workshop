@@ -1,0 +1,55 @@
+LOG-STRUCTURED FILE SYSTEMS
+9
+43.9 A New Problem: Garbage Collection
+You may have noticed another problem with LFS; it repeatedly writes
+the latest version of a ﬁle (including its inode and data) to new locations
+on disk. This process, while keeping writes efﬁcient, implies that LFS
+leaves old versions of ﬁle structures scattered throughout the disk. We
+(rather unceremoniously) call these old versions garbage.
+For example, let’s imagine the case where we have an existing ﬁle re-
+ferred to by inode number k, which points to a single data block D0.
+We now update that block, generating both a new inode and a new data
+block. The resulting on-disk layout of LFS would look something like this
+(note we omit the imap and other structures for simplicity; a new chunk
+of imap would also have to be written to disk to point to the new inode):
+D0
+A0
+I[k]
+b[0]:A0
+(garbage)
+D0
+A4
+I[k]
+b[0]:A4
+In the diagram, you can see that both the inode and data block have
+two versions on disk, one old (the one on the left) and one current and
+thus live (the one on the right). By the simple act of (logically) updating
+a data block, a number of new structures must be persisted by LFS, thus
+leaving old versions of said blocks on the disk.
+As another example, imagine we instead append a block to that orig-
+inal ﬁle k. In this case, a new version of the inode is generated, but the
+old data block is still pointed to by the inode. Thus, it is still live and very
+much part of the current ﬁle system:
+D0
+A0
+I[k]
+b[0]:A0
+(garbage)
+D1
+A4
+b[0]:A0
+b[1]:A4
+I[k]
+So what should we do with these older versions of inodes, data blocks,
+and so forth? One could keep those older versions around and allow
+users to restore old ﬁle versions (for example, when they accidentally
+overwrite or delete a ﬁle, it could be quite handy to do so); such a ﬁle
+system is known as a versioning ﬁle system because it keeps track of the
+different versions of a ﬁle.
+However, LFS instead keeps only the latest live version of a ﬁle; thus
+(in the background), LFS must periodically ﬁnd these old dead versions
+of ﬁle data, inodes, and other structures, and clean them; cleaning should
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

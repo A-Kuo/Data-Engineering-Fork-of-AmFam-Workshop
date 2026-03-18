@@ -1,0 +1,44 @@
+4
+DATA INTEGRITY AND PROTECTION
+The growing prevalence of LSEs has inﬂuenced RAID designs over the
+years. One particularly interesting problem arises in RAID-4/5 systems
+when both full-disk faults and LSEs occur in tandem. Speciﬁcally, when
+an entire disk fails, the RAID tries to reconstruct the disk (say, onto a
+hot spare) by reading through all of the other disks in the parity group
+and recomputing the missing values. If, during reconstruction, an LSE
+is encountered on any one of the other disks, we have a problem: the
+reconstruction cannot successfully complete.
+To combat this issue, some systems add an extra degree of redundancy.
+For example, NetApp’s RAID-DP has the equivalent of two parity disks
+instead of one [C+04]. When an LSE is discovered during reconstruction,
+the extra parity helps to reconstruct the missing block. As always, there is
+a cost, in that maintaining two parity blocks for each stripe is more costly;
+however, the log-structured nature of the NetApp WAFL ﬁle system mit-
+igates that cost in many cases [HLM94]. The remaining cost is space, in
+the form of an extra disk for the second parity block.
+45.3 Detecting Corruption: The Checksum
+Let’s now tackle the more challenging problem, that of silent failures
+via data corruption. How can we prevent users from getting bad data
+when corruption arises, and thus leads to disks returning bad data?
+CRUX: HOW TO PRESERVE DATA INTEGRITY DESPITE CORRUPTION
+Given the silent nature of such failures, what can a storage system do
+to detect when corruption arises? What techniques are needed? How can
+one implement them efﬁciently?
+Unlike latent sector errors, detection of corruption is a key problem.
+How can a client tell that a block has gone bad? Once it is known that a
+particular block is bad, recovery is the same as before: you need to have
+some other copy of the block around (and hopefully, one that is not cor-
+rupt!). Thus, we focus here on detection techniques.
+The primary mechanism used by modern storage systems to preserve
+data integrity is called the checksum. A checksum is simply the result
+of a function that takes a chunk of data (say a 4KB block) as input and
+computes a function over said data, producing a small summary of the
+contents of the data (say 4 or 8 bytes). This summary is referred to as the
+checksum. The goal of such a computation is to enable a system to detect
+if data has somehow been corrupted or altered by storing the checksum
+with the data and then conﬁrming upon later access that the data’s cur-
+rent checksum matches the original storage value.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

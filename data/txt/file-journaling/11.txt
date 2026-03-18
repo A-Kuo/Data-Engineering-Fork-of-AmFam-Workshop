@@ -1,0 +1,52 @@
+12
+CRASH CONSISTENCY: FSCK AND JOURNALING
+the data block of the parent directory containing the new directory en-
+try, and the parent directory inode (which now has a new modiﬁcation
+time). With journaling, we logically commit all of this information to
+the journal for each of our two ﬁle creations; because the ﬁles are in the
+same directory, and assuming they even have inodes within the same in-
+ode block, this means that if we’re not careful, we’ll end up writing these
+same blocks over and over.
+To remedy this problem, some ﬁle systems do not commit each update
+to disk one at a time (e.g., Linux ext3); rather, one can buffer all updates
+into a global transaction. In our example above, when the two ﬁles are
+created, the ﬁle system just marks the in-memory inode bitmap, inodes
+of the ﬁles, directory data, and directory inode as dirty, and adds them to
+the list of blocks that form the current transaction. When it is ﬁnally time
+to write these blocks to disk (say, after a timeout of 5 seconds), this single
+global transaction is committed containing all of the updates described
+above. Thus, by buffering updates, a ﬁle system can avoid excessive write
+trafﬁc to disk in many cases.
+Making The Log Finite
+We thus have arrived at a basic protocol for updating ﬁle-system on-disk
+structures. The ﬁle system buffers updates in memory for some time;
+when it is ﬁnally time to write to disk, the ﬁle system ﬁrst carefully writes
+out the details of the transaction to the journal (a.k.a. write-ahead log);
+after the transaction is complete, the ﬁle system checkpoints those blocks
+to their ﬁnal locations on disk.
+However, the log is of a ﬁnite size. If we keep adding transactions to
+it (as in this ﬁgure), it will soon ﬁll. What do you think happens then?
+Journal
+Tx1
+Tx2
+Tx3
+Tx4
+Tx5
+...
+Two problems arise when the log becomes full. The ﬁrst is simpler,
+but less critical: the larger the log, the longer recovery will take, as the
+recovery process must replay all the transactions within the log (in order)
+to recover. The second is more of an issue: when the log is full (or nearly
+full), no further transactions can be committed to the disk, thus making
+the ﬁle system “less than useful” (i.e., useless).
+To address these problems, journaling ﬁle systems treat the log as a
+circular data structure, re-using it over and over; this is why the journal
+is sometimes referred to as a circular log. To do so, the ﬁle system must
+take action some time after a checkpoint. Speciﬁcally, once a transaction
+has been checkpointed, the ﬁle system should free the space it was occu-
+pying within the journal, allowing the log space to be reused. There are
+many ways to achieve this end; for example, you could simply mark the
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

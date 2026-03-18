@@ -1,0 +1,28 @@
+18
+FILE SYSTEM IMPLEMENTATION
+Homework (Simulation)
+Use this tool, vsfs.py, to study how ﬁle system state changes as var-
+ious operations take place. The ﬁle system begins in an empty state, with
+just a root directory. As the simulation takes place, various operations are
+performed, thus slowly changing the on-disk state of the ﬁle system. See
+the README for details.
+Questions
+1. Run the simulator with some different random seeds (say 17, 18, 19,
+20), and see if you can ﬁgure out which operations must have taken
+place between each state change.
+2. Now do the same, using different random seeds (say 21, 22, 23,
+24), except run with the -r ﬂag, thus making you guess the state
+change while being shown the operation. What can you conclude
+about the inode and data-block allocation algorithms, in terms of
+which blocks they prefer to allocate?
+3. Now reduce the number of data blocks in the ﬁle system, to very
+low numbers (say two), and run the simulator for a hundred or so
+requests. What types of ﬁles end up in the ﬁle system in this highly-
+constrained layout? What types of operations would fail?
+4. Now do the same, but with inodes. With very few inodes, what
+types of operations can succeed? Which will usually fail? What is
+the ﬁnal state of the ﬁle system likely to be?
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,49 @@
+2
+REDUNDANT ARRAYS OF INEXPENSIVE DISKS (RAIDS)
+TIP: TRANSPARENCY ENABLES DEPLOYMENT
+When considering how to add new functionality to a system, one should
+always consider whether such functionality can be added transparently,
+in a way that demands no changes to the rest of the system. Requiring a
+complete rewrite of the existing software (or radical hardware changes)
+lessens the chance of impact of an idea. RAID is a perfect example, and
+certainly its transparency contributed to its success; administrators could
+install a SCSI-based RAID storage array instead of a SCSI disk, and the
+rest of the system (host computer, OS, etc.) did not have to change one bit
+to start using it. By solving this problem of deployment, RAID was made
+more successful from day one.
+Amazingly, RAIDs provide these advantages transparently to systems
+that use them, i.e., a RAID just looks like a big disk to the host system. The
+beauty of transparency, of course, is that it enables one to simply replace
+a disk with a RAID and not change a single line of software; the operat-
+ing system and client applications continue to operate without modiﬁca-
+tion. In this manner, transparency greatly improves the deployability of
+RAID, enabling users and administrators to put a RAID to use without
+worries of software compatibility.
+We now discuss some of the important aspects of RAIDs. We begin
+with the interface, fault model, and then discuss how one can evaluate a
+RAID design along three important axes: capacity, reliability, and perfor-
+mance. We then discuss a number of other issues that are important to
+RAID design and implementation.
+38.1 Interface And RAID Internals
+To a ﬁle system above, a RAID looks like a big, (hopefully) fast, and
+(hopefully) reliable disk. Just as with a single disk, it presents itself as
+a linear array of blocks, each of which can be read or written by the ﬁle
+system (or other client).
+When a ﬁle system issues a logical I/O request to the RAID, the RAID
+internally must calculate which disk (or disks) to access in order to com-
+plete the request, and then issue one or more physical I/Os to do so. The
+exact nature of these physical I/Os depends on the RAID level, as we will
+discuss in detail below. However, as a simple example, consider a RAID
+that keeps two copies of each block (each one on a separate disk); when
+writing to such a mirrored RAID system, the RAID will have to perform
+two physical I/Os for every one logical I/O it is issued.
+A RAID system is often built as a separate hardware box, with a stan-
+dard connection (e.g., SCSI, or SATA) to a host.
+Internally, however,
+RAIDs are fairly complex, consisting of a microcontroller that runs ﬁrmware
+to direct the operation of the RAID, volatile memory such as DRAM
+to buffer data blocks as they are read and written, and in some cases,
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

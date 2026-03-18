@@ -1,0 +1,48 @@
+CRASH CONSISTENCY: FSCK AND JOURNALING
+11
+write will either happen or not (and never be half-written); thus, to make
+sure the write of TxE is atomic, one should make it a single 512-byte block.
+Thus, our current protocol to update the ﬁle system, with each of its three
+phases labeled:
+1. Journal write: Write the contents of the transaction (including TxB,
+metadata, and data) to the log; wait for these writes to complete.
+2. Journal commit: Write the transaction commit block (containing
+TxE) to the log; wait for write to complete; transaction is said to be
+committed.
+3. Checkpoint: Write the contents of the update (metadata and data)
+to their ﬁnal on-disk locations.
+Recovery
+Let’s now understand how a ﬁle system can use the contents of the jour-
+nal to recover from a crash. A crash may happen at any time during this
+sequence of updates. If the crash happens before the transaction is writ-
+ten safely to the log (i.e., before Step 2 above completes), then our job
+is easy: the pending update is simply skipped. If the crash happens af-
+ter the transaction has committed to the log, but before the checkpoint is
+complete, the ﬁle system can recover the update as follows. When the
+system boots, the ﬁle system recovery process will scan the log and look
+for transactions that have committed to the disk; these transactions are
+thus replayed (in order), with the ﬁle system again attempting to write
+out the blocks in the transaction to their ﬁnal on-disk locations. This form
+of logging is one of the simplest forms there is, and is called redo logging.
+By recovering the committed transactions in the journal, the ﬁle system
+ensures that the on-disk structures are consistent, and thus can proceed
+by mounting the ﬁle system and readying itself for new requests.
+Note that it is ﬁne for a crash to happen at any point during check-
+pointing, even after some of the updates to the ﬁnal locations of the blocks
+have completed. In the worst case, some of these updates are simply per-
+formed again during recovery. Because recovery is a rare operation (only
+taking place after an unexpected system crash), a few redundant writes
+are nothing to worry about3.
+Batching Log Updates
+You might have noticed that the basic protocol could add a lot of extra
+disk trafﬁc. For example, imagine we create two ﬁles in a row, called
+file1 and file2, in the same directory.
+To create one ﬁle, one has
+to update a number of on-disk structures, minimally including: the in-
+ode bitmap (to allocate a new inode), the newly-created inode of the ﬁle,
+3Unless you worry about everything, in which case we can’t help you. Stop worrying so
+much, it is unhealthy! But now you’re probably worried about over-worrying.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

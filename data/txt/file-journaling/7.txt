@@ -1,0 +1,52 @@
+8
+CRASH CONSISTENCY: FSCK AND JOURNALING
+Data Journaling
+Let’s look at a simple example to understand how data journaling works.
+Data journaling is available as a mode with the Linux ext3 ﬁle system,
+from which much of this discussion is based.
+Say we have our canonical update again, where we wish to write the
+inode (I[v2]), bitmap (B[v2]), and data block (Db) to disk again. Before
+writing them to their ﬁnal disk locations, we are now ﬁrst going to write
+them to the log (a.k.a. journal). This is what this will look like in the log:
+Journal
+TxB
+I[v2]
+B[v2]
+Db
+TxE
+You can see we have written ﬁve blocks here. The transaction begin
+(TxB) tells us about this update, including information about the pend-
+ing update to the ﬁle system (e.g., the ﬁnal addresses of the blocks I[v2],
+B[v2], and Db), and some kind of transaction identiﬁer (TID). The mid-
+dle three blocks just contain the exact contents of the blocks themselves;
+this is known as physical logging as we are putting the exact physical
+contents of the update in the journal (an alternate idea, logical logging,
+puts a more compact logical representation of the update in the journal,
+e.g., “this update wishes to append data block Db to ﬁle X”, which is a
+little more complex but can save space in the log and perhaps improve
+performance). The ﬁnal block (TxE) is a marker of the end of this transac-
+tion, and will also contain the TID.
+Once this transaction is safely on disk, we are ready to overwrite the
+old structures in the ﬁle system; this process is called checkpointing.
+Thus, to checkpoint the ﬁle system (i.e., bring it up to date with the pend-
+ing update in the journal), we issue the writes I[v2], B[v2], and Db to
+their disk locations as seen above; if these writes complete successfully,
+we have successfully checkpointed the ﬁle system and are basically done.
+Thus, our initial sequence of operations:
+1. Journal write: Write the transaction, including a transaction-begin
+block, all pending data and metadata updates, and a transaction-
+end block, to the log; wait for these writes to complete.
+2. Checkpoint: Write the pending metadata and data updates to their
+ﬁnal locations in the ﬁle system.
+In our example, we would write TxB, I[v2], B[v2], Db, and TxE to the
+journal ﬁrst. When these writes complete, we would complete the update
+by checkpointing I[v2], B[v2], and Db, to their ﬁnal locations on disk.
+Things get a little trickier when a crash occurs during the writes to
+the journal. Here, we are trying to write the set of blocks in the transac-
+tion (e.g., TxB, I[v2], B[v2], Db, TxE) to disk. One simple way to do this
+would be to issue each one at a time, waiting for each to complete, and
+then issuing the next. However, this is slow. Ideally, we’d like to issue
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

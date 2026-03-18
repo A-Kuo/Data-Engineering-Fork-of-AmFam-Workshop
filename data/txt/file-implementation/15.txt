@@ -1,0 +1,51 @@
+16
+FILE SYSTEM IMPLEMENTATION
+TIP: UNDERSTAND THE DURABILITY/PERFORMANCE TRADE-OFF
+Storage systems often present a durability/performance trade-off to
+users. If the user wishes data that is written to be immediately durable,
+the system must go through the full effort of committing the newly-
+written data to disk, and thus the write is slow (but safe). However, if
+the user can tolerate the loss of a little data, the system can buffer writes
+in memory for some time and write them later to the disk (in the back-
+ground). Doing so makes writes appear to complete quickly, thus im-
+proving perceived performance; however, if a crash occurs, writes not
+yet committed to disk will be lost, and hence the trade-off. To understand
+how to make this trade-off properly, it is best to understand what the ap-
+plication using the storage system requires; for example, while it may be
+tolerable to lose the last few images downloaded by your web browser,
+losing part of a database transaction that is adding money to your bank
+account may be less tolerable. Unless you’re rich, of course; in that case,
+why do you care so much about hoarding every last penny?
+agated to disk, the updates are lost; however, by keeping writes in mem-
+ory longer, performance can be improved by batching, scheduling, and
+even avoiding writes.
+Some applications (such as databases) don’t enjoy this trade-off. Thus,
+to avoid unexpected data loss due to write buffering, they simply force
+writes to disk, by calling fsync(), by using direct I/O interfaces that
+work around the cache, or by using the raw disk interface and avoiding
+the ﬁle system altogether3. While most applications live with the trade-
+offs made by the ﬁle system, there are enough controls in place to get the
+system to do what you want it to, should the default not be satisfying.
+40.8 Summary
+We have seen the basic machinery required in building a ﬁle system.
+There needs to be some information about each ﬁle (metadata), usually
+stored in a structure called an inode. Directories are just a speciﬁc type
+of ﬁle that store name→inode-number mappings. And other structures
+are needed too; for example, ﬁle systems often use a structure such as a
+bitmap to track which inodes or data blocks are free or allocated.
+The terriﬁc aspect of ﬁle system design is its freedom; the ﬁle systems
+we explore in the coming chapters each take advantage of this freedom
+to optimize some aspect of the ﬁle system. There are also clearly many
+policy decisions we have left unexplored. For example, when a new ﬁle
+is created, where should it be placed on disk? This policy and others will
+also be the subject of future chapters. Or will they?4
+3Take a database class to learn more about old-school databases and their former insis-
+tence on avoiding the OS and controlling everything themselves.
+But watch out!
+Those
+database types are always trying to bad mouth the OS. Shame on you, database people. Shame.
+4Cue mysterious music that gets you even more intrigued about the topic of ﬁle systems.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG
