@@ -1,0 +1,45 @@
+6
+INTERLUDE: PROCESS API
+TIP: GETTING IT RIGHT (LAMPSON’S LAW)
+As Lampson states in his well-regarded “Hints for Computer Systems
+Design” [L83], “Get it right. Neither abstraction nor simplicity is a sub-
+stitute for getting it right.” Sometimes, you just have to do the right thing,
+and when you do, it is way better than the alternatives. There are lots
+of ways to design APIs for process creation; however, the combination
+of fork() and exec() are simple and immensely powerful. Here, the
+UNIX designers simply got it right. And because Lampson so often “got
+it right”, we name the law in his honor.
+executable and overwrites its current code segment (and current static
+data) with it; the heap and stack and other parts of the memory space of
+the program are re-initialized. Then the OS simply runs that program,
+passing in any arguments as the argv of that process. Thus, it does not
+create a new process; rather, it transforms the currently running program
+(formerly p3) into a different running program (wc). After the exec()
+in the child, it is almost as if p3.c never ran; a successful call to exec()
+never returns.
+5.4 Why? Motivating The API
+Of course, one big question you might have: why would we build
+such an odd interface to what should be the simple act of creating a new
+process? Well, as it turns out, the separation of fork() and exec() is
+essential in building a UNIX shell, because it lets the shell run code after
+the call to fork() but before the call to exec(); this code can alter the
+environment of the about-to-be-run program, and thus enables a variety
+of interesting features to be readily built.
+The shell is just a user program4. It shows you a prompt and then
+waits for you to type something into it. You then type a command (i.e.,
+the name of an executable program, plus any arguments) into it; in most
+cases, the shell then ﬁgures out where in the ﬁle system the executable
+resides, calls fork() to create a new child process to run the command,
+calls some variant of exec() to run the command, and then waits for the
+command to complete by calling wait(). When the child completes, the
+shell returns from wait() and prints out a prompt again, ready for your
+next command.
+The separation of fork() and exec() allows the shell to do a whole
+bunch of useful things rather easily. For example:
+prompt> wc p3.c > newfile.txt
+4And there are lots of shells; tcsh, bash, and zsh to name a few. You should pick one,
+read its man pages, and learn more about it; all UNIX experts do.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

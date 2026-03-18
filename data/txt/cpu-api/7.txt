@@ -1,0 +1,85 @@
+8
+INTERLUDE: PROCESS API
+1
+#include <stdio.h>
+2
+#include <stdlib.h>
+3
+#include <unistd.h>
+4
+#include <string.h>
+5
+#include <fcntl.h>
+6
+#include <sys/stat.h>
+7
+#include <sys/wait.h>
+8
+9
+int main(int argc, char *argv[]) {
+10
+int rc = fork();
+11
+if (rc < 0) {
+12
+// fork failed
+13
+fprintf(stderr, "fork failed\n");
+14
+exit(1);
+15
+} else if (rc == 0) {
+16
+// child: redirect standard output to a file
+17
+close(STDOUT_FILENO);
+18
+open("./p4.output", O_CREAT|O_WRONLY|O_TRUNC,
+19
+S_IRWXU);
+20
+// now exec "wc"...
+21
+char *myargs[3];
+22
+myargs[0] = strdup("wc");
+// program: wc
+23
+myargs[1] = strdup("p4.c"); // arg: file to count
+24
+myargs[2] = NULL;
+// mark end of array
+25
+execvp(myargs[0], myargs);
+// runs word count
+26
+} else {
+27
+// parent goes down this path (main)
+28
+int rc_wait = wait(NULL);
+29
+}
+30
+return 0;
+31
+}
+Figure 5.4: All Of The Above With Redirection (p4.c)
+5.5 Process Control And Users
+Beyond fork(), exec(), and wait(), there are a lot of other inter-
+faces for interacting with processes in UNIX systems. For example, the
+kill() system call is used to send signals to a process, including di-
+rectives to pause, die, and other useful imperatives. For convenience,
+in most UNIX shells, certain keystroke combinations are conﬁgured to
+deliver a speciﬁc signal to the currently running process; for example,
+control-c sends a SIGINT (interrupt) to the process (normally terminating
+it) and control-z sends a SIGTSTP (stop) signal thus pausing the process
+in mid-execution (you can resume it later with a command, e.g., the fg
+built-in command found in many shells).
+The entire signals subsystem provides a rich infrastructure to deliver
+external events to processes, including ways to receive and process those
+signals within individual processes, and ways to send signals to individ-
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

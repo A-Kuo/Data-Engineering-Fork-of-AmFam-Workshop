@@ -1,0 +1,44 @@
+10
+INTERLUDE: PROCESS API
+ASIDE: THE SUPERUSER (ROOT)
+A system generally needs a user who can administer the system, and is
+not limited in the way most users are. Such a user should be able to kill
+an arbitrary process (e.g., if it is abusing the system in some way), even
+though that process was not started by this user. Such a user should also
+be able to run powerful commands such as shutdown (which, unsurpris-
+ingly, shuts down the system). In UNIX-based systems, these special abil-
+ities are given to the superuser (sometimes called root). While most users
+can’t kill other users processes, the superuser can. Being root is much like
+being Spider-Man: with great power comes great responsibility [QI15].
+Thus, to increase security (and avoid costly mistakes), it’s usually better
+to be a regular user; if you do need to be root, tread carefully, as all of the
+destructive powers of the computing world are now at your ﬁngertips.
+a bit of an egomaniac. The command kill can be used to send arbitrary
+signals to processes, as can the slightly more user friendly killall. Be
+sure to use these carefully; if you accidentally kill your window manager,
+the computer you are sitting in front of may become quite difﬁcult to use.
+Finally, there are many different kinds of CPU meters you can use to
+get a quick glance understanding of the load on your system; for example,
+we always keep MenuMeters (from Raging Menace software) running on
+our Macintosh toolbars, so we can see how much CPU is being utilized
+at any moment in time. In general, the more information about what is
+going on, the better.
+5.7 Summary
+We have introduced some of the APIs dealing with UNIX process cre-
+ation: fork(), exec(), and wait(). However, we have just skimmed
+the surface. For more detail, read Stevens and Rago [SR05], of course,
+particularly the chapters on Process Control, Process Relationships, and
+Signals; there is much to extract from the wisdom therein.
+While our passion for the UNIX process API remains strong, we should
+also note that such positivity is not uniform. For example, a recent pa-
+per by systems researchers from Microsoft, Boston University, and ETH
+in Switzerland details some problems with fork(), and advocates for
+other, simpler process creation APIs such as spawn() [B+19]. Read it,
+and the related work it refers to, to understand this different vantage
+point. While it’s generally good to trust this book, remember too that
+the authors have opinions; those opinions may not (always) be as widely
+shared as you might think.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

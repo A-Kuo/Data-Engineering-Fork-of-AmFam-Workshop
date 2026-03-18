@@ -1,0 +1,28 @@
+5
+Interlude: Process API
+ASIDE: INTERLUDES
+Interludes will cover more practical aspects of systems, including a par-
+ticular focus on operating system APIs and how to use them. If you don’t
+like practical things, you could skip these interludes. But you should like
+practical things, because, well, they are generally useful in real life; com-
+panies, for example, don’t usually hire you for your non-practical skills.
+In this interlude, we discuss process creation in UNIX systems. UNIX
+presents one of the most intriguing ways to create a new process with
+a pair of system calls: fork() and exec(). A third routine, wait(),
+can be used by a process wishing to wait for a process it has created to
+complete. We now present these interfaces in more detail, with a few
+simple examples to motivate us. And thus, our problem:
+CRUX: HOW TO CREATE AND CONTROL PROCESSES
+What interfaces should the OS present for process creation and con-
+trol? How should these interfaces be designed to enable powerful func-
+tionality, ease of use, and high performance?
+5.1 The fork() System Call
+The fork() system call is used to create a new process [C63]. How-
+ever, be forewarned: it is certainly the strangest routine you will ever
+call1. More speciﬁcally, you have a running program whose code looks
+like what you see in Figure 5.1; examine the code, or better yet, type it in
+and run it yourself!
+1Well, OK, we admit that we don’t know that for sure; who knows what routines you
+call when no one is looking? But fork() is pretty odd, no matter how unusual your routine-
+calling patterns are.
+1

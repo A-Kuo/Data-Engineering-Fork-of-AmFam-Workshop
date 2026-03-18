@@ -1,0 +1,84 @@
+INTERLUDE: PROCESS API
+5
+1
+#include <stdio.h>
+2
+#include <stdlib.h>
+3
+#include <unistd.h>
+4
+#include <string.h>
+5
+#include <sys/wait.h>
+6
+7
+int main(int argc, char *argv[]) {
+8
+printf("hello (pid:%d)\n", (int) getpid());
+9
+int rc = fork();
+10
+if (rc < 0) {
+// fork failed; exit
+11
+fprintf(stderr, "fork failed\n");
+12
+exit(1);
+13
+} else if (rc == 0) { // child (new process)
+14
+printf("child (pid:%d)\n", (int) getpid());
+15
+char *myargs[3];
+16
+myargs[0] = strdup("wc");
+// program: "wc"
+17
+myargs[1] = strdup("p3.c"); // arg: input file
+18
+myargs[2] = NULL;
+// mark end of array
+19
+execvp(myargs[0], myargs);
+// runs word count
+20
+printf("this shouldn’t print out");
+21
+} else {
+// parent goes down this path
+22
+int rc_wait = wait(NULL);
+23
+printf("parent of %d (rc_wait:%d) (pid:%d)\n",
+24
+rc, rc_wait, (int) getpid());
+25
+}
+26
+return 0;
+27
+}
+28
+Figure 5.3: Calling fork(), wait(), And exec() (p3.c)
+in p2.c is only useful if you want to keep running copies of the same
+program. However, often you want to run a different program; exec()
+does just that (Figure 5.3).
+In this example, the child process calls execvp() in order to run the
+program wc, which is the word counting program. In fact, it runs wc on
+the source ﬁle p3.c, thus telling us how many lines, words, and bytes are
+found in the ﬁle:
+prompt> ./p3
+hello (pid:29383)
+child (pid:29384)
+29
+107
+1030 p3.c
+parent of 29384 (rc_wait:29384) (pid:29383)
+prompt>
+The fork() system call is strange; its partner in crime, exec(), is not
+so normal either. What it does: given the name of an executable (e.g., wc),
+and some arguments (e.g., p3.c), it loads code (and static data) from that
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

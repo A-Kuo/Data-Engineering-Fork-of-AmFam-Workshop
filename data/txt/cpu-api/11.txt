@@ -1,0 +1,37 @@
+12
+INTERLUDE: PROCESS API
+References
+[B+19] “A fork() in the road” by Andrew Baumann, Jonathan Appavoo, Orran Krieger, Tim-
+othy Roscoe. HotOS ’19, Bertinoro, Italy. A fun paper full of fork()ing rage. Read it to get an
+opposing viewpoint on the UNIX process API. Presented at the always lively HotOS workshop, where
+systems researchers go to present extreme opinions in the hopes of pushing the community in new di-
+rections.
+[C63] “A Multiprocessor System Design” by Melvin E. Conway. AFIPS ’63 Fall Joint Computer
+Conference, New York, USA 1963. An early paper on how to design multiprocessing systems; may
+be the ﬁrst place the term fork() was used in the discussion of spawning new processes.
+[DV66] “Programming Semantics for Multiprogrammed Computations” by Jack B. Dennis and
+Earl C. Van Horn. Communications of the ACM, Volume 9, Number 3, March 1966. A classic
+paper that outlines the basics of multiprogrammed computer systems. Undoubtedly had great inﬂuence
+on Project MAC, Multics, and eventually UNIX.
+[J16] “They could be twins!” by Phoebe Jackson-Edwards. The Daily Mail. March 1, 2016.. This
+hard-hitting piece of journalism shows a bunch of weirdly similar child/parent photos and is frankly kind
+of mesmerizing. Go ahead, waste two minutes of your life and check it out. But don’t forget to come
+back here! This, in a microcosm, is the danger of surﬁng the web.
+[L83] “Hints for Computer Systems Design” by Butler Lampson. ACM Operating Systems
+Review, Volume 15:5, October 1983. Lampson’s famous hints on how to design computer systems.
+You should read it at some point in your life, and probably at many points in your life.
+[QI15] “With Great Power Comes Great Responsibility” by The Quote Investigator. Available:
+https://quoteinvestigator.com/2015/07/23/great-power. The quote investigator
+concludes that the earliest mention of this concept is 1793, in a collection of decrees made at the French
+National Convention. The speciﬁc quote: “Ils doivent envisager qu’une grande responsabilit´e est la
+suite ins´eparable d’un grand pouvoir”, which roughly translates to “They must consider that great
+responsibility follows inseparably from great power.” Only in 1962 did the following words appear in
+Spider-Man: “...with great power there must also come–great responsibility!” So it looks like the French
+Revolution gets credit for this one, not Stan Lee. Sorry, Stan.
+[SR05] “Advanced Programming in the UNIX Environment” by W. Richard Stevens, Stephen
+A. Rago. Addison-Wesley, 2005. All nuances and subtleties of using UNIX APIs are found herein.
+Buy this book! Read it! And most importantly, live it.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,46 @@
+4
+INTERLUDE: PROCESS API
+it will choose to do, and hence which process will run ﬁrst. This non-
+determinism, as it turns out, leads to some interesting problems, par-
+ticularly in multi-threaded programs; hence, we’ll see a lot more non-
+determinism when we study concurrency in the second part of the book.
+5.2 The wait() System Call
+So far, we haven’t done much: just created a child that prints out a
+message and exits. Sometimes, as it turns out, it is quite useful for a
+parent to wait for a child process to ﬁnish what it has been doing. This
+task is accomplished with the wait() system call (or its more complete
+sibling waitpid()); see Figure 5.2 for details.
+In this example (p2.c), the parent process calls wait() to block (i.e.,
+delay its execution) until the child ﬁnishes executing. When the child is
+done, the parent becomes unblocked, and wait() returns in the parent.
+Adding a wait() call to the code above makes the output determin-
+istic. Can you see why? Go ahead, think about it.
+(waiting for you to think .... and done)
+Now that you have thought a bit, here is the output:
+prompt> ./p2
+hello (pid:29266)
+child (pid:29267)
+parent of 29267 (rc_wait:29267) (pid:29266)
+prompt>
+With this code, we now know that the child will always print ﬁrst.
+Why do we know that? Well, it might simply run ﬁrst, as before, and
+thus print before the parent. However, if the parent does happen to run
+ﬁrst, it will immediately call wait(); this system call won’t return until
+the child has run and exited2. Thus, even when the parent runs ﬁrst, it
+politely waits for the child to ﬁnish running, then wait() returns, and
+then the parent prints its message.
+5.3 Finally, The exec() System Call
+A ﬁnal and important piece of the process creation API is the exec()
+system call3. This system call is useful when you want to run a program
+that is different from the calling program. For example, calling fork()
+2There are a few cases where wait() returns before the child exits; read the man page
+for more details, as always. And beware of any absolute and unqualiﬁed statements this book
+makes, such as “the child will always print ﬁrst” or “UNIX is the best thing in the world, even
+better than ice cream.”
+3On Linux, there are six variants of exec():
+execl(), execlp(), execle(),
+execv(), execvp(), and execvpe(). Read the man pages to learn more.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG
