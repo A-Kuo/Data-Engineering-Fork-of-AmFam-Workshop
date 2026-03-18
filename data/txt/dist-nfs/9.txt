@@ -1,0 +1,43 @@
+10
+SUN’S NETWORK FILE SYSTEM (NFS)
+Case 1: Request Lost
+Client
+[send request]
+Server
+(no mesg)
+Case 2: Server Down
+Client
+[send request]
+Server
+(down)
+Case 3: Reply lost on way back from Server
+Client
+[send request]
+Server
+[recv request]
+[handle request]
+[send reply]
+Figure 49.6: The Three Types Of Loss
+In this way, the client can handle all timeouts in a uniﬁed way. If a
+WRITE request was simply lost (Case 1 above), the client will retry it, the
+server will perform the write, and all will be well. The same will happen
+if the server happened to be down while the request was sent, but back
+up and running when the second request is sent, and again all works
+as desired (Case 2). Finally, the server may in fact receive the WRITE
+request, issue the write to its disk, and send a reply. This reply may get
+lost (Case 3), again causing the client to re-send the request. When the
+server receives the request again, it will simply do the exact same thing:
+write the data to disk and reply that it has done so. If the client this time
+receives the reply, all is again well, and thus the client has handled both
+message loss and server failure in a uniform manner. Neat!
+A small aside: some operations are hard to make idempotent. For
+example, when you try to make a directory that already exists, you are
+informed that the mkdir request has failed. Thus, in NFS, if the ﬁle server
+receives a MKDIR protocol message and executes it successfully but the
+reply is lost, the client may repeat it and encounter that failure when in
+fact the operation at ﬁrst succeeded and then only failed on the retry.
+Thus, life is not perfect.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

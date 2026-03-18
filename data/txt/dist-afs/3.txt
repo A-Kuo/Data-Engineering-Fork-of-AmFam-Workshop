@@ -1,0 +1,45 @@
+4
+THE ANDREW FILE SYSTEM (AFS)
+imbalance problem was solved by introducing volumes, which an ad-
+ministrator could move across servers to balance load; the context-switch
+problem was solved in AFSv2 by building the server with threads instead
+of processes. However, for the sake of space, we focus here on the main
+two protocol problems above that limited the scale of the system.
+50.3 Improving the Protocol
+The two problems above limited the scalability of AFS; the server CPU
+became the bottleneck of the system, and each server could only ser-
+vice 20 clients without becoming overloaded. Servers were receiving too
+many TestAuth messages, and when they received Fetch or Store mes-
+sages, were spending too much time traversing the directory hierarchy.
+Thus, the AFS designers were faced with a problem:
+THE CRUX: HOW TO DESIGN A SCALABLE FILE PROTOCOL
+How should one redesign the protocol to minimize the number of
+server interactions, i.e., how could they reduce the number of TestAuth
+messages? Further, how could they design the protocol to make these
+server interactions efﬁcient? By attacking both of these issues, a new pro-
+tocol would result in a much more scalable version AFS.
+50.4 AFS Version 2
+AFSv2 introduced the notion of a callback to reduce the number of
+client/server interactions. A callback is simply a promise from the server
+to the client that the server will inform the client when a ﬁle that the
+client is caching has been modiﬁed. By adding this state to the system,
+the client no longer needs to contact the server to ﬁnd out if a cached ﬁle
+is still valid. Rather, it assumes that the ﬁle is valid until the server tells it
+otherwise; notice the analogy to polling versus interrupts.
+AFSv2 also introduced the notion of a ﬁle identiﬁer (FID) (similar to
+the NFS ﬁle handle) instead of pathnames to specify which ﬁle a client
+was interested in. An FID in AFS consists of a volume identiﬁer, a ﬁle
+identiﬁer, and a “uniquiﬁer” (to enable reuse of the volume and ﬁle IDs
+when a ﬁle is deleted). Thus, instead of sending whole pathnames to
+the server and letting the server walk the pathname to ﬁnd the desired
+ﬁle, the client would walk the pathname, one piece at a time, caching the
+results and thus hopefully reducing the load on the server.
+For example, if a client accessed the ﬁle /home/remzi/notes.txt,
+and home was the AFS directory mounted onto / (i.e., / was the local root
+directory, but home and its children were in AFS), the client would ﬁrst
+Fetch the directory contents of home, put them in the local-disk cache,
+and set up a callback on home. Then, the client would Fetch the directory
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

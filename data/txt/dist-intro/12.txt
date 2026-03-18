@@ -1,0 +1,50 @@
+DISTRIBUTED SYSTEMS
+13
+Aside: THE END-TO-END ARGUMENT
+The end-to-end argument makes the case that the highest level in a sys-
+tem, i.e., usually the application at “the end”, is ultimately the only lo-
+cale within a layered system where certain functionality can truly be im-
+plemented. In their landmark paper [SRC84], Saltzer et al. argue this
+through an excellent example: reliable ﬁle transfer between two ma-
+chines. If you want to transfer a ﬁle from machine A to machine B, and
+make sure that the bytes that end up on B are exactly the same as those
+that began on A, you must have an “end-to-end” check of this; lower-
+level reliable machinery, e.g., in the network or disk, provides no such
+guarantee.
+The contrast is an approach which tries to solve the reliable-ﬁle-transfer
+problem by adding reliability to lower layers of the system. For example,
+say we build a reliable communication protocol and use it to build our
+reliable ﬁle transfer. The communication protocol guarantees that every
+byte sent by a sender will be received in order by the receiver, say us-
+ing timeout/retry, acknowledgments, and sequence numbers. Unfortu-
+nately, using such a protocol does not a reliable ﬁle transfer make; imag-
+ine the bytes getting corrupted in sender memory before the communi-
+cation even takes place, or something bad happening when the receiver
+writes the data to disk. In those cases, even though the bytes were deliv-
+ered reliably across the network, our ﬁle transfer was ultimately not reli-
+able. To build a reliable ﬁle transfer, one must include end-to-end checks
+of reliability, e.g., after the entire transfer is complete, read back the ﬁle
+on the receiver disk, compute a checksum, and compare that checksum
+to that of the ﬁle on the sender.
+The corollary to this maxim is that sometimes having lower layers pro-
+vide extra functionality can indeed improve system performance or oth-
+erwise optimize a system. Thus, you should not rule out having such
+machinery at a lower-level in a system; rather, you should carefully con-
+sider the utility of such machinery, given its eventual usage in an overall
+system or application.
+(from the receiver to sender) when the reply isn’t immediately generated;
+this lets the client know the server received the request. Then, after some
+time has passed, the client can periodically ask whether the server is still
+working on the request; if the server keeps saying “yes”, the client should
+be happy and continue to wait (after all, sometimes a procedure call can
+take a long time to ﬁnish executing).
+The run-time must also handle procedure calls with large arguments,
+larger than what can ﬁt into a single packet. Some lower-level network
+protocols provide such sender-side fragmentation (of larger packets into
+a set of smaller ones) and receiver-side reassembly (of smaller parts into
+one larger logical whole); if not, the RPC run-time may have to implement
+such functionality itself. See Birrell and Nelson’s paper for details [BN84].
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

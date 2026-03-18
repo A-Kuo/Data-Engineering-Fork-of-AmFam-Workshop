@@ -1,0 +1,43 @@
+4
+LOCALITY AND THE FAST FILE SYSTEM
+systems (such as Linux ext2, ext3, and ext4) instead organize the drive
+into block groups, each of which is just a consecutive portion of the disk’s
+address space. The picture below illustrates an example where every 8
+blocks are organized into a different block group (note that real groups
+would consist of many more blocks):
+Group 0
+Group 1
+Group 2
+Whether you call them cylinder groups or block groups, these groups
+are the central mechanism that FFS uses to improve performance. Crit-
+ically, by placing two ﬁles within the same group, FFS can ensure that
+accessing one after the other will not result in long seeks across the disk.
+To use these groups to store ﬁles and directories, FFS needs to have the
+ability to place ﬁles and directories into a group, and track all necessary
+information about them therein. To do so, FFS includes all the structures
+you might expect a ﬁle system to have within each group, e.g., space for
+inodes, data blocks, and some structures to track whether each of those
+are allocated or free. Here is a depiction of what FFS keeps within a single
+cylinder group:
+S ib db
+Inodes
+Data
+Let’s now examine the components of this single cylinder group in
+more detail. FFS keeps a copy of the super block (S) in each group for
+reliability reasons. The super block is needed to mount the ﬁle system;
+by keeping multiple copies, if one copy becomes corrupt, you can still
+mount and access the ﬁle system by using a working replica.
+Within each group, FFS needs to track whether the inodes and data
+blocks of the group are allocated. A per-group inode bitmap (ib) and
+data bitmap (db) serve this role for inodes and data blocks in each group.
+Bitmaps are an excellent way to manage free space in a ﬁle system be-
+cause it is easy to ﬁnd a large chunk of free space and allocate it to a ﬁle,
+perhaps avoiding some of the fragmentation problems of the free list in
+the old ﬁle system.
+Finally, the inode and data block regions are just like those in the pre-
+vious very-simple ﬁle system (VSFS). Most of each cylinder group, as
+usual, is comprised of data blocks.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

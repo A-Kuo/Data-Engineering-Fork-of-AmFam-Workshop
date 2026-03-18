@@ -1,0 +1,49 @@
+LOCALITY AND THE FAST FILE SYSTEM
+5
+ASIDE: FFS FILE CREATION
+As an example, think about what data structures must be updated when
+a ﬁle is created; assume, for this example, that the user creates a new ﬁle
+/foo/bar.txt and that the ﬁle is one block long (4KB). The ﬁle is new,
+and thus needs a new inode; thus, both the inode bitmap and the newly-
+allocated inode will be written to disk. The ﬁle also has data in it and
+thus it too must be allocated; the data bitmap and a data block will thus
+(eventually) be written to disk. Hence, at least four writes to the current
+cylinder group will take place (recall that these writes may be buffered
+in memory for a while before they take place). But this is not all! In
+particular, when creating a new ﬁle, you must also place the ﬁle in the
+ﬁle-system hierarchy, i.e., the directory must be updated. Speciﬁcally, the
+parent directory foo must be updated to add the entry for bar.txt; this
+update may ﬁt in an existing data block of foo or require a new block to
+be allocated (with associated data bitmap). The inode of foo must also
+be updated, both to reﬂect the new length of the directory as well as to
+update time ﬁelds (such as last-modiﬁed-time). Overall, it is a lot of work
+just to create a new ﬁle! Perhaps next time you do so, you should be more
+thankful, or at least surprised that it all works so well.
+41.4 Policies: How To Allocate Files and Directories
+With this group structure in place, FFS now has to decide how to place
+ﬁles and directories and associated metadata on disk to improve perfor-
+mance. The basic mantra is simple: keep related stuff together (and its corol-
+lary, keep unrelated stuff far apart).
+Thus, to obey the mantra, FFS has to decide what is “related” and
+place it within the same block group; conversely, unrelated items should
+be placed into different block groups. To achieve this end, FFS makes use
+of a few simple placement heuristics.
+The ﬁrst is the placement of directories. FFS employs a simple ap-
+proach: ﬁnd the cylinder group with a low number of allocated direc-
+tories (to balance directories across groups) and a high number of free
+inodes (to subsequently be able to allocate a bunch of ﬁles), and put the
+directory data and inode in that group. Of course, other heuristics could
+be used here (e.g., taking into account the number of free data blocks).
+For ﬁles, FFS does two things. First, it makes sure (in the general case)
+to allocate the data blocks of a ﬁle in the same group as its inode, thus
+preventing long seeks between inode and data (as in the old ﬁle system).
+Second, it places all ﬁles that are in the same directory in the cylinder
+group of the directory they are in. Thus, if a user creates four ﬁles, /a/b,
+/a/c, /a/d, and /b/f, FFS would try to place the ﬁrst three near one
+another (same group) and the fourth far away (in some other group).
+Let’s look at an example of such an allocation. In the example, as-
+sume that there are only 10 inodes and 10 data blocks in each group (both
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

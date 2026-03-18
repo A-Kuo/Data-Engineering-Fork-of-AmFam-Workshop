@@ -1,0 +1,50 @@
+8
+HARD DISK DRIVES
+TIP: USE DISKS SEQUENTIALLY
+When at all possible, transfer data to and from disks in a sequential man-
+ner. If sequential is not possible, at least think about transferring data
+in large chunks: the bigger, the better. If I/O is done in little random
+pieces, I/O performance will suffer dramatically. Also, users will suffer.
+Also, you will suffer, knowing what suffering you have wrought with
+your careless random I/Os.
+surface to the other) would likely take two or three times longer. The
+average rotational delay is calculated from the RPM directly. 15000 RPM
+is equal to 250 RPS (rotations per second); thus, each rotation takes 4 ms.
+On average, the disk will encounter a half rotation and thus 2 ms is the
+average time. Finally, the transfer time is just the size of the transfer over
+the peak transfer rate; here it is vanishingly small (30 microseconds; note
+that we need 1000 microseconds just to get 1 millisecond!).
+Thus, from our equation above, TI/O for the Cheetah roughly equals
+6 ms. To compute the rate of I/O, we just divide the size of the transfer
+by the average time, and thus arrive at RI/O for the Cheetah under the
+random workload of about 0.66 MB/s. The same calculation for the Bar-
+racuda yields a TI/O of about 13.2 ms, more than twice as slow, and thus
+a rate of about 0.31 MB/s.
+Now let’s look at the sequential workload. Here we can assume there
+is a single seek and rotation before a very long transfer. For simplicity,
+assume the size of the transfer is 100 MB. Thus, TI/O for the Cheetah and
+Barracuda is about 800 ms and 950 ms, respectively. The rates of I/O
+are thus very nearly the peak transfer rates of 125 MB/s and 105 MB/s,
+respectively. Figure 37.6 summarizes these numbers.
+Cheetah
+Barracuda
+RI/O Random
+0.66 MB/s
+0.31 MB/s
+RI/O Sequential
+125 MB/s
+105 MB/s
+Figure 37.6: Disk Drive Performance: SCSI Versus SATA
+The ﬁgure shows us a number of important things. First, and most
+importantly, there is a huge gap in drive performance between random
+and sequential workloads, almost a factor of 200 or so for the Cheetah
+and more than a factor 300 difference for the Barracuda. And thus we
+arrive at the most obvious design tip in the history of computing.
+A second, more subtle point: there is a large difference in performance
+between high-end “performance” drives and low-end “capacity” drives.
+For this reason (and others), people are often willing to pay top dollar for
+the former while trying to get the latter as cheaply as possible.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

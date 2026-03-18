@@ -1,0 +1,45 @@
+10
+LOCALITY AND THE FAST FILE SYSTEM
+0%
+25%
+50%
+75%
+100%
+1K
+32K
+1M
+10M
+The Challenges of Amortization
+Percent Bandwidth (Desired)
+Log(Chunk Size Needed)
+50%, 409.6K
+90%, 3.69M
+Figure 41.2: Amortization: How Big Do Chunks Have To Be?
+structure of the inode itself. The ﬁrst twelve direct blocks were placed
+in the same group as the inode; each subsequent indirect block, and all
+the blocks it pointed to, was placed in a different group. With a block
+size of 4KB, and 32-bit disk addresses, this strategy implies that every
+1024 blocks of the ﬁle (4MB) were placed in separate groups, the lone
+exception being the ﬁrst 48KB of the ﬁle as pointed to by direct pointers.
+Note that the trend in disk drives is that transfer rate improves fairly
+rapidly, as disk manufacturers are good at cramming more bits into the
+same surface, but the mechanical aspects of drives related to seeks (disk
+arm speed and the rate of rotation) improve rather slowly [P98]. The
+implication is that over time, mechanical costs become relatively more
+expensive, and thus, to amortize said costs, you have to transfer more
+data between seeks.
+41.7 A Few Other Things About FFS
+FFS introduced a few other innovations too. In particular, the design-
+ers were extremely worried about accommodating small ﬁles; as it turned
+out, many ﬁles were 2KB or so in size back then, and using 4KB blocks,
+while good for transferring data, was not so good for space efﬁciency.
+This internal fragmentation could thus lead to roughly half the disk be-
+ing wasted for a typical ﬁle system.
+The solution the FFS designers hit upon was simple and solved the
+problem. They decided to introduce sub-blocks, which were 512-byte
+little blocks that the ﬁle system could allocate to ﬁles. Thus, if you created
+a small ﬁle (say 1KB in size), it would occupy two sub-blocks and thus not
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

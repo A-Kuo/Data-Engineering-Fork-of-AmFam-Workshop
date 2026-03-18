@@ -1,0 +1,73 @@
+HARD DISK DRIVES
+9
+ASIDE: COMPUTING THE “AVERAGE” SEEK
+In many books and papers, you will see average disk-seek time cited
+as being roughly one-third of the full seek time. Where does this come
+from?
+Turns out it arises from a simple calculation based on average seek
+distance, not time. Imagine the disk as a set of tracks, from 0 to N. The
+seek distance between any two tracks x and y is thus computed as the
+absolute value of the difference between them: |x −y|.
+To compute the average seek distance, all you need to do is to ﬁrst add
+up all possible seek distances:
+N
+X
+x=0
+N
+X
+y=0
+|x −y|.
+(37.4)
+Then, divide this by the number of different possible seeks: N 2. To
+compute the sum, we’ll just use the integral form:
+Z N
+x=0
+Z N
+y=0
+|x −y| dy dx.
+(37.5)
+To compute the inner integral, let’s break out the absolute value:
+Z x
+y=0
+(x −y) dy +
+Z N
+y=x
+(y −x) dy.
+(37.6)
+Solving this leads to (xy −1
+2y2)
+x
+0 + ( 1
+2y2 −xy)
+N
+x which can be sim-
+pliﬁed to (x2 −Nx + 1
+2N 2). Now we have to compute the outer integral:
+Z N
+x=0
+(x2 −Nx + 1
+2N 2) dx,
+(37.7)
+which results in:
+(1
+3x3 −N
+2 x2 + N 2
+2 x)
+
+N
+0
+= N 3
+3 .
+(37.8)
+Remember that we still have to divide by the total number of seeks
+(N 2) to compute the average seek distance: ( N3
+3 )/(N 2) =
+1
+3N. Thus the
+average seek distance on a disk, over all possible seeks, is one-third the
+full distance. And now when you hear that an average seek is one-third
+of a full seek, you’ll know where it came from.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

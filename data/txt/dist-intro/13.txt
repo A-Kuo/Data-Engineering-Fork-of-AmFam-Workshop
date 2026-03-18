@@ -1,0 +1,52 @@
+14
+DISTRIBUTED SYSTEMS
+One issue that many systems handle is that of byte ordering. As you
+may know, some machines store values in what is known as big endian
+ordering, whereas others use little endian ordering. Big endian stores
+bytes (say, of an integer) from most signiﬁcant to least signiﬁcant bits,
+much like Arabic numerals; little endian does the opposite.
+Both are
+equally valid ways of storing numeric information; the question here is
+how to communicate between machines of different endianness.
+RPC packages often handle this by providing a well-deﬁned endi-
+anness within their message formats. In Sun’s RPC package, the XDR
+(eXternal Data Representation) layer provides this functionality. If the
+machine sending or receiving a message matches the endianness of XDR,
+messages are just sent and received as expected. If, however, the machine
+communicating has a different endianness, each piece of information in
+the message must be converted. Thus, the difference in endianness can
+have a small performance cost.
+A ﬁnal issue is whether to expose the asynchronous nature of com-
+munication to clients, thus enabling some performance optimizations.
+Speciﬁcally, typical RPCs are made synchronously, i.e., when a client
+issues the procedure call, it must wait for the procedure call to return
+before continuing. Because this wait can be long, and because the client
+may have other work it could be doing, some RPC packages enable you
+to invoke an RPC asynchronously. When an asynchronous RPC is is-
+sued, the RPC package sends the request and returns immediately; the
+client is then free to do other work, such as call other RPCs or other use-
+ful computation. The client at some point will want to see the results of
+the asynchronous RPC; it thus calls back into the RPC layer, telling it to
+wait for outstanding RPCs to complete, at which point return arguments
+can be accessed.
+48.6 Summary
+We have seen the introduction of a new topic, distributed systems, and
+its major issue: how to handle failure which is now a commonplace event.
+As they say inside of Google, when you have just your desktop machine,
+failure is rare; when you’re in a data center with thousands of machines,
+failure is happening all the time. The key to any distributed system is
+how you deal with that failure.
+We have also seen that communication forms the heart of any dis-
+tributed system. A common abstraction of that communication is found
+in remote procedure call (RPC), which enables clients to make remote
+calls on servers; the RPC package handles all of the gory details, includ-
+ing timeout/retry and acknowledgment, in order to deliver a service that
+closely mirrors a local procedure call.
+The best way to really understand an RPC package is of course to use
+one yourself. Sun’s RPC system, using the stub compiler rpcgen, is an
+older one; Google’s gRPC and Apache Thrift are modern takes on the
+same. Try one out, and see what all the fuss is about.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

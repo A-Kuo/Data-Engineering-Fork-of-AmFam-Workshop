@@ -1,0 +1,52 @@
+12
+DISTRIBUTED SYSTEMS
+One of the ﬁrst challenges we must overcome is how to locate a re-
+mote service. This problem, of naming, is a common one in distributed
+systems, and in some sense goes beyond the scope of our current discus-
+sion. The simplest of approaches build on existing naming systems, e.g.,
+hostnames and port numbers provided by current internet protocols. In
+such a system, the client must know the hostname or IP address of the
+machine running the desired RPC service, as well as the port number it is
+using (a port number is just a way of identifying a particular communica-
+tion activity taking place on a machine, allowing multiple communication
+channels at once). The protocol suite must then provide a mechanism to
+route packets to a particular address from any other machine in the sys-
+tem. For a good discussion of naming, you’ll have to look elsewhere, e.g.,
+read about DNS and name resolution on the Internet, or better yet just
+read the excellent chapter in Saltzer and Kaashoek’s book [SK09].
+Once a client knows which server it should talk to for a particular re-
+mote service, the next question is which transport-level protocol should
+RPC be built upon. Speciﬁcally, should the RPC system use a reliable pro-
+tocol such as TCP/IP, or be built upon an unreliable communication layer
+such as UDP/IP?
+Naively the choice would seem easy: clearly we would like for a re-
+quest to be reliably delivered to the remote server, and clearly we would
+like to reliably receive a reply. Thus we should choose the reliable trans-
+port protocol such as TCP, right?
+Unfortunately, building RPC on top of a reliable communication layer
+can lead to a major inefﬁciency in performance. Recall from the discus-
+sion above how reliable communication layers work: with acknowledg-
+ments plus timeout/retry. Thus, when the client sends an RPC request
+to the server, the server responds with an acknowledgment so that the
+caller knows the request was received. Similarly, when the server sends
+the reply to the client, the client acks it so that the server knows it was
+received. By building a request/response protocol (such as RPC) on top
+of a reliable communication layer, two “extra” messages are sent.
+For this reason, many RPC packages are built on top of unreliable com-
+munication layers, such as UDP. Doing so enables a more efﬁcient RPC
+layer, but does add the responsibility of providing reliability to the RPC
+system. The RPC layer achieves the desired level of responsibility by us-
+ing timeout/retry and acknowledgments much like we described above.
+By using some form of sequence numbering, the communication layer
+can guarantee that each RPC takes place exactly once (in the case of no
+failure), or at most once (in the case where failure arises).
+Other Issues
+There are some other issues an RPC run-time must handle as well. For
+example, what happens when a remote call takes a long time to com-
+plete? Given our timeout machinery, a long-running remote call might
+appear as a failure to a client, thus triggering a retry, and thus the need
+for some care here. One solution is to use an explicit acknowledgment
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

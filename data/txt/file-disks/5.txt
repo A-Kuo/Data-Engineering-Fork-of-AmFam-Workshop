@@ -1,0 +1,77 @@
+6
+HARD DISK DRIVES
+ASIDE: DIMENSIONAL ANALYSIS
+Remember in Chemistry class, how you solved virtually every problem
+by simply setting up the units such that they canceled out, and somehow
+the answers popped out as a result? That chemical magic is known by the
+highfalutin name of dimensional analysis and it turns out it is useful in
+computer systems analysis too.
+Let’s do an example to see how dimensional analysis works and why it is
+useful. In this case, assume you have to ﬁgure out how long, in millisec-
+onds, a single rotation of a disk takes. Unfortunately, you are given only
+the RPM of the disk, or rotations per minute. Let’s assume we’re talking
+about a 10K RPM disk (i.e., it rotates 10,000 times per minute). How do
+we set up the dimensional analysis so that we get time per rotation in
+milliseconds?
+To do so, we start by putting the desired units on the left; in this case,
+we wish to obtain the time (in milliseconds) per rotation, so that is ex-
+actly what we write down:
+T ime (ms)
+1 Rotation . We then write down everything
+we know, making sure to cancel units where possible. First, we obtain
+1 minute
+10,000 Rotations (keeping rotation on the bottom, as that’s where it is on
+the left), then transform minutes into seconds with 60 seconds
+1 minute , and then
+ﬁnally transform seconds in milliseconds with 1000 ms
+1 second. The ﬁnal result is
+the following (with units nicely canceled):
+T ime (ms)
+1 Rot.
+=
+1✘✘✘
+minute
+10,000 Rot. · 60✘✘✘
+seconds
+1✘✘✘
+minute · 1000 ms
+1✘✘✘
+second =
+60,000 ms
+10,000 Rot. =
+6 ms
+Rotation
+As you can see from this example, dimensional analysis makes what
+seems intuitive into a simple and repeatable process.
+Beyond the
+RPM calculation above, it comes in handy with I/O analysis regularly.
+For example, you will often be given the transfer rate of a disk, e.g.,
+100 MB/second, and then asked: how long does it take to transfer a
+512 KB block (in milliseconds)? With dimensional analysis, it’s easy:
+T ime (ms)
+1 Request =
+512✟✟
+KB
+1 Request ·
+1✟✟
+MB
+1024✟✟
+KB · 1✘✘✘
+second
+100✟✟
+MB · 1000 ms
+1✘✘✘
+second =
+5 ms
+Request
+37.4 I/O Time: Doing The Math
+Now that we have an abstract model of the disk, we can use a little
+analysis to better understand disk performance. In particular, we can
+now represent I/O time as the sum of three major components:
+TI/O = Tseek + Trotation + Ttransfer
+(37.1)
+Note that the rate of I/O (RI/O), which is often more easily used for
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

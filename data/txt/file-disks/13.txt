@@ -1,0 +1,20 @@
+14
+HARD DISK DRIVES
+wait for a bit [ID01], in what is called a non-work-conserving approach.
+By waiting, a new and “better” request may arrive at the disk, and thus
+overall efﬁciency is increased. Of course, deciding when to wait, and for
+how long, can be tricky; see the research paper for details, or check out
+the Linux kernel implementation to see how such ideas are transitioned
+into practice (if you are the ambitious sort).
+37.6 Summary
+We have presented a summary of how disks work. The summary is
+actually a detailed functional model; it does not describe the amazing
+physics, electronics, and material science that goes into actual drive de-
+sign. For those interested in even more details of that nature, we suggest
+a different major (or perhaps minor); for those that are happy with this
+model, good! We can now proceed to using the model to build more in-
+teresting systems on top of these incredible devices.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

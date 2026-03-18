@@ -1,0 +1,53 @@
+14
+I/O DEVICES
+References
+[A+11] “vIC: Interrupt Coalescing for Virtual Machine Storage Device IO” by Irfan Ahmad,
+Ajay Gulati, Ali Mashtizadeh. USENIX ’11. A terriﬁc survey of interrupt coalescing in traditional
+and virtualized environments.
+[AD14] “Operating Systems: Three Easy Pieces” (Chapters: Crash Consistency: FSCK and
+Journaling and Log-Structured File Systems) by Remzi Arpaci-Dusseau and Andrea Arpaci-
+Dusseau. Arpaci-Dusseau Books, 2014. A description of a ﬁle-system checker and how it works,
+which requires low-level access to disk devices not normally provided by the ﬁle system directly.
+[C01] “An Empirical Study of Operating System Errors” by Andy Chou, Junfeng Yang, Ben-
+jamin Chelf, Seth Hallem, Dawson Engler. SOSP ’01. One of the ﬁrst papers to systematically
+explore how many bugs are in modern operating systems. Among other neat ﬁndings, the authors show
+that device drivers have something like seven times more bugs than mainline kernel code.
+[CK+08] “The xv6 Operating System” by Russ Cox, Frans Kaashoek, Robert Morris, Nickolai
+Zeldovich. From: http://pdos.csail.mit.edu/6.828/2008/index.html. See ide.c for the IDE
+device driver, with a few more details therein.
+[D07] “What Every Programmer Should Know About Memory” by Ulrich Drepper. Novem-
+ber, 2007. Available: http://www.akkadia.org/drepper/cpumemory.pdf. A fantastic
+read about modern memory systems, starting at DRAM and going all the way up to virtualization and
+cache-optimized algorithms.
+[G08] “EIO: Error-handling is Occasionally Correct” by Haryadi Gunawi, Cindy Rubio-Gonzalez,
+Andrea Arpaci-Dusseau, Remzi Arpaci-Dusseau, Ben Liblit. FAST ’08, San Jose, CA, February
+2008. Our own work on building a tool to ﬁnd code in Linux ﬁle systems that does not handle error
+return properly. We found hundreds and hundreds of bugs, many of which have now been ﬁxed.
+[H17] “Intel Core i7-7700K review: Kaby Lake Debuts for Desktop” by Joel Hruska. January 3,
+2017. www.extremetech.com/extreme/241950-intels-core-i7-7700k-reviewed-kaby
+-lake-debuts-desktop. An in-depth review of a recent Intel chipset, including CPUs and the
+I/O subsystem.
+[H18] “Hacker News” by Many contributors. Available: https://news.ycombinator.com. One
+of the better aggregators for tech-related stuff. Once back in 2014, this book became a highly-ranked
+entry, leading to 1 million chapter downloads in just one day! Sadly, we have yet to re-experience such
+a high.
+[L94] “AT Attachment Interface for Disk Drives” by Lawrence J. Lamers. Reference number:
+ANSI X3.221, 1994. Available: ftp://ftp.t10.org/t13/project/d0791r4c-ATA-1.pdf.
+A rather dry document about device interfaces. Read it at your own peril.
+[MR96] “Eliminating Receive Livelock in an Interrupt-driven Kernel” by Jeffrey Mogul, K. K.
+Ramakrishnan. USENIX ’96, San Diego, CA, January 1996. Mogul and colleagues did a great deal
+of pioneering work on web server network performance. This paper is but one example.
+[S08] “Interrupts” by Mark Smotherman. July ’08. Available: http://people.cs.clemson.edu/
+˜mark/interrupts.html. A treasure trove of information on the history of interrupts, DMA, and
+related early ideas in computing.
+[S03] “Improving the Reliability of Commodity Operating Systems” by Michael M. Swift, Brian
+N. Bershad, Henry M. Levy. SOSP ’03. Swift’s work revived interest in a more microkernel-like
+approach to operating systems; minimally, it ﬁnally gave some good reasons why address-space based
+protection could be useful in a modern OS.
+[W10] “Hard Disk Driver” by Washington State Course Homepage. Available online at this
+site: http://eecs.wsu.edu/˜cs460/cs560/HDdriver.html. A nice summary of a simple
+IDE disk drive’s interface and how to build a device driver for it.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

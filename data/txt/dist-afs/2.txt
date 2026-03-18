@@ -1,0 +1,46 @@
+THE ANDREW FILE SYSTEM (AFS)
+3
+TIP: MEASURE THEN BUILD (PATTERSON’S LAW)
+One of our advisors, David Patterson (of RISC and RAID fame), used to
+always encourage us to measure a system and demonstrate a problem
+before building a new system to ﬁx said problem. By using experimen-
+tal evidence, rather than gut instinct, you can turn the process of system
+building into a more scientiﬁc endeavor. Doing so also has the fringe ben-
+eﬁt of making you think about how exactly to measure the system before
+your improved version is developed. When you do ﬁnally get around to
+building the new system, two things are better as a result: ﬁrst, you have
+evidence that shows you are solving a real problem; second, you now
+have a way to measure your new system in place, to show that it actually
+improves upon the state of the art. And thus we call this Patterson’s Law.
+50.2 Problems with Version 1
+A few key problems with this ﬁrst version of AFS motivated the de-
+signers to rethink their ﬁle system. To study the problems in detail, the
+designers of AFS spent a great deal of time measuring their existing pro-
+totype to ﬁnd what was wrong. Such experimentation is a good thing,
+because measurement is the key to understanding how systems work
+and how to improve them; obtaining concrete, good data is thus a neces-
+sary part of systems construction. In their study, the authors found two
+main problems with AFSv1:
+• Path-traversal costs are too high: When performing a Fetch or Store
+protocol request, the client passes the entire pathname (e.g., /home/
+remzi/notes.txt) to the server. The server, in order to access the
+ﬁle, must perform a full pathname traversal, ﬁrst looking in the root
+directory to ﬁnd home, then in home to ﬁnd remzi, and so forth,
+all the way down the path until ﬁnally the desired ﬁle is located.
+With many clients accessing the server at once, the designers of AFS
+found that the server was spending much of its CPU time simply
+walking down directory paths.
+• The client issues too many TestAuth protocol messages: Much
+like NFS and its overabundance of GETATTR protocol messages,
+AFSv1 generated a large amount of trafﬁc to check whether a lo-
+cal ﬁle (or its stat information) was valid with the TestAuth proto-
+col message. Thus, servers spent much of their time telling clients
+whether it was OK to use their cached copies of a ﬁle. Most of the
+time, the answer was that the ﬁle had not changed.
+There were actually two other problems with AFSv1: load was not
+balanced across servers, and the server used a single distinct process per
+client thus inducing context switching and other overheads. The load
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

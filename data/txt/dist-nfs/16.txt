@@ -1,0 +1,53 @@
+SUN’S NETWORK FILE SYSTEM (NFS)
+17
+References
+[AKW88] “The AWK Programming Language” by Alfred V. Aho, Brian W. Kernighan, Peter
+J. Weinberger. Pearson, 1988 (1st edition). A concise, wonderful book about awk. We once had the
+pleasure of meeting Peter Weinberger; when he introduced himself, he said “I’m Peter Weinberger, you
+know, the ’W’ in awk?” As huge awk fans, this was a moment to savor. One of us (Remzi) then said,
+“I love awk! I particularly love the book, which makes everything so wonderfully clear.” Weinberger
+replied (crestfallen), “Oh, Kernighan wrote the book.”
+[C00] “NFS Illustrated” by Brent Callaghan. Addison-Wesley Professional Computing Series,
+2000. A great NFS reference; incredibly thorough and detailed per the protocol itself.
+[ES03] “New NFS Tracing Tools and Techniques for System Analysis” by Daniel Ellard and
+Margo Seltzer. LISA ’03, San Diego, California. An intricate, careful analysis of NFS done via
+passive tracing. By simply monitoring network trafﬁc, the authors show how to derive a vast amount
+of ﬁle system understanding.
+[HLM94] “File System Design for an NFS File Server Appliance” by Dave Hitz, James Lau,
+Michael Malcolm. USENIX Winter 1994. San Francisco, California, 1994. Hitz et al. were greatly
+inﬂuenced by previous work on log-structured ﬁle systems.
+[K86] “Vnodes: An Architecture for Multiple File System Types in Sun UNIX” by Steve R.
+Kleiman. USENIX Summer ’86, Atlanta, Georgia. This paper shows how to build a ﬂexible ﬁle
+system architecture into an operating system, enabling multiple different ﬁle system implementations
+to coexist. Now used in virtually every modern operating system in some form.
+[NT94] “Kerberos: An Authentication Service for Computer Networks” by B. Clifford Neu-
+man, Theodore Ts’o. IEEE Communications, 32(9):33-38, September 1994. Kerberos is an early
+and hugely inﬂuential authentication service. We probably should write a book chapter about it some-
+time...
+[O91] “The Role of Distributed State” by John K. Ousterhout. 1991. Available at this site:
+ftp://ftp.cs.berkeley.edu/ucb/sprite/papers/state.ps. A rarely referenced dis-
+cussion of distributed state; a broader perspective on the problems and challenges.
+[P+94] “NFS Version 3: Design and Implementation” by Brian Pawlowski, Chet Juszczak, Peter
+Staubach, Carl Smith, Diane Lebel, Dave Hitz. USENIX Summer 1994, pages 137-152. The small
+modiﬁcations that underlie NFS version 3.
+[P+00] “The NFS version 4 protocol” by Brian Pawlowski, David Noveck, David Robinson,
+Robert Thurlow. 2nd International System Administration and Networking Conference (SANE
+2000). Undoubtedly the most literary paper on NFS ever written.
+[RO91] “The Design and Implementation of the Log-structured File System” by Mendel Rosen-
+blum, John Ousterhout. Symposium on Operating Systems Principles (SOSP), 1991. LFS again.
+No, you can never get enough LFS.
+[S86] “The Sun Network File System: Design, Implementation and Experience” by Russel
+Sandberg. USENIX Summer 1986. The original NFS paper; though a bit of a challenging read,
+it is worthwhile to see the source of these wonderful ideas.
+[Sun89] “NFS: Network File System Protocol Speciﬁcation” by Sun Microsystems, Inc. Request
+for Comments: 1094, March 1989. Available: http://www.ietf.org/rfc/rfc1094.txt.
+The dreaded speciﬁcation; read it if you must, i.e., you are getting paid to read it. Hopefully, paid a lot.
+Cash money!
+[V72] “La Begueule” by Francois-Marie Arouet a.k.a. Voltaire. Published in 1772. Voltaire said
+a number of clever things, this being but one example. For example, Voltaire also said “If you have two
+religions in your land, the two will cut each other’s throats; but if you have thirty religions, they will
+dwell in peace.” What do you say to that, Democrats and Republicans?
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

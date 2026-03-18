@@ -1,0 +1,55 @@
+HARD DISK DRIVES
+3
+Head
+Arm
+0
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Spindle
+Rotates this way
+Figure 37.2: A Single Track Plus A Head
+37.3 A Simple Disk Drive
+Let’s understand how disks work by building up a model one track at
+a time. Assume we have a simple disk with a single track (Figure 37.1).
+This track has just 12 sectors, each of which is 512 bytes in size (our typical
+sector size, recall) and addressed therefore by the numbers 0 through 11.
+The single platter we have here rotates around the spindle, to which a
+motor is attached.
+Of course, the track by itself isn’t too interesting; we want to be able
+to read or write those sectors, and thus we need a disk head, attached
+to a disk arm, as we now see (Figure 37.2). In the ﬁgure, the disk head,
+attached to the end of the arm, is positioned over sector 6, and the surface
+is rotating counter-clockwise.
+Single-track Latency: The Rotational Delay
+To understand how a request would be processed on our simple, one-
+track disk, imagine we now receive a request to read block 0. How should
+the disk service this request?
+In our simple disk, the disk doesn’t have to do much. In particular, it
+must just wait for the desired sector to rotate under the disk head. This
+wait happens often enough in modern drives, and is an important enough
+component of I/O service time, that it has a special name: rotational de-
+lay (sometimes rotation delay, though that sounds weird). In the exam-
+ple, if the full rotational delay is R, the disk has to incur a rotational delay
+of about R
+2 to wait for 0 to come under the read/write head (if we start at
+6). A worst-case request on this single track would be to sector 5, causing
+nearly a full rotational delay in order to service such a request.
+Multiple Tracks: Seek Time
+So far our disk just has a single track, which is not too realistic; modern
+disks of course have many millions. Let’s thus look at an ever-so-slightly
+more realistic disk surface, this one with three tracks (Figure 37.3, left).
+In the ﬁgure, the head is currently positioned over the innermost track
+(which contains sectors 24 through 35); the next track over contains the
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

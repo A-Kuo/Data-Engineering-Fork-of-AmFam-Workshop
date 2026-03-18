@@ -1,0 +1,31 @@
+12
+THE ANDREW FILE SYSTEM (AFS)
+can access which ﬁles. NFS, like most UNIX ﬁle systems, has much less
+support for this type of sharing.
+Finally, as mentioned before, AFS adds tools to enable simpler man-
+agement of servers for the administrators of the system. In thinking about
+system management, AFS was light years ahead of the ﬁeld.
+50.9 Summary
+AFS shows us how distributed ﬁle systems can be built quite differ-
+ently than what we saw with NFS. The protocol design of AFS is partic-
+ularly important; by minimizing server interactions (through whole-ﬁle
+caching and callbacks), each server can support many clients and thus
+reduce the number of servers needed to manage a particular site. Many
+other features, including the single namespace, security, and access-control
+lists, make AFS quite nice to use. The consistency model provided by AFS
+is simple to understand and reason about, and does not lead to the occa-
+sional weird behavior as one sometimes observes in NFS.
+Perhaps unfortunately, AFS is likely on the decline. Because NFS be-
+came an open standard, many different vendors supported it, and, along
+with CIFS (the Windows-based distributed ﬁle system protocol), NFS
+dominates the marketplace.
+Although one still sees AFS installations
+from time to time (such as in various educational institutions, including
+Wisconsin), the only lasting inﬂuence will likely be from the ideas of AFS
+rather than the actual system itself. Indeed, NFSv4 now adds server state
+(e.g., an “open” protocol message), and thus bears an increasing similar-
+ity to the basic AFS protocol.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

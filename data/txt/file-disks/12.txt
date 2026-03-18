@@ -1,0 +1,48 @@
+HARD DISK DRIVES
+13
+TIP: IT ALWAYS DEPENDS (LIVNY’S LAW)
+Almost any question can be answered with “it depends”, as our colleague
+Miron Livny always says. However, use with caution, as if you answer
+too many questions this way, people will stop asking you questions alto-
+gether. For example, somebody asks: “want to go to lunch?” You reply:
+“it depends, are you coming along?”
+On modern drives, as we saw above, both seek and rotation are roughly
+equivalent (depending, of course, on the exact requests), and thus SPTF
+is useful and improves performance. However, it is even more difﬁcult
+to implement in an OS, which generally does not have a good idea where
+track boundaries are or where the disk head currently is (in a rotational
+sense). Thus, SPTF is usually performed inside a drive, described below.
+Other Scheduling Issues
+There are many other issues we do not discuss in this brief description
+of basic disk operation, scheduling, and related topics.
+One such is-
+sue is this: where is disk scheduling performed on modern systems? In
+older systems, the operating system did all the scheduling; after looking
+through the set of pending requests, the OS would pick the best one, and
+issue it to the disk. When that request completed, the next one would be
+chosen, and so forth. Disks were simpler then, and so was life.
+In modern systems, disks can accommodate multiple outstanding re-
+quests, and have sophisticated internal schedulers themselves (which can
+implement SPTF accurately; inside the disk controller, all relevant details
+are available, including exact head position). Thus, the OS scheduler usu-
+ally picks what it thinks the best few requests are (say 16) and issues them
+all to disk; the disk then uses its internal knowledge of head position and
+detailed track layout information to service said requests in the best pos-
+sible (SPTF) order.
+Another important related task performed by disk schedulers is I/O
+merging. For example, imagine a series of requests to read blocks 33,
+then 8, then 34, as in Figure 37.8. In this case, the scheduler should merge
+the requests for blocks 33 and 34 into a single two-block request; any re-
+ordering that the scheduler does is performed upon the merged requests.
+Merging is particularly important at the OS level, as it reduces the num-
+ber of requests sent to the disk and thus lowers overheads.
+One ﬁnal problem that modern schedulers address is this: how long
+should the system wait before issuing an I/O to disk? One might naively
+think that the disk, once it has even a single I/O, should immediately
+issue the request to the drive; this approach is called work-conserving, as
+the disk will never be idle if there are requests to serve. However, research
+on anticipatory disk scheduling has shown that sometimes it is better to
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

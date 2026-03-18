@@ -1,0 +1,83 @@
+I/O DEVICES
+5
+THE CRUX: HOW TO AVOID THE COSTS OF POLLING
+How can the OS check device status without frequent polling, and
+thus lower the CPU overhead required to manage the device?
+36.4 Lowering CPU Overhead With Interrupts
+The invention that many engineers came upon years ago to improve
+this interaction is something we’ve seen already: the interrupt. Instead of
+polling the device repeatedly, the OS can issue a request, put the calling
+process to sleep, and context switch to another task. When the device
+is ﬁnally ﬁnished with the operation, it will raise a hardware interrupt,
+causing the CPU to jump into the OS at a predetermined interrupt service
+routine (ISR) or more simply an interrupt handler. The handler is just a
+piece of operating system code that will ﬁnish the request (for example,
+by reading data and perhaps an error code from the device) and wake the
+process waiting for the I/O, which can then proceed as desired.
+Interrupts thus allow for overlap of computation and I/O, which is
+key for improved utilization. This timeline shows the problem:
+CPU
+Disk
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+p
+p
+p
+p
+p
+1
+1
+1
+1
+1
+In the diagram, Process 1 runs on the CPU for some time (indicated by
+a repeated 1 on the CPU line), and then issues an I/O request to the disk
+to read some data. Without interrupts, the system simply spins, polling
+the status of the device repeatedly until the I/O is complete (indicated by
+a p). The disk services the request and ﬁnally Process 1 can run again.
+If instead we utilize interrupts and allow for overlap, the OS can do
+something else while waiting for the disk:
+CPU
+Disk
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+2
+2
+2
+2
+2
+1
+1
+1
+1
+1
+In this example, the OS runs Process 2 on the CPU while the disk ser-
+vices Process 1’s request. When the disk request is ﬁnished, an interrupt
+occurs, and the OS wakes up Process 1 and runs it again. Thus, both the
+CPU and the disk are properly utilized during the middle stretch of time.
+Note that using interrupts is not always the best solution. For example,
+imagine a device that performs its tasks very quickly: the ﬁrst poll usually
+ﬁnds the device to be done with task. Using an interrupt in this case will
+actually slow down the system: switching to another process, handling the
+interrupt, and switching back to the issuing process is expensive. Thus, if
+a device is fast, it may be best to poll; if it is slow, interrupts, which allow
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

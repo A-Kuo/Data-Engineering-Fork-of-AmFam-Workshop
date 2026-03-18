@@ -1,0 +1,50 @@
+THE ANDREW FILE SYSTEM (AFS)
+5
+Client (C1)
+Server
+fd = open(“/home/remzi/notes.txt”, ...);
+Send Fetch (home FID, “remzi”)
+Receive Fetch request
+look for remzi in home dir
+setup callback(C1) on remzi
+return remzi’s content/FID
+Receive Fetch reply
+write remzi to local disk cache
+record callback status of remzi
+Send Fetch (remzi FID, “notes.txt”)
+Receive Fetch request
+look for notes.txt in remzi dir
+setup callback(C1) on notes.txt
+return notes.txt’s content/FID
+Receive Fetch reply
+write notes.txt to local disk cache
+record callback status of notes.txt
+local open() of cached notes.txt
+return ﬁle descriptor to application
+read(fd, buffer, MAX);
+perform local read() on cached copy
+close(fd);
+do local close() on cached copy
+if ﬁle has changed, ﬂush to server
+fd = open(“/home/remzi/notes.txt”, ...);
+Foreach dir (home, remzi)
+if (callback(dir) == VALID)
+use local copy for lookup(dir)
+else
+Fetch (as above)
+if (callback(notes.txt) == VALID)
+open local cached copy
+return ﬁle descriptor to it
+else
+Fetch (as above) then open and return fd
+Figure 50.2: Reading A File: Client-side And File Server Actions
+remzi, put it in the local-disk cache, and set up a callback on remzi.
+Finally, the client would Fetch notes.txt, cache this regular ﬁle in the
+local disk, set up a callback, and ﬁnally return a ﬁle descriptor to the
+calling application. See Figure 50.2 for a summary.
+The key difference, however, from NFS, is that with each fetch of a
+directory or ﬁle, the AFS client would establish a callback with the server,
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

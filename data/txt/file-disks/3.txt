@@ -1,0 +1,114 @@
+4
+HARD DISK DRIVES
+0
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+12
+23
+22
+21
+20
+19
+18
+17
+16
+15
+14
+13
+24
+35
+34
+33
+32
+31
+30
+29
+28
+27
+26
+25
+Spindle
+Rotates this way
+Seek
+Remaining rotation
+3
+2
+1
+0
+11
+10
+9
+8
+7
+6
+5
+4
+15
+14
+13
+12
+23
+22
+21
+20
+19
+18
+17
+16
+27
+26
+25
+24
+35
+34
+33
+32
+31
+30
+29
+28
+Spindle
+Rotates this way
+Figure 37.3: Three Tracks Plus A Head (Right: With Seek)
+next set of sectors (12 through 23), and the outermost track contains the
+ﬁrst sectors (0 through 11).
+To understand how the drive might access a given sector, we now trace
+what would happen on a request to a distant sector, e.g., a read to sector
+11. To service this read, the drive has to ﬁrst move the disk arm to the cor-
+rect track (in this case, the outermost one), in a process known as a seek.
+Seeks, along with rotations, are one of the most costly disk operations.
+The seek, it should be noted, has many phases: ﬁrst an acceleration
+phase as the disk arm gets moving; then coasting as the arm is moving
+at full speed, then deceleration as the arm slows down; ﬁnally settling as
+the head is carefully positioned over the correct track. The settling time
+is often quite signiﬁcant, e.g., 0.5 to 2 ms, as the drive must be certain to
+ﬁnd the right track (imagine if it just got close instead!).
+After the seek, the disk arm has positioned the head over the right
+track. A depiction of the seek is found in Figure 37.3 (right).
+As we can see, during the seek, the arm has been moved to the desired
+track, and the platter of course has rotated, in this case about 3 sectors.
+Thus, sector 9 is just about to pass under the disk head, and we must
+only endure a short rotational delay to complete the transfer.
+When sector 11 passes under the disk head, the ﬁnal phase of I/O
+will take place, known as the transfer, where data is either read from or
+written to the surface. And thus, we have a complete picture of I/O time:
+ﬁrst a seek, then waiting for the rotational delay, and ﬁnally the transfer.
+Some Other Details
+Though we won’t spend too much time on it, there are some other inter-
+esting details about how hard drives operate. Many drives employ some
+kind of track skew to make sure that sequential reads can be properly
+serviced even when crossing track boundaries. In our simple example
+disk, this might appear as seen in Figure 37.4 (page 5).
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

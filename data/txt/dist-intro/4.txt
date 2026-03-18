@@ -1,0 +1,47 @@
+DISTRIBUTED SYSTEMS
+5
+TIP: USE CHECKSUMS FOR INTEGRITY
+Checksums are a commonly-used method to detect corruption quickly
+and effectively in modern systems. A simple checksum is addition: just
+sum up the bytes of a chunk of data; of course, many other more sophis-
+ticated checksums have been created, including basic cyclic redundancy
+codes (CRCs), the Fletcher checksum, and many others [MK09].
+In networking, checksums are used as follows. Before sending a message
+from one machine to another, compute a checksum over the bytes of the
+message. Then send both the message and the checksum to the desti-
+nation. At the destination, the receiver computes a checksum over the
+incoming message as well; if this computed checksum matches the sent
+checksum, the receiver can feel some assurance that the data likely did
+not get corrupted during transmission.
+Checksums can be evaluated along a number of different axes. Effective-
+ness is one primary consideration: does a change in the data lead to a
+change in the checksum? The stronger the checksum, the harder it is for
+changes in the data to go unnoticed. Performance is the other important
+criterion: how costly is the checksum to compute? Unfortunately, effec-
+tiveness and performance are often at odds, meaning that checksums of
+high quality are often expensive to compute. Life, again, isn’t perfect.
+in the UDP/IP networking stack available today on virtually all modern
+systems. To use UDP, a process uses the sockets API in order to create a
+communication endpoint; processes on other machines (or on the same
+machine) send UDP datagrams to the original process (a datagram is a
+ﬁxed-sized message up to some max size).
+Figures 48.1 and 48.2 show a simple client and server built on top of
+UDP/IP. The client can send a message to the server, which then responds
+with a reply. With this small amount of code, you have all you need to
+begin building distributed systems!
+UDP is a great example of an unreliable communication layer. If you
+use it, you will encounter situations where packets get lost (dropped) and
+thus do not reach their destination; the sender is never thus informed of
+the loss. However, that does not mean that UDP does not guard against
+any failures at all. For example, UDP includes a checksum to detect some
+forms of packet corruption.
+However, because many applications simply want to send data to a
+destination and not worry about packet loss, we need more. Speciﬁcally,
+we need reliable communication on top of an unreliable network.
+48.3 Reliable Communication Layers
+To build a reliable communication layer, we need some new mech-
+anisms and techniques to handle packet loss. Let us consider a simple
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

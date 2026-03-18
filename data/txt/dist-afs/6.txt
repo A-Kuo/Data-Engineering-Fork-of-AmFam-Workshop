@@ -1,0 +1,152 @@
+THE ANDREW FILE SYSTEM (AFS)
+7
+Client1
+Client2
+Server
+Comments
+P1
+P2
+Cache
+P3
+Cache
+Disk
+open(F)
+-
+-
+-
+File created
+write(A)
+A
+-
+-
+close()
+A
+-
+A
+open(F)
+A
+-
+A
+read() →A
+A
+-
+A
+close()
+A
+-
+A
+open(F)
+A
+-
+A
+write(B)
+B
+-
+A
+open(F)
+B
+-
+A
+Local processes
+read() →B
+B
+-
+A
+see writes immediately
+close()
+B
+-
+A
+B
+open(F)
+A
+A
+Remote processes
+B
+read() →A
+A
+A
+do not see writes...
+B
+close()
+A
+A
+close()
+B
+✚
+A
+B
+... until close()
+B
+open(F)
+B
+B
+has taken place
+B
+read() →B
+B
+B
+B
+close()
+B
+B
+B
+open(F)
+B
+B
+open(F)
+B
+B
+B
+write(D)
+D
+B
+B
+D
+write(C)
+C
+B
+D
+close()
+C
+C
+close()
+D
+✁C
+D
+D
+open(F)
+D
+D
+Unfortunately for P3
+D
+read() →D
+D
+D
+the last writer wins
+D
+close()
+D
+D
+Figure 50.3: Cache Consistency Timeline
+valid. This step ensures that clients will no longer read stale copies of
+the ﬁle; subsequent opens on those clients will require a re-fetch of the
+new version of the ﬁle from the server (and will also serve to reestablish
+a callback on the new version of the ﬁle).
+AFS makes an exception to this simple model between processes on
+the same machine. In this case, writes to a ﬁle are immediately visible to
+other local processes (i.e., a process does not have to wait until a ﬁle is
+closed to see its latest updates). This makes using a single machine be-
+have exactly as you would expect, as this behavior is based upon typical
+UNIX semantics. Only when switching to a different machine would you
+be able to detect the more general AFS consistency mechanism.
+There is one interesting cross-machine case that is worthy of further
+discussion. Speciﬁcally, in the rare case that processes on different ma-
+chines are modifying a ﬁle at the same time, AFS naturally employs what
+is known as a last writer wins approach (which perhaps should be called
+last closer wins). Speciﬁcally, whichever client calls close() last will
+update the entire ﬁle on the server last and thus will be the “winning”
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

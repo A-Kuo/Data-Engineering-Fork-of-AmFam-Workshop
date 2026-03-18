@@ -1,0 +1,52 @@
+6
+LOCALITY AND THE FAST FILE SYSTEM
+unrealistically small numbers), and that the three directories (the root di-
+rectory /, /a, and /b) and four ﬁles (/a/c, /a/d, /a/e, /b/f) are
+placed within them per the FFS policies. Assume the regular ﬁles are each
+two blocks in size, and that the directories have just a single block of data.
+For this ﬁgure, we use the obvious symbols for each ﬁle or directory (i.e.,
+/ for the root directory, a for /a, f for /b/f, and so forth).
+group inodes
+data
+0 /--------- /---------
+1 acde------ accddee---
+2 bf-------- bff-------
+3 ---------- ----------
+4 ---------- ----------
+5 ---------- ----------
+6 ---------- ----------
+7 ---------- ----------
+Note that the FFS policy does two positive things: the data blocks of
+each ﬁle are near each ﬁle’s inode, and ﬁles in the same directory are
+near one another (namely, /a/c, /a/d, and /a/e are all in Group 1, and
+directory /b and its ﬁle /b/f are near one another in Group 2).
+In contrast, let’s now look at an inode allocation policy that simply
+spreads inodes across groups, trying to ensure that no group’s inode table
+ﬁlls up quickly. The ﬁnal allocation might thus look something like this:
+group inodes
+data
+0 /--------- /---------
+1 a--------- a---------
+2 b--------- b---------
+3 c--------- cc--------
+4 d--------- dd--------
+5 e--------- ee--------
+6 f--------- ff--------
+7 ---------- ----------
+As you can see from the ﬁgure, while this policy does indeed keep ﬁle
+(and directory) data near its respective inode, ﬁles within a directory are
+arbitrarily spread around the disk, and thus name-based locality is not
+preserved. Access to ﬁles /a/c, /a/d, and /a/e now spans three groups
+instead of one as per the FFS approach.
+The FFS policy heuristics are not based on extensive studies of ﬁle-
+system trafﬁc or anything particularly nuanced; rather, they are based on
+good old-fashioned common sense (isn’t that what CS stands for after
+all?)1. Files in a directory are often accessed together: imagine compil-
+ing a bunch of ﬁles and then linking them into a single executable. Be-
+1Some people refer to common sense as horse sense, especially people who work regu-
+larly with horses. However, we have a feeling that this idiom may be lost as the “mechanized
+horse”, a.k.a. the car, gains in popularity. What will they invent next? A ﬂying machine??!!
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

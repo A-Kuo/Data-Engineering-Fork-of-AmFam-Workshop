@@ -1,0 +1,49 @@
+DISTRIBUTED SYSTEMS
+3
+// client code
+int main(int argc, char *argv[]) {
+int sd = UDP_Open(20000);
+struct sockaddr_in addrSnd, addrRcv;
+int rc = UDP_FillSockAddr(&addrSnd, "cs.wisc.edu", 10000);
+char message[BUFFER_SIZE];
+sprintf(message, "hello world");
+rc = UDP_Write(sd, &addrSnd, message, BUFFER_SIZE);
+if (rc > 0)
+int rc = UDP_Read(sd, &addrRcv, message, BUFFER_SIZE);
+return 0;
+}
+// server code
+int main(int argc, char *argv[]) {
+int sd = UDP_Open(10000);
+assert(sd > -1);
+while (1) {
+struct sockaddr_in addr;
+char message[BUFFER_SIZE];
+int rc = UDP_Read(sd, &addr, message, BUFFER_SIZE);
+if (rc > 0) {
+char reply[BUFFER_SIZE];
+sprintf(reply, "goodbye world");
+rc = UDP_Write(sd, &addr, reply, BUFFER_SIZE);
+}
+}
+return 0;
+}
+Figure 48.1: Example UDP Code (client.c, server.c)
+once, it is possible that the memory within the router cannot accommo-
+date all of the packets. The only choice the router has at that point is
+to drop one or more of the packets. This same behavior occurs at end
+hosts as well; when you send a large number of messages to a single ma-
+chine, the machine’s resources can easily become overwhelmed, and thus
+packet loss again arises.
+Thus, packet loss is fundamental in networking. The question thus
+becomes: how should we deal with it?
+48.2 Unreliable Communication Layers
+One simple way is this: we don’t deal with it. Because some appli-
+cations know how to deal with packet loss, it is sometimes useful to let
+them communicate with a basic unreliable messaging layer, an example
+of the end-to-end argument one often hears about (see the Aside at end
+of chapter). One excellent example of such an unreliable layer is found
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,31 @@
+DISTRIBUTED SYSTEMS
+15
+References
+[A70] “The ALOHA System — Another Alternative for Computer Communications” by Nor-
+man Abramson. The 1970 Fall Joint Computer Conference. The ALOHA network pioneered some
+basic concepts in networking, including exponential back-off and retransmit, which formed the basis for
+communication in shared-bus Ethernet networks for years.
+[BN84] “Implementing Remote Procedure Calls” by Andrew D. Birrell, Bruce Jay Nelson.
+ACM TOCS, Volume 2:1, February 1984. The foundational RPC system upon which all others build.
+Yes, another pioneering effort from our friends at Xerox PARC.
+[MK09] “The Effectiveness of Checksums for Embedded Control Networks” by Theresa C.
+Maxino and Philip J. Koopman. IEEE Transactions on Dependable and Secure Computing,
+6:1, January ’09. A nice overview of basic checksum machinery and some performance and robustness
+comparisons between them.
+[LH89] “Memory Coherence in Shared Virtual Memory Systems” by Kai Li and Paul Hudak.
+ACM TOCS, 7:4, November 1989. The introduction of software-based shared memory via virtual
+memory. An intriguing idea for sure, but not a lasting or good one in the end.
+[SK09] “Principles of Computer System Design” by Jerome H. Saltzer and M. Frans Kaashoek.
+Morgan-Kaufmann, 2009. An excellent book on systems, and a must for every bookshelf. One of the
+few terriﬁc discussions on naming we’ve seen.
+[SRC84] “End-To-End Arguments in System Design” by Jerome H. Saltzer, David P. Reed,
+David D. Clark. ACM TOCS, 2:4, November 1984. A beautiful discussion of layering, abstraction,
+and where functionality must ultimately reside in computer systems.
+[VJ88] “Congestion Avoidance and Control” by Van Jacobson. SIGCOMM ’88 . A pioneering
+paper on how clients should adjust to perceived network congestion; deﬁnitely one of the key pieces of
+technology underlying the Internet, and a must read for anyone serious about systems, and for Van
+Jacobson’s relatives because well relatives should read all of your papers.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

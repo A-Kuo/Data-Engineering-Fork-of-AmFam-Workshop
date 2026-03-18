@@ -1,0 +1,51 @@
+8
+THE ANDREW FILE SYSTEM (AFS)
+ﬁle, i.e., the ﬁle that remains on the server for others to see. The result is
+a ﬁle that was generated in its entirety either by one client or the other.
+Note the difference from a block-based protocol like NFS: in NFS, writes
+of individual blocks may be ﬂushed out to the server as each client is up-
+dating the ﬁle, and thus the ﬁnal ﬁle on the server could end up as a mix
+of updates from both clients. In many cases, such a mixed ﬁle output
+would not make much sense, i.e., imagine a JPEG image getting modi-
+ﬁed by two clients in pieces; the resulting mix of writes would not likely
+constitute a valid JPEG.
+A timeline showing a few of these different scenarios can be seen in
+Figure 50.3. The columns show the behavior of two processes (P1 and P2)
+on Client1 and its cache state, one process (P3) on Client2 and its cache
+state, and the server (Server), all operating on a single ﬁle called, imag-
+inatively, F. For the server, the ﬁgure simply shows the contents of the
+ﬁle after the operation on the left has completed. Read through it and see
+if you can understand why each read returns the results that it does. A
+commentary ﬁeld on the right will help you if you get stuck.
+50.6 Crash Recovery
+From the description above, you might sense that crash recovery is
+more involved than with NFS. You would be right. For example, imagine
+there is a short period of time where a server (S) is not able to contact
+a client (C1), for example, while the client C1 is rebooting. While C1
+is not available, S may have tried to send it one or more callback recall
+messages; for example, imagine C1 had ﬁle F cached on its local disk, and
+then C2 (another client) updated F, thus causing S to send messages to all
+clients caching the ﬁle to remove it from their local caches. Because C1
+may miss those critical messages when it is rebooting, upon rejoining the
+system, C1 should treat all of its cache contents as suspect. Thus, upon
+the next access to ﬁle F, C1 should ﬁrst ask the server (with a TestAuth
+protocol message) whether its cached copy of ﬁle F is still valid; if so, C1
+can use it; if not, C1 should fetch the newer version from the server.
+Server recovery after a crash is also more complicated. The problem
+that arises is that callbacks are kept in memory; thus, when a server re-
+boots, it has no idea which client machine has which ﬁles. Thus, upon
+server restart, each client of the server must realize that the server has
+crashed and treat all of their cache contents as suspect, and (as above)
+reestablish the validity of a ﬁle before using it. Thus, a server crash is a
+big event, as one must ensure that each client is aware of the crash in a
+timely manner, or risk a client accessing a stale ﬁle. There are many ways
+to implement such recovery; for example, by having the server send a
+message (saying “don’t trust your cache contents!”) to each client when
+it is up and running again, or by having clients check that the server is
+alive periodically (with a heartbeat message, as it is called). As you can
+see, there is a cost to building a more scalable and sensible caching model;
+with NFS, clients hardly noticed a server crash.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

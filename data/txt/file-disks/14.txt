@@ -1,0 +1,40 @@
+HARD DISK DRIVES
+15
+References
+[ADR03] “More Than an Interface: SCSI vs. ATA” by Dave Anderson, Jim Dykes, Erik Riedel.
+FAST ’03, 2003. One of the best recent-ish references on how modern disk drives really work; a must
+read for anyone interested in knowing more.
+[CKR72] “Analysis of Scanning Policies for Reducing Disk Seek Times” E.G. Coffman, L.A.
+Klimko, B. Ryan SIAM Journal of Computing, September 1972, Vol 1. No 3. Some of the early
+work in the ﬁeld of disk scheduling.
+[HK+17] “The Unwritten Contract of Solid State Drives” by Jun He, Sudarsun Kannan, Andrea
+C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. EuroSys ’17, Belgrade, Serbia, April 2017. We
+take the idea of the unwritten contract, and extend it to SSDs. Using SSDs well seems as complicated
+as hard drives, and sometimes more so.
+[ID01] “Anticipatory Scheduling: A Disk-scheduling Framework To Overcome Deceptive Idle-
+ness In Synchronous I/O” by Sitaram Iyer, Peter Druschel. SOSP ’01, October 2001. A cool paper
+showing how waiting can improve disk scheduling: better requests may be on their way!
+[JW91] “Disk Scheduling Algorithms Based On Rotational Position” by D. Jacobson, J. Wilkes.
+Technical Report HPL-CSP-91-7rev1, Hewlett-Packard, February 1991. A more modern take on
+disk scheduling. It remains a technical report (and not a published paper) because the authors were
+scooped by Seltzer et al. [SCO90].
+[RW92] “An Introduction to Disk Drive Modeling” by C. Ruemmler, J. Wilkes. IEEE Computer,
+27:3, March 1994. A terriﬁc introduction to the basics of disk operation. Some pieces are out of date,
+but most of the basics remain.
+[SCO90] “Disk Scheduling Revisited” by Margo Seltzer, Peter Chen, John Ousterhout. USENIX
+1990. A paper that talks about how rotation matters too in the world of disk scheduling.
+[SG04] “MEMS-based storage devices and standard disk interfaces: A square peg in a round
+hole?” Steven W. Schlosser, Gregory R. Ganger FAST ’04, pp. 87-100, 2004 While the MEMS
+aspect of this paper hasn’t yet made an impact, the discussion of the contract between ﬁle systems and
+disks is wonderful and a lasting contribution. We later build on this work to study the “Unwritten
+Contract of Solid State Drives” [HK+17]
+[S09a] “Barracuda ES.2 data sheet” by Seagate, Inc.. Available at this website, at least, it was:
+http://www.seagate.com/docs/pdf/datasheet/disc/ds_barracuda_es.pdf. A
+data sheet; read at your own risk. Risk of what? Boredom.
+[S09b] “Cheetah 15K.5” by Seagate, Inc.. Available at this website, we’re pretty sure it is:
+http://www.seagate.com/docs/pdf/datasheet/disc/ds-cheetah-15k-5-us.pdf.
+See above commentary on data sheets.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

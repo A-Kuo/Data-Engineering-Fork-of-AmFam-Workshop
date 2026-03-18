@@ -1,0 +1,29 @@
+LOCALITY AND THE FAST FILE SYSTEM
+13
+References
+[AD18a] “Operating Systems: Three Easy Pieces” (Chapter: Hard Disk Drives) by Remzi
+Arpaci-Dusseau and Andrea Arpaci-Dusseau. Arpaci-Dusseau Books, 2018. There is no way
+you should be reading about FFS without having ﬁrst understood hard drives in some detail. If you try
+to do so, please instead go directly to jail; do not pass go, and, critically, do not collect 200 much-needed
+simoleons.
+[AD18b] “Operating Systems: Three Easy Pieces” (Chapter: File System Implementation) by
+Remzi Arpaci-Dusseau and Andrea Arpaci-Dusseau . Arpaci-Dusseau Books, 2018. As above,
+it makes little sense to read this chapter unless you have read (and understood) the chapter on ﬁle
+system implementation. Otherwise, we’ll be throwing around terms like “inode” and “indirect block”
+and you’ll be like “huh?” and that is no fun for either of us.
+[K94] “The Design of the SEER Predictive Caching System” by G. H. Kuenning. MOBICOMM
+’94, Santa Cruz, California, December 1994. According to Kuenning, this is the best overview of the
+SEER project, which led to (among other things) the collection of these traces.
+[MJLF84] “A Fast File System for UNIX” by Marshall K. McKusick, William N. Joy, Sam J.
+Lefﬂer, Robert S. Fabry. ACM TOCS, 2:3, August 1984. McKusick was recently honored with the
+IEEE Reynold B. Johnson award for his contributions to ﬁle systems, much of which was based on
+his work building FFS. In his acceptance speech, he discussed the original FFS software: only 1200
+lines of code! Modern versions are a little more complex, e.g., the BSD FFS descendant now is in the
+50-thousand lines-of-code range.
+[P98] “Hardware Technology Trends and Database Opportunities” by David A. Patterson.
+Keynote Lecture at SIGMOD ’98, June 1998. A great and simple overview of disk technology trends
+and how they change over time.
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

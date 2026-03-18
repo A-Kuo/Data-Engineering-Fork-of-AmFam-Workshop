@@ -1,0 +1,56 @@
+2
+THE ANDREW FILE SYSTEM (AFS)
+TestAuth
+Test whether a file has changed
+(used to validate cached entries)
+GetFileStat
+Get the stat info for a file
+Fetch
+Fetch the contents of file
+Store
+Store this file on the server
+SetFileStat
+Set the stat info for a file
+ListDir
+List the contents of a directory
+Figure 50.1: AFSv1 Protocol Highlights
+One of the basic tenets of all versions of AFS is whole-ﬁle caching on
+the local disk of the client machine that is accessing a ﬁle. When you
+open() a ﬁle, the entire ﬁle (if it exists) is fetched from the server and
+stored in a ﬁle on your local disk. Subsequent application read() and
+write() operations are redirected to the local ﬁle system where the ﬁle is
+stored; thus, these operations require no network communication and are
+fast. Finally, upon close(), the ﬁle (if it has been modiﬁed) is ﬂushed
+back to the server. Note the obvious contrasts with NFS, which caches
+blocks (not whole ﬁles, although NFS could of course cache every block of
+an entire ﬁle) and does so in client memory (not local disk).
+Let’s get into the details a bit more. When a client application ﬁrst calls
+open(), the AFS client-side code (which the AFS designers call Venus)
+would send a Fetch protocol message to the server. The Fetch protocol
+message would pass the entire pathname of the desired ﬁle (for exam-
+ple, /home/remzi/notes.txt) to the ﬁle server (the group of which
+they called Vice), which would then traverse the pathname, ﬁnd the de-
+sired ﬁle, and ship the entire ﬁle back to the client. The client-side code
+would then cache the ﬁle on the local disk of the client (by writing it to
+local disk). As we said above, subsequent read() and write() system
+calls are strictly local in AFS (no communication with the server occurs);
+they are just redirected to the local copy of the ﬁle. Because the read()
+and write() calls act just like calls to a local ﬁle system, once a block
+is accessed, it also may be cached in client memory. Thus, AFS also uses
+client memory to cache copies of blocks that it has in its local disk. Fi-
+nally, when ﬁnished, the AFS client checks if the ﬁle has been modiﬁed
+(i.e., that it has been opened for writing); if so, it ﬂushes the new version
+back to the server with a Store protocol message, sending the entire ﬁle
+and pathname to the server for permanent storage.
+The next time the ﬁle is accessed, AFSv1 does so much more efﬁ-
+ciently. Speciﬁcally, the client-side code ﬁrst contacts the server (using
+the TestAuth protocol message) in order to determine whether the ﬁle
+has changed. If not, the client would use the locally-cached copy, thus
+improving performance by avoiding a network transfer. The ﬁgure above
+shows some of the protocol messages in AFSv1. Note that this early ver-
+sion of the protocol only cached ﬁle contents; directories, for example,
+were only kept at the server.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

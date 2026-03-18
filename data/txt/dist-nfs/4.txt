@@ -1,0 +1,46 @@
+SUN’S NETWORK FILE SYSTEM (NFS)
+5
+It gets even worse when you consider the fact that a stateful server has
+to deal with client crashes. Imagine, for example, a client that opens a ﬁle
+and then crashes. The open() uses up a ﬁle descriptor on the server; how
+can the server know it is OK to close a given ﬁle? In normal operation, a
+client would eventually call close() and thus inform the server that the
+ﬁle should be closed. However, when a client crashes, the server never
+receives a close(), and thus has to notice the client has crashed in order
+to close the ﬁle.
+For these reasons, the designers of NFS decided to pursue a stateless
+approach: each client operation contains all the information needed to
+complete the request. No fancy crash recovery is needed; the server just
+starts running again, and a client, at worst, might have to retry a request.
+49.5 The NFSv2 Protocol
+We thus arrive at the NFSv2 protocol deﬁnition. Our problem state-
+ment is simple:
+THE CRUX: HOW TO DEFINE A STATELESS FILE PROTOCOL
+How can we deﬁne the network protocol to enable stateless operation?
+Clearly, stateful calls like open() can’t be a part of the discussion (as it
+would require the server to track open ﬁles); however, the client appli-
+cation will want to call open(), read(), write(), close() and other
+standard API calls to access ﬁles and directories. Thus, as a reﬁned ques-
+tion, how do we deﬁne the protocol to both be stateless and support the
+POSIX ﬁle system API?
+One key to understanding the design of the NFS protocol is under-
+standing the ﬁle handle. File handles are used to uniquely describe the
+ﬁle or directory a particular operation is going to operate upon; thus,
+many of the protocol requests include a ﬁle handle.
+You can think of a ﬁle handle as having three important components: a
+volume identiﬁer, an inode number, and a generation number; together, these
+three items comprise a unique identiﬁer for a ﬁle or directory that a client
+wishes to access. The volume identiﬁer informs the server which ﬁle sys-
+tem the request refers to (an NFS server can export more than one ﬁle
+system); the inode number tells the server which ﬁle within that partition
+the request is accessing. Finally, the generation number is needed when
+reusing an inode number; by incrementing it whenever an inode num-
+ber is reused, the server ensures that a client with an old ﬁle handle can’t
+accidentally access the newly-allocated ﬁle.
+Here is a summary of some of the important pieces of the protocol; the
+full protocol is available elsewhere (see Callaghan’s book for an excellent
+and detailed overview of NFS [C00]).
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,62 @@
+6
+SUN’S NETWORK FILE SYSTEM (NFS)
+NFSPROC_GETATTR
+ﬁle handle
+returns: attributes
+NFSPROC_SETATTR
+ﬁle handle, attributes
+returns: attributes
+NFSPROC_LOOKUP
+directory ﬁle handle, name of ﬁle/dir to look up
+returns: ﬁle handle, attributes
+NFSPROC_READ
+ﬁle handle, offset, count
+data, attributes
+NFSPROC_WRITE
+ﬁle handle, offset, count, data
+attributes
+NFSPROC_CREATE
+directory ﬁle handle, name of ﬁle, attributes
+ﬁle handle, attributes
+NFSPROC_REMOVE
+directory ﬁle handle, name of ﬁle to be removed
+–
+NFSPROC_MKDIR
+directory ﬁle handle, name of directory, attributes
+ﬁle handle, attributes
+NFSPROC_RMDIR
+directory ﬁle handle, name of directory to be removed
+–
+NFSPROC_READDIR
+directory handle, count of bytes to read, cookie
+returns: directory entries, cookie (to get more entries)
+Figure 49.4: The NFS Protocol: Examples
+We brieﬂy highlight the important components of the protocol. First,
+the LOOKUP protocol message is used to obtain a ﬁle handle, which is
+then subsequently used to access ﬁle data. The client passes a directory
+ﬁle handle and name of a ﬁle to look up, and the handle to that ﬁle (or
+directory) plus its attributes are passed back to the client from the server.
+For example, assume the client already has a directory ﬁle handle for
+the root directory of a ﬁle system (/) (indeed, this would be obtained
+through the NFS mount protocol, which is how clients and servers ﬁrst
+are connected together; we do not discuss the mount protocol here for
+sake of brevity). If an application running on the client opens the ﬁle
+/foo.txt, the client-side ﬁle system sends a lookup request to the server,
+passing it the root ﬁle handle and the name foo.txt; if successful, the
+ﬁle handle (and attributes) for foo.txt will be returned.
+In case you are wondering, attributes are just the metadata that the ﬁle
+system tracks about each ﬁle, including ﬁelds such as ﬁle creation time,
+last modiﬁcation time, size, ownership and permissions information, and
+so forth, i.e., the same type of information that you would get back if you
+called stat() on a ﬁle.
+Once a ﬁle handle is available, the client can issue READ and WRITE
+protocol messages on a ﬁle to read or write the ﬁle, respectively. The
+READ protocol message requires the protocol to pass along the ﬁle handle
+of the ﬁle along with the offset within the ﬁle and number of bytes to read.
+The server then will be able to issue the read (after all, the handle tells the
+server which volume and which inode to read from, and the offset and
+count tells it which bytes of the ﬁle to read) and return the data (and up-
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

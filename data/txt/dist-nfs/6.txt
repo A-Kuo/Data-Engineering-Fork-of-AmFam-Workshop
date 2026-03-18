@@ -1,0 +1,44 @@
+SUN’S NETWORK FILE SYSTEM (NFS)
+7
+to-date attributes) to the client (or an error if there was a failure). WRITE
+is handled similarly, except the data is passed from the client to the server,
+and just a success code (and up-to-date attributes) is returned.
+One last interesting protocol message is the GETATTR request; given a
+ﬁle handle, it simply fetches the attributes for that ﬁle, including the last
+modiﬁed time of the ﬁle. We will see why this protocol request is impor-
+tant in NFSv2 below when we discuss caching (can you guess why?).
+49.6 From Protocol To Distributed File System
+Hopefully you are now getting some sense of how this protocol is
+turned into a ﬁle system across the client-side ﬁle system and the ﬁle
+server. The client-side ﬁle system tracks open ﬁles, and generally trans-
+lates application requests into the relevant set of protocol messages. The
+server simply responds to protocol messages, each of which contains all
+of the information needed to complete the request.
+For example, let us consider a simple application which reads a ﬁle.
+In the diagram (Figure 49.5), we show what system calls the application
+makes, and what the client-side ﬁle system and ﬁle server do in respond-
+ing to such calls.
+A few comments about the ﬁgure. First, notice how the client tracks all
+relevant state for the ﬁle access, including the mapping of the integer ﬁle
+descriptor to an NFS ﬁle handle as well as the current ﬁle pointer. This
+enables the client to turn each read request (which you may have noticed
+do not specify the offset to read from explicitly) into a properly-formatted
+read protocol message which tells the server exactly which bytes from
+the ﬁle to read. Upon a successful read, the client updates the current
+ﬁle position; subsequent reads are issued with the same ﬁle handle but a
+different offset.
+Second, you may notice where server interactions occur. When the ﬁle
+is opened for the ﬁrst time, the client-side ﬁle system sends a LOOKUP
+request message. Indeed, if a long pathname must be traversed (e.g.,
+/home/remzi/foo.txt), the client would send three LOOKUPs: one
+to look up home in the directory /, one to look up remzi in home, and
+ﬁnally one to look up foo.txt in remzi.
+Third, you may notice how each server request has all the information
+needed to complete the request in its entirety. This design point is critical
+to be able to gracefully recover from server failure, as we will now discuss
+in more detail; it ensures that the server does not need state to be able to
+respond to the request.
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

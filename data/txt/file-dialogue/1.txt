@@ -1,0 +1,19 @@
+2
+SUMMARY DIALOGUE ON PERSISTENCE
+Professor: (frowns) I think you’re being sarcastic. Well, what else did you like?
+Student: And I also liked all the thought that has gone into building technology-
+aware systems, like FFS and LFS. Neat stuff! Being disk aware seems cool. But
+will it matter anymore, with Flash and all the newest, latest technologies?
+Professor: Good question! Yes, even with Flash, all of this stuff is still relevant,
+amazingly. For example, Flash Translation Layers (FTLs) use log-structuring
+internally, to improve performance and reliability of Flash-based SSDs. And
+thinking about locality is always useful. So while the technology may be chang-
+ing, many of the ideas we have studied will continue to be useful, for a while at
+least.
+Student: That’s good. I just spent all this time learning it, and I didn’t want it
+to all be for no reason!
+Professor: Professors wouldn’t do that to you, would they?
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

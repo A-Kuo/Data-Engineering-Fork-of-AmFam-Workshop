@@ -1,0 +1,49 @@
+6
+DISTRIBUTED SYSTEMS
+Sender
+[send message]
+Receiver
+[receive message]
+[send ack]
+[receive ack]
+Figure 48.3: Message Plus Acknowledgment
+Sender
+[send message;
+ keep copy;
+ set timer]
+Receiver
+...
+ (waiting for ack)
+...
+[timer goes off;
+ set timer/retry]
+[receive message]
+[send ack]
+[receive ack;
+ delete copy/timer off]
+Figure 48.4: Message Plus Acknowledgment: Dropped Request
+example in which a client is sending a message to a server over an unreli-
+able connection. The ﬁrst question we must answer: how does the sender
+know that the receiver has actually received the message?
+The technique that we will use is known as an acknowledgment, or
+ack for short. The idea is simple: the sender sends a message to the re-
+ceiver; the receiver then sends a short message back to acknowledge its
+receipt. Figure 48.3 depicts the process.
+When the sender receives an acknowledgment of the message, it can
+then rest assured that the receiver did indeed receive the original mes-
+sage. However, what should the sender do if it does not receive an ac-
+knowledgment?
+To handle this case, we need an additional mechanism, known as a
+timeout. When the sender sends a message, the sender now sets a timer
+to go off after some period of time. If, in that time, no acknowledgment
+has been received, the sender concludes that the message has been lost.
+The sender then simply performs a retry of the send, sending the same
+message again with hopes that this time, it will get through. For this
+approach to work, the sender must keep a copy of the message around,
+in case it needs to send it again. The combination of the timeout and
+the retry have led some to call the approach timeout/retry; pretty clever
+crowd, those networking types, no? Figure 48.4 shows an example.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

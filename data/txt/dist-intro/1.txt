@@ -1,0 +1,47 @@
+2
+DISTRIBUTED SYSTEMS
+TIP: COMMUNICATION IS INHERENTLY UNRELIABLE
+In virtually all circumstances, it is good to view communication as a
+fundamentally unreliable activity. Bit corruption, down or non-working
+links and machines, and lack of buffer space for incoming packets all lead
+to the same result: packets sometimes do not reach their destination. To
+build reliable services atop such unreliable networks, we must consider
+techniques that can cope with packet loss.
+Other important issues exist as well. System performance is often crit-
+ical; with a network connecting our distributed system together, system
+designers must often think carefully about how to accomplish their given
+tasks, trying to reduce the number of messages sent and further make
+communication as efﬁcient (low latency, high bandwidth) as possible.
+Finally, security is also a necessary consideration. When connecting
+to a remote site, having some assurance that the remote party is who
+they say they are becomes a central problem. Further, ensuring that third
+parties cannot monitor or alter an on-going communication between two
+others is also a challenge.
+In this introduction, we’ll cover the most basic aspect that is new in
+a distributed system: communication. Namely, how should machines
+within a distributed system communicate with one another? We’ll start
+with the most basic primitives available, messages, and build a few higher-
+level primitives on top of them. As we said above, failure will be a central
+focus: how should communication layers handle failures?
+48.1 Communication Basics
+The central tenet of modern networking is that communication is fun-
+damentally unreliable. Whether in the wide-area Internet, or a local-area
+high-speed network such as Inﬁniband, packets are regularly lost, cor-
+rupted, or otherwise do not reach their destination.
+There are a multitude of causes for packet loss or corruption. Some-
+times, during transmission, some bits get ﬂipped due to electrical or other
+similar problems. Sometimes, an element in the system, such as a net-
+work link or packet router or even the remote host, are somehow dam-
+aged or otherwise not working correctly; network cables do accidentally
+get severed, at least sometimes.
+More fundamental however is packet loss due to lack of buffering
+within a network switch, router, or endpoint. Speciﬁcally, even if we
+could guarantee that all links worked correctly, and that all the compo-
+nents in the system (switches, routers, end hosts) were up and running as
+expected, loss is still possible, for the following reason. Imagine a packet
+arrives at a router; for the packet to be processed, it must be placed in
+memory somewhere within the router. If many such packets arrive at
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

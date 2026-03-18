@@ -1,0 +1,48 @@
+LOCALITY AND THE FAST FILE SYSTEM
+7
+0
+2
+4
+6
+8
+10
+0%
+20%
+40%
+60%
+80%
+100%
+FFS Locality
+Path Difference
+Cumulative Frequency
+Trace
+Random
+Figure 41.1: FFS Locality For SEER Traces
+cause such namespace-based locality exists, FFS will often improve per-
+formance, making sure that seeks between related ﬁles are nice and short.
+41.5 Measuring File Locality
+To understand better whether these heuristics make sense, let’s ana-
+lyze some traces of ﬁle system access and see if indeed there is namespace
+locality. For some reason, there doesn’t seem to be a good study of this
+topic in the literature.
+Speciﬁcally, we’ll use the SEER traces [K94] and analyze how “far
+away” ﬁle accesses were from one another in the directory tree. For ex-
+ample, if ﬁle f is opened, and then re-opened next in the trace (before
+any other ﬁles are opened), the distance between these two opens in the
+directory tree is zero (as they are the same ﬁle). If a ﬁle f in directory
+dir (i.e., dir/f) is opened, and followed by an open of ﬁle g in the same
+directory (i.e., dir/g), the distance between the two ﬁle accesses is one,
+as they share the same directory but are not the same ﬁle. Our distance
+metric, in other words, measures how far up the directory tree you have
+to travel to ﬁnd the common ancestor of two ﬁles; the closer they are in the
+tree, the lower the metric.
+Figure 41.1 shows the locality observed in the SEER traces over all
+workstations in the SEER cluster over the entirety of all traces. The graph
+plots the difference metric along the x-axis, and shows the cumulative
+percentage of ﬁle opens that were of that difference along the y-axis.
+Speciﬁcally, for the SEER traces (marked “Trace” in the graph), you can
+see that about 7% of ﬁle accesses were to the ﬁle that was opened previ-
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

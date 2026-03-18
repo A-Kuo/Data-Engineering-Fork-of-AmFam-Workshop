@@ -1,0 +1,48 @@
+I/O DEVICES
+9
+Application
+File System
+Raw
+Generic Block Layer
+Device Driver [SCSI, ATA, etc.]
+POSIX API [open, read, write, close, etc.]
+Generic Block Interface [block read/write]
+Specific Block Interface [protocol-specific read/write]
+user
+kernel mode
+Figure 36.4: The File System Stack
+The diagram also shows a raw interface to devices, which enables spe-
+cial applications (such as a ﬁle-system checker, described later [AD14],
+or a disk defragmentation tool) to directly read and write blocks without
+using the ﬁle abstraction. Most systems provide this type of interface to
+support these low-level storage management applications.
+Note that the encapsulation seen above can have its downside as well.
+For example, if there is a device that has many special capabilities, but
+has to present a generic interface to the rest of the kernel, those special
+capabilities will go unused. This situation arises, for example, in Linux
+with SCSI devices, which have very rich error reporting; because other
+block devices (e.g., ATA/IDE) have much simpler error handling, all that
+higher levels of software ever receive is a generic EIO (generic IO error)
+error code; any extra detail that SCSI may have provided is thus lost to
+the ﬁle system [G08].
+Interestingly, because device drivers are needed for any device you
+might plug into your system, over time they have come to represent a
+huge percentage of kernel code. Studies of the Linux kernel reveal that
+over 70% of OS code is found in device drivers [C01]; for Windows-based
+systems, it is likely quite high as well. Thus, when people tell you that the
+OS has millions of lines of code, what they are really saying is that the OS
+has millions of lines of device-driver code. Of course, for any given in-
+stallation, most of that code may not be active (i.e., only a few devices are
+connected to the system at a time). Perhaps more depressingly, as drivers
+are often written by “amateurs” (instead of full-time kernel developers),
+they tend to have many more bugs and thus are a primary contributor to
+kernel crashes [S03].
+36.8 Case Study: A Simple IDE Disk Driver
+To dig a little deeper here, let’s take a quick look at an actual device: an
+IDE disk drive [L94]. We summarize the protocol as described in this ref-
+erence [W10]; we’ll also peek at the xv6 source code for a simple example
+of a working IDE driver [CK+08].
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

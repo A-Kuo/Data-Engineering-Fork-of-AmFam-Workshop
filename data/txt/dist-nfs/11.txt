@@ -1,0 +1,50 @@
+12
+SUN’S NETWORK FILE SYSTEM (NFS)
+C1
+cache: F[v1]
+C2
+cache: F[v2]
+C3
+cache: empty
+Server S
+disk: F[v1] at first
+      F[v2] eventually
+Figure 49.7: The Cache Consistency Problem
+(version 2), or F[v2] and the old version F[v1] so we can keep the two
+distinct (but of course the ﬁle has the same name, just different contents).
+Finally, there is a third client, C3, which has not yet accessed the ﬁle F.
+You can probably see the problem that is upcoming (Figure 49.7). In
+fact, there are two subproblems. The ﬁrst subproblem is that the client C2
+may buffer its writes in its cache for a time before propagating them to the
+server; in this case, while F[v2] sits in C2’s memory, any access of F from
+another client (say C3) will fetch the old version of the ﬁle (F[v1]). Thus,
+by buffering writes at the client, other clients may get stale versions of the
+ﬁle, which may be undesirable; indeed, imagine the case where you log
+into machine C2, update F, and then log into C3 and try to read the ﬁle,
+only to get the old copy! Certainly this could be frustrating. Thus, let us
+call this aspect of the cache consistency problem update visibility; when
+do updates from one client become visible at other clients?
+The second subproblem of cache consistency is a stale cache; in this
+case, C2 has ﬁnally ﬂushed its writes to the ﬁle server, and thus the server
+has the latest version (F[v2]). However, C1 still has F[v1] in its cache; if a
+program running on C1 reads ﬁle F, it will get a stale version (F[v1]) and
+not the most recent copy (F[v2]), which is (often) undesirable.
+NFSv2 implementations solve these cache consistency problems in two
+ways. First, to address update visibility, clients implement what is some-
+times called ﬂush-on-close (a.k.a., close-to-open) consistency semantics;
+speciﬁcally, when a ﬁle is written to and subsequently closed by a client
+application, the client ﬂushes all updates (i.e., dirty pages in the cache)
+to the server. With ﬂush-on-close consistency, NFS ensures that a subse-
+quent open from another node will see the latest ﬁle version.
+Second, to address the stale-cache problem, NFSv2 clients ﬁrst check
+to see whether a ﬁle has changed before using its cached contents. Specif-
+ically, before using a cached block, the client-side ﬁle system will issue a
+GETATTR request to the server to fetch the ﬁle’s attributes. The attributes,
+importantly, include information as to when the ﬁle was last modiﬁed on
+the server; if the time-of-modiﬁcation is more recent than the time that the
+ﬁle was fetched into the client cache, the client invalidates the ﬁle, thus
+removing it from the client cache and ensuring that subsequent reads will
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

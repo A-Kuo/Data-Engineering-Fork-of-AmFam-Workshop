@@ -1,0 +1,46 @@
+2
+SUN’S NETWORK FILE SYSTEM (NFS)
+CRUX: HOW TO BUILD A DISTRIBUTED FILE SYSTEM
+How do you build a distributed ﬁle system? What are the key aspects
+to think about? What is easy to get wrong? What can we learn from
+existing systems?
+49.1 A Basic Distributed File System
+We now will study the architecture of a simpliﬁed distributed ﬁle sys-
+tem. A simple client/server distributed ﬁle system has more components
+than the ﬁle systems we have studied so far. On the client side, there are
+client applications which access ﬁles and directories through the client-
+side ﬁle system. A client application issues system calls to the client-side
+ﬁle system (such as open(), read(), write(), close(), mkdir(),
+etc.) in order to access ﬁles which are stored on the server. Thus, to client
+applications, the ﬁle system does not appear to be any different than a lo-
+cal (disk-based) ﬁle system, except perhaps for performance; in this way,
+distributed ﬁle systems provide transparent access to ﬁles, an obvious
+goal; after all, who would want to use a ﬁle system that required a differ-
+ent set of APIs or otherwise was a pain to use?
+The role of the client-side ﬁle system is to execute the actions needed
+to service those system calls. For example, if the client issues a read()
+request, the client-side ﬁle system may send a message to the server-side
+ﬁle system (or, as it is commonly called, the ﬁle server) to read a partic-
+ular block; the ﬁle server will then read the block from disk (or its own
+in-memory cache), and send a message back to the client with the re-
+quested data. The client-side ﬁle system will then copy the data into the
+user buffer supplied to the read() system call and thus the request will
+complete. Note that a subsequent read() of the same block on the client
+may be cached in client memory or on the client’s disk even; in the best
+such case, no network trafﬁc need be generated.
+Client Application
+Client-side File System
+Networking Layer
+File Server
+Networking Layer
+Disks
+Figure 49.2: Distributed File System Architecture
+From this simple overview, you should get a sense that there are two
+important pieces of software in a client/server distributed ﬁle system: the
+client-side ﬁle system and the ﬁle server. Together their behavior deter-
+mines the behavior of the distributed ﬁle system. Now it’s time to study
+one particular system: Sun’s Network File System (NFS).
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

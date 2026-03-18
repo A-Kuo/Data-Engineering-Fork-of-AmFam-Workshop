@@ -1,0 +1,48 @@
+8
+DISTRIBUTED SYSTEMS
+TIP: BE CAREFUL SETTING THE TIMEOUT VALUE
+As you can probably guess from the discussion, setting the timeout value
+correctly is an important aspect of using timeouts to retry message sends.
+If the timeout is too small, the sender will re-send messages needlessly,
+thus wasting CPU time on the sender and network resources. If the time-
+out is too large, the sender waits too long to re-send and thus perceived
+performance at the sender is reduced. The “right” value, from the per-
+spective of a single client and server, is thus to wait just long enough to
+detect packet loss but no longer.
+However, there are often more than just a single client and server in a
+distributed system, as we will see in future chapters. In a scenario with
+many clients sending to a single server, packet loss at the server may be
+an indicator that the server is overloaded. If true, clients might retry in
+a different adaptive manner; for example, after the ﬁrst timeout, a client
+might increase its timeout value to a higher amount, perhaps twice as
+high as the original value. Such an exponential back-off scheme, pio-
+neered in the early Aloha network and adopted in early Ethernet [A70],
+avoids situations where resources are being overloaded by an excess of
+re-sends. Robust systems strive to avoid overload of this nature.
+The receiver uses its counter value as the expected value for the ID
+of the incoming message from that sender. If the ID of a received mes-
+sage (N) matches the receiver’s counter (also N), it acks the message and
+passes it up to the application; in this case, the receiver concludes this
+is the ﬁrst time this message has been received. The receiver then incre-
+ments its counter (to N + 1), and waits for the next message.
+If the ack is lost, the sender will timeout and re-send message N. This
+time, the receiver’s counter is higher (N +1), and thus the receiver knows
+it has already received this message. Thus it acks the message but does
+not pass it up to the application. In this simple manner, sequence counters
+can be used to avoid duplicates.
+The most commonly used reliable communication layer is known as
+TCP/IP, or just TCP for short. TCP has a great deal more sophistication
+than we describe above, including machinery to handle congestion in the
+network [VJ88], multiple outstanding requests, and hundreds of other
+small tweaks and optimizations. Read more about it if you’re curious;
+better yet, take a networking course and learn that material well.
+48.4 Communication Abstractions
+Given a basic messaging layer, we now approach the next question
+in this chapter: what abstraction of communication should we use when
+building a distributed system?
+The systems community developed a number of approaches over the
+years. One body of work took OS abstractions and extended them to
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

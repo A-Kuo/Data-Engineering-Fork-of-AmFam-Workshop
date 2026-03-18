@@ -1,0 +1,53 @@
+10
+THE ANDREW FILE SYSTEM (AFS)
+mote server dominates, and is similar on both systems. You might think
+AFS would be slower in this case, as it has to write the ﬁle to local disk;
+however, those writes are buffered by the local (client-side) ﬁle system
+cache and thus said costs are likely hidden. Similarly, you might think
+that AFS reads from the local cached copy would be slower, again be-
+cause AFS stores the cached copy on disk. However, AFS again beneﬁts
+here from local ﬁle system caching; reads on AFS would likely hit in the
+client-side memory cache, and performance would be similar to NFS.
+Second, an interesting difference arises during a large-ﬁle sequential
+re-read (Workload 6). Because AFS has a large local disk cache, it will
+access the ﬁle from there when the ﬁle is accessed again. NFS, in contrast,
+only can cache blocks in client memory; as a result, if a large ﬁle (i.e., a ﬁle
+bigger than local memory) is re-read, the NFS client will have to re-fetch
+the entire ﬁle from the remote server. Thus, AFS is faster than NFS in this
+case by a factor of
+Lnet
+Ldisk , assuming that remote access is indeed slower
+than local disk. We also note that NFS in this case increases server load,
+which has an impact on scale as well.
+Third, we note that sequential writes (of new ﬁles) should perform
+similarly on both systems (Workloads 8, 9). AFS, in this case, will write
+the ﬁle to the local cached copy; when the ﬁle is closed, the AFS client
+will force the writes to the server, as per the protocol. NFS will buffer
+writes in client memory, perhaps forcing some blocks to the server due
+to client-side memory pressure, but deﬁnitely writing them to the server
+when the ﬁle is closed, to preserve NFS ﬂush-on-close consistency. You
+might think AFS would be slower here, because it writes all data to local
+disk. However, realize that it is writing to a local ﬁle system; those writes
+are ﬁrst committed to the page cache, and only later (in the background)
+to disk, and thus AFS reaps the beneﬁts of the client-side OS memory
+caching infrastructure to improve performance.
+Fourth, we note that AFS performs worse on a sequential ﬁle over-
+write (Workload 10). Thus far, we have assumed that the workloads that
+write are also creating a new ﬁle; in this case, the ﬁle exists, and is then
+over-written. Overwrite can be a particularly bad case for AFS, because
+the client ﬁrst fetches the old ﬁle in its entirety, only to subsequently over-
+write it. NFS, in contrast, will simply overwrite blocks and thus avoid the
+initial (useless) read2.
+Finally, workloads that access a small subset of data within large ﬁles
+perform much better on NFS than AFS (Workloads 7, 11). In these cases,
+the AFS protocol fetches the entire ﬁle when the ﬁle is opened; unfortu-
+nately, only a small read or write is performed. Even worse, if the ﬁle is
+modiﬁed, the entire ﬁle is written back to the server, doubling the per-
+2We assume here that NFS writes are block-sized and block-aligned; if they were not, the
+NFS client would also have to read the block ﬁrst. We also assume the ﬁle was not opened
+with the O TRUNC ﬂag; if it had been, the initial open in AFS would not fetch the soon to be
+truncated ﬁle’s contents.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

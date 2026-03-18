@@ -1,0 +1,33 @@
+41
+Locality and The Fast File System
+When the UNIX operating system was ﬁrst introduced, the UNIX wiz-
+ard himself Ken Thompson wrote the ﬁrst ﬁle system. Let’s call that the
+“old UNIX ﬁle system”, and it was really simple. Basically, its data struc-
+tures looked like this on the disk:
+S
+Inodes
+Data
+The super block (S) contained information about the entire ﬁle system:
+how big the volume is, how many inodes there are, a pointer to the head
+of a free list of blocks, and so forth. The inode region of the disk contained
+all the inodes for the ﬁle system. Finally, most of the disk was taken up
+by data blocks.
+The good thing about the old ﬁle system was that it was simple, and
+supported the basic abstractions the ﬁle system was trying to deliver: ﬁles
+and the directory hierarchy. This easy-to-use system was a real step for-
+ward from the clumsy, record-based storage systems of the past, and the
+directory hierarchy was a true advance over simpler, one-level hierarchies
+provided by earlier systems.
+41.1 The Problem: Poor Performance
+The problem: performance was terrible. As measured by Kirk McKu-
+sick and his colleagues at Berkeley [MJLF84], performance started off bad
+and got worse over time, to the point where the ﬁle system was delivering
+only 2% of overall disk bandwidth!
+The main issue was that the old UNIX ﬁle system treated the disk like it
+was a random-access memory; data was spread all over the place without
+regard to the fact that the medium holding the data was a disk, and thus
+had real and expensive positioning costs. For example, the data blocks of
+a ﬁle were often very far away from its inode, thus inducing an expensive
+seek whenever one ﬁrst read the inode and then the data blocks of a ﬁle
+(a pretty common operation).
+1

@@ -1,0 +1,36 @@
+THE ANDREW FILE SYSTEM (AFS)
+13
+References
+[B+91] “Measurements of a Distributed File System” by Mary Baker, John Hartman, Martin
+Kupfer, Ken Shirriff, John Ousterhout. SOSP ’91, Paciﬁc Grove, California, October 1991. An
+early paper measuring how people use distributed ﬁle systems. Matches much of the intuition found in
+AFS.
+[H+11] “A File is Not a File: Understanding the I/O Behavior of Apple Desktop Applications”
+by Tyler Harter, Chris Dragga, Michael Vaughn, Andrea C. Arpaci-Dusseau, Remzi H. Arpaci-
+Dusseau. SOSP ’11, New York, New York, October 2011. Our own paper studying the behavior of
+Apple Desktop workloads; turns out they are a bit different than many of the server-based workloads the
+systems research community usually focuses upon. Also a good recent reference which points to a lot of
+related work.
+[H+88] “Scale and Performance in a Distributed File System” by John H. Howard, Michael
+L. Kazar, Sherri G. Menees, David A. Nichols, M. Satyanarayanan, Robert N. Sidebotham,
+Michael J. West. ACM Transactions on Computing Systems (ACM TOCS), Volume 6:1, Febru-
+ary 1988. The long journal version of the famous AFS system, still in use in a number of places
+throughout the world, and also probably the earliest clear thinking on how to build distributed ﬁle
+systems. A wonderful combination of the science of measurement and principled engineering.
+[R+00] “A Comparison of File System Workloads” by Drew Roselli, Jacob R. Lorch, Thomas E.
+Anderson. USENIX ’00, San Diego, California, June 2000. A more recent set of traces as compared
+to the Baker paper [B+91], with some interesting twists.
+[S+85] “The ITC Distributed File System: Principles and Design” by M. Satyanarayanan, J.H.
+Howard, D.A. Nichols, R.N. Sidebotham, A. Spector, M.J. West. SOSP ’85, Orcas Island, Wash-
+ington, December 1985. The older paper about a distributed ﬁle system. Much of the basic design of
+AFS is in place in this older system, but not the improvements for scale. The name change to “Andrew”
+is an homage to two people both named Andrew, Andrew Carnegie and Andrew Mellon. These two
+rich dudes started the Carnegie Institute of Technology and the Mellon Institute of Industrial Research,
+respectively, which eventually merged to become what is now known as Carnegie Mellon University.
+[V99] “File system usage in Windows NT 4.0” by Werner Vogels. SOSP ’99, Kiawah Island
+Resort, South Carolina, December 1999. A cool study of Windows workloads, which are inherently
+different than many of the UNIX-based studies that had previously been done.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

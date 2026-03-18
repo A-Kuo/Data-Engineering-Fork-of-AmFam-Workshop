@@ -1,0 +1,52 @@
+DISTRIBUTED SYSTEMS
+7
+Sender
+[send message;
+ keep copy;
+ set timer]
+Receiver
+[receive message]
+[send ack]
+...
+ (waiting for ack)
+...
+[timer goes off;
+ set timer/retry]
+[receive message]
+[send ack]
+[receive ack;
+ delete copy/timer off]
+Figure 48.5: Message Plus Acknowledgment: Dropped Reply
+Unfortunately, timeout/retry in this form is not quite enough. Figure
+48.5 shows an example of packet loss which could lead to trouble. In this
+example, it is not the original message that gets lost, but the acknowledg-
+ment. From the perspective of the sender, the situation seems the same:
+no ack was received, and thus a timeout and retry are in order. But from
+the perspective of the receiver, it is quite different: now the same message
+has been received twice! While there may be cases where this is OK, in
+general it is not; imagine what would happen when you are downloading
+a ﬁle and extra packets are repeated inside the download. Thus, when we
+are aiming for a reliable message layer, we also usually want to guarantee
+that each message is received exactly once by the receiver.
+To enable the receiver to detect duplicate message transmission, the
+sender has to identify each message in some unique way, and the receiver
+needs some way to track whether it has already seen each message be-
+fore. When the receiver sees a duplicate transmission, it simply acks the
+message, but (critically) does not pass the message to the application that
+receives the data. Thus, the sender receives the ack but the message is not
+received twice, preserving the exactly-once semantics mentioned above.
+There are myriad ways to detect duplicate messages. For example, the
+sender could generate a unique ID for each message; the receiver could
+track every ID it has ever seen. This approach could work, but it is pro-
+hibitively costly, requiring unbounded memory to track all IDs.
+A simpler approach, requiring little memory, solves this problem, and
+the mechanism is known as a sequence counter. With a sequence counter,
+the sender and receiver agree upon a start value (e.g., 1) for a counter
+that each side will maintain. Whenever a message is sent, the current
+value of the counter is sent along with the message; this counter value
+(N) serves as an ID for the message. After the message is sent, the sender
+then increments the value (to N + 1).
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

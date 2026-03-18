@@ -1,0 +1,49 @@
+DISTRIBUTED SYSTEMS
+11
+For the server, code is also generated. The steps taken on the server
+are as follows:
+• Unpack the message. This step, called unmarshaling or deserial-
+ization, takes the information out of the incoming message. The
+function identiﬁer and arguments are extracted.
+• Call into the actual function. Finally! We have reached the point
+where the remote function is actually executed. The RPC runtime
+calls into the function speciﬁed by the ID and passes in the desired
+arguments.
+• Package the results. The return argument(s) are marshaled back
+into a single reply buffer.
+• Send the reply. The reply is ﬁnally sent to the caller.
+There are a few other important issues to consider in a stub compiler.
+The ﬁrst is complex arguments, i.e., how does one package and send
+a complex data structure? For example, when one calls the write()
+system call, one passes in three arguments: an integer ﬁle descriptor, a
+pointer to a buffer, and a size indicating how many bytes (starting at the
+pointer) are to be written. If an RPC package is passed a pointer, it needs
+to be able to ﬁgure out how to interpret that pointer, and perform the
+correct action. Usually this is accomplished through either well-known
+types (e.g., a buffer t that is used to pass chunks of data given a size,
+which the RPC compiler understands), or by annotating the data struc-
+tures with more information, enabling the compiler to know which bytes
+need to be serialized.
+Another important issue is the organization of the server with regards
+to concurrency. A simple server just waits for requests in a simple loop,
+and handles each request one at a time. However, as you might have
+guessed, this can be grossly inefﬁcient; if one RPC call blocks (e.g., on
+I/O), server resources are wasted. Thus, most servers are constructed in
+some sort of concurrent fashion. A common organization is a thread pool.
+In this organization, a ﬁnite set of threads are created when the server
+starts; when a message arrives, it is dispatched to one of these worker
+threads, which then does the work of the RPC call, eventually replying;
+during this time, a main thread keeps receiving other requests, and per-
+haps dispatching them to other workers. Such an organization enables
+concurrent execution within the server, thus increasing its utilization; the
+standard costs arise as well, mostly in programming complexity, as the
+RPC calls may now need to use locks and other synchronization primi-
+tives in order to ensure their correct operation.
+Run-Time Library
+The run-time library handles much of the heavy lifting in an RPC system;
+most performance and reliability issues are handled herein. We’ll now
+discuss some of the major challenges in building such a run-time layer.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

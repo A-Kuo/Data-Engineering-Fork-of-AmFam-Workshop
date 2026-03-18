@@ -1,0 +1,32 @@
+37
+Hard Disk Drives
+The last chapter introduced the general concept of an I/O device and
+showed you how the OS might interact with such a beast. In this chapter,
+we dive into more detail about one device in particular: the hard disk
+drive. These drives have been the main form of persistent data storage in
+computer systems for decades and much of the development of ﬁle sys-
+tem technology (coming soon) is predicated on their behavior. Thus, it
+is worth understanding the details of a disk’s operation before building
+the ﬁle system software that manages it. Many of these details are avail-
+able in excellent papers by Ruemmler and Wilkes [RW92] and Anderson,
+Dykes, and Riedel [ADR03].
+CRUX: HOW TO STORE AND ACCESS DATA ON DISK
+How do modern hard-disk drives store data? What is the interface?
+How is the data actually laid out and accessed? How does disk schedul-
+ing improve performance?
+37.1 The Interface
+Let’s start by understanding the interface to a modern disk drive. The
+basic interface for all modern drives is straightforward. The drive consists
+of a large number of sectors (512-byte blocks), each of which can be read
+or written. The sectors are numbered from 0 to n −1 on a disk with n
+sectors. Thus, we can view the disk as an array of sectors; 0 to n −1 is
+thus the address space of the drive.
+Multi-sector operations are possible; indeed, many ﬁle systems will
+read or write 4KB at a time (or more). However, when updating the disk,
+the only guarantee drive manufacturers make is that a single 512-byte
+write is atomic (i.e., it will either complete in its entirety or it won’t com-
+plete at all); thus, if an untimely power loss occurs, only a portion of a
+larger write may complete (sometimes called a torn write).
+There are some assumptions most clients of disk drives make, but
+that are not speciﬁed directly in the interface; Schlosser and Ganger have
+1

@@ -1,0 +1,48 @@
+SUN’S NETWORK FILE SYSTEM (NFS)
+13
+go to the server and retrieve the latest version of the ﬁle. If, on the other
+hand, the client sees that it has the latest version of the ﬁle, it will go
+ahead and use the cached contents, thus increasing performance.
+When the original team at Sun implemented this solution to the stale-
+cache problem, they realized a new problem; suddenly, the NFS server
+was ﬂooded with GETATTR requests. A good engineering principle to
+follow is to design for the common case, and to make it work well; here,
+although the common case was that a ﬁle was accessed only from a sin-
+gle client (perhaps repeatedly), the client always had to send GETATTR
+requests to the server to make sure no one else had changed the ﬁle. A
+client thus bombards the server, constantly asking “has anyone changed
+this ﬁle?”, when most of the time no one had.
+To remedy this situation (somewhat), an attribute cache was added
+to each client. A client would still validate a ﬁle before accessing it, but
+most often would just look in the attribute cache to fetch the attributes.
+The attributes for a particular ﬁle were placed in the cache when the ﬁle
+was ﬁrst accessed, and then would timeout after a certain amount of time
+(say 3 seconds). Thus, during those three seconds, all ﬁle accesses would
+determine that it was OK to use the cached ﬁle and thus do so with no
+network communication with the server.
+49.10 Assessing NFS Cache Consistency
+A few ﬁnal words about NFS cache consistency. The ﬂush-on-close be-
+havior was added to “make sense”, but introduced a certain performance
+problem. Speciﬁcally, if a temporary or short-lived ﬁle was created on a
+client and then soon deleted, it would still be forced to the server. A more
+ideal implementation might keep such short-lived ﬁles in memory until
+they are deleted and thus remove the server interaction entirely, perhaps
+increasing performance.
+More importantly, the addition of an attribute cache into NFS made
+it very hard to understand or reason about exactly what version of a ﬁle
+one was getting. Sometimes you would get the latest version; sometimes
+you would get an old version simply because your attribute cache hadn’t
+yet timed out and thus the client was happy to give you what was in
+client memory. Although this was ﬁne most of the time, it would (and
+still does!) occasionally lead to odd behavior.
+And thus we have described the oddity that is NFS client caching.
+It serves as an interesting example where details of an implementation
+serve to deﬁne user-observable semantics, instead of the other way around.
+49.11 Implications On Server-Side Write Buffering
+Our focus so far has been on client caching, and that is where most
+of the interesting issues arise. However, NFS servers tend to be well-
+equipped machines with a lot of memory too, and thus they have caching
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,49 @@
+10
+DISTRIBUTED SYSTEMS
+Stub Generator
+The stub generator’s job is simple: to remove some of the pain of packing
+function arguments and results into messages by automating it. Numer-
+ous beneﬁts arise: one avoids, by design, the simple mistakes that occur
+in writing such code by hand; further, a stub compiler can perhaps opti-
+mize such code and thus improve performance.
+The input to such a compiler is simply the set of calls a server wishes
+to export to clients. Conceptually, it could be something as simple as this:
+interface {
+int func1(int arg1);
+int func2(int arg1, int arg2);
+};
+The stub generator takes an interface like this and generates a few dif-
+ferent pieces of code. For the client, a client stub is generated, which
+contains each of the functions speciﬁed in the interface; a client program
+wishing to use this RPC service would link with this client stub and call
+into it in order to make RPCs.
+Internally, each of these functions in the client stub do all of the work
+needed to perform the remote procedure call. To the client, the code just
+appears as a function call (e.g., the client calls func1(x)); internally, the
+code in the client stub for func1() does this:
+• Create a message buffer. A message buffer is usually just a con-
+tiguous array of bytes of some size.
+• Pack the needed information into the message buffer. This infor-
+mation includes some kind of identiﬁer for the function to be called,
+as well as all of the arguments that the function needs (e.g., in our
+example above, one integer for func1). The process of putting all
+of this information into a single contiguous buffer is sometimes re-
+ferred to as the marshaling of arguments or the serialization of the
+message.
+• Send the message to the destination RPC server. The communi-
+cation with the RPC server, and all of the details required to make
+it operate correctly, are handled by the RPC run-time library, de-
+scribed further below.
+• Wait for the reply. Because function calls are usually synchronous,
+the call will wait for its completion.
+• Unpack return code and other arguments. If the function just re-
+turns a single return code, this process is straightforward; however,
+more complex functions might return more complex results (e.g., a
+list), and thus the stub might need to unpack those as well. This
+step is also known as unmarshaling or deserialization.
+• Return to the caller. Finally, just return from the client stub back
+into the client code.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

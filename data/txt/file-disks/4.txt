@@ -1,0 +1,73 @@
+HARD DISK DRIVES
+5
+Track skew: 2 blocks
+0
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+22
+21
+20
+19
+18
+17
+16
+15
+14
+13
+12
+23
+32
+31
+30
+29
+28
+27
+26
+25
+24
+35
+34
+33
+Spindle
+Rotates this way
+Figure 37.4: Three Tracks: Track Skew Of 2
+Sectors are often skewed like this because when switching from one
+track to another, the disk needs time to reposition the head (even to neigh-
+boring tracks). Without such skew, the head would be moved to the next
+track but the desired next block would have already rotated under the
+head, and thus the drive would have to wait almost the entire rotational
+delay to access the next block.
+Another reality is that outer tracks tend to have more sectors than
+inner tracks, which is a result of geometry; there is simply more room
+out there. These tracks are often referred to as multi-zoned disk drives,
+where the disk is organized into multiple zones, and where a zone is con-
+secutive set of tracks on a surface. Each zone has the same number of
+sectors per track, and outer zones have more sectors than inner zones.
+Finally, an important part of any modern disk drive is its cache, for
+historical reasons sometimes called a track buffer. This cache is just some
+small amount of memory (usually around 8 or 16 MB) which the drive
+can use to hold data read from or written to the disk. For example, when
+reading a sector from the disk, the drive might decide to read in all of the
+sectors on that track and cache them in its memory; doing so allows the
+drive to quickly respond to any subsequent requests to the same track.
+On writes, the drive has a choice: should it acknowledge the write has
+completed when it has put the data in its memory, or after the write has
+actually been written to disk? The former is called write back caching
+(or sometimes immediate reporting), and the latter write through. Write
+back caching sometimes makes the drive appear “faster”, but can be dan-
+gerous; if the ﬁle system or applications require that data be written to
+disk in a certain order for correctness, write-back caching can lead to
+problems (read the chapter on ﬁle-system journaling for details).
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

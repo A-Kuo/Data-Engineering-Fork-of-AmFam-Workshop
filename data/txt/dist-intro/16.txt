@@ -1,0 +1,16 @@
+DISTRIBUTED SYSTEMS
+17
+the sender should be able to be in ﬂight concurrently. Also add a
+sender-side call that enables a client to wait for all outstanding mes-
+sages to be acknowledged.
+7. Now, one more pain point: measurement. Measure the bandwidth
+of each of your approaches; how much data can you transfer be-
+tween two different machines, at what rate? Also measure latency:
+for single packet send and acknowledgment, how quickly does it
+ﬁnish? Finally, do your numbers look reasonable? What did you
+expect? How can you better set your expectations so as to know if
+there is a problem, or that your code is working well?
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

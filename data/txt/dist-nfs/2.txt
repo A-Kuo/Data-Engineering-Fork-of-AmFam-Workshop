@@ -1,0 +1,44 @@
+SUN’S NETWORK FILE SYSTEM (NFS)
+3
+ASIDE: WHY SERVERS CRASH
+Before getting into the details of the NFSv2 protocol, you might be
+wondering: why do servers crash? Well, as you might guess, there are
+plenty of reasons. Servers may simply suffer from a power outage (tem-
+porarily); only when power is restored can the machines be restarted.
+Servers are often comprised of hundreds of thousands or even millions
+of lines of code; thus, they have bugs (even good software has a few
+bugs per hundred or thousand lines of code), and thus they eventually
+will trigger a bug that will cause them to crash. They also have memory
+leaks; even a small memory leak will cause a system to run out of mem-
+ory and crash. And, ﬁnally, in distributed systems, there is a network
+between the client and the server; if the network acts strangely (for ex-
+ample, if it becomes partitioned and clients and servers are working but
+cannot communicate), it may appear as if a remote machine has crashed,
+but in reality it is just not currently reachable through the network.
+49.2 On To NFS
+One of the earliest and quite successful distributed systems was devel-
+oped by Sun Microsystems, and is known as the Sun Network File Sys-
+tem (or NFS) [S86]. In deﬁning NFS, Sun took an unusual approach: in-
+stead of building a proprietary and closed system, Sun instead developed
+an open protocol which simply speciﬁed the exact message formats that
+clients and servers would use to communicate. Different groups could
+develop their own NFS servers and thus compete in an NFS marketplace
+while preserving interoperability. It worked: today there are many com-
+panies that sell NFS servers (including Oracle/Sun, NetApp [HLM94],
+EMC, IBM, and others), and the widespread success of NFS is likely at-
+tributed to this “open market” approach.
+49.3 Focus: Simple And Fast Server Crash Recovery
+In this chapter, we will discuss the classic NFS protocol (version 2,
+a.k.a. NFSv2), which was the standard for many years; small changes
+were made in moving to NFSv3, and larger-scale protocol changes were
+made in moving to NFSv4. However, NFSv2 is both wonderful and frus-
+trating and thus serves as our focus.
+In NFSv2, the main goal in the design of the protocol was simple and
+fast server crash recovery. In a multiple-client, single-server environment,
+this goal makes a great deal of sense; any minute that the server is down
+(or unavailable) makes all the client machines (and their users) unhappy
+and unproductive. Thus, as the server goes, so goes the entire system.
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

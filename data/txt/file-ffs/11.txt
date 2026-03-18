@@ -1,0 +1,42 @@
+12
+LOCALITY AND THE FAST FILE SYSTEM
+TIP: MAKE THE SYSTEM USABLE
+Probably the most basic lesson from FFS is that not only did it intro-
+duce the conceptually good idea of disk-aware layout, but it also added
+a number of features that simply made the system more usable. Long ﬁle
+names, symbolic links, and a rename operation that worked atomically
+all improved the utility of a system; while hard to write a research pa-
+per about (imagine trying to read a 14-pager about “The Symbolic Link:
+Hard Link’s Long Lost Cousin”), such small features made FFS more use-
+ful and thus likely increased its chances for adoption. Making a system
+usable is often as or more important than its deep technical innovations.
+just return the desired data from its cache. File systems thus no longer
+have to worry about these incredibly low-level details. Abstraction and
+higher-level interfaces can be a good thing, when designed properly.
+Some other usability improvements were added as well. FFS was one
+of the ﬁrst ﬁle systems to allow for long ﬁle names, thus enabling more
+expressive names in the ﬁle system instead of the traditional ﬁxed-size
+approach (e.g., 8 characters).
+Further, a new concept was introduced
+called a symbolic link. As discussed in a previous chapter [AD18b] ,
+hard links are limited in that they both could not point to directories (for
+fear of introducing loops in the ﬁle system hierarchy) and that they can
+only point to ﬁles within the same volume (i.e., the inode number must
+still be meaningful). Symbolic links allow the user to create an “alias” to
+any other ﬁle or directory on a system and thus are much more ﬂexible.
+FFS also introduced an atomic rename() operation for renaming ﬁles.
+Usability improvements, beyond the basic technology, also likely gained
+FFS a stronger user base.
+41.8 Summary
+The introduction of FFS was a watershed moment in ﬁle system his-
+tory, as it made clear that the problem of ﬁle management was one of the
+most interesting issues within an operating system, and showed how one
+might begin to deal with that most important of devices, the hard disk.
+Since that time, hundreds of new ﬁle systems have developed, but still
+today many ﬁle systems take cues from FFS (e.g., Linux ext2 and ext3 are
+obvious intellectual descendants). Certainly all modern systems account
+for the main lesson of FFS: treat the disk like it’s a disk.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

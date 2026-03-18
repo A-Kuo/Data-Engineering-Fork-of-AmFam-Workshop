@@ -1,0 +1,47 @@
+8
+I/O DEVICES
+For example, on x86, the in and out instructions can be used to com-
+municate with devices. For example, to send data to a device, the caller
+speciﬁes a register with the data in it, and a speciﬁc port which names the
+device. Executing the instruction leads to the desired behavior.
+Such instructions are usually privileged. The OS controls devices, and
+the OS thus is the only entity allowed to directly communicate with them.
+Imagine if any program could read or write the disk, for example: total
+chaos (as always), as any user program could use such a loophole to gain
+complete control over the machine.
+The second method to interact with devices is known as memory-
+mapped I/O. With this approach, the hardware makes device registers
+available as if they were memory locations. To access a particular register,
+the OS issues a load (to read) or store (to write) the address; the hardware
+then routes the load/store to the device instead of main memory.
+There is not some great advantage to one approach or the other. The
+memory-mapped approach is nice in that no new instructions are needed
+to support it, but both approaches are still in use today.
+36.7 Fitting Into The OS: The Device Driver
+One ﬁnal problem we will discuss: how to ﬁt devices, each of which
+have very speciﬁc interfaces, into the OS, which we would like to keep
+as general as possible. For example, consider a ﬁle system. We’d like
+to build a ﬁle system that worked on top of SCSI disks, IDE disks, USB
+keychain drives, and so forth, and we’d like the ﬁle system to be relatively
+oblivious to all of the details of how to issue a read or write request to
+these different types of drives. Thus, our problem:
+THE CRUX: HOW TO BUILD A DEVICE-NEUTRAL OS
+How can we keep most of the OS device-neutral, thus hiding the de-
+tails of device interactions from major OS subsystems?
+The problem is solved through the age-old technique of abstraction.
+At the lowest level, a piece of software in the OS must know in detail
+how a device works. We call this piece of software a device driver, and
+any speciﬁcs of device interaction are encapsulated within.
+Let us see how this abstraction might help OS design and implemen-
+tation by examining the Linux ﬁle system software stack. Figure 36.4 is
+a rough and approximate depiction of the Linux software organization.
+As you can see from the diagram, a ﬁle system (and certainly, an appli-
+cation above) is completely oblivious to the speciﬁcs of which disk class
+it is using; it simply issues block read and write requests to the generic
+block layer, which routes them to the appropriate device driver, which
+handles the details of issuing the speciﬁc request. Although simpliﬁed,
+the diagram shows how such detail can be hidden from most of the OS.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

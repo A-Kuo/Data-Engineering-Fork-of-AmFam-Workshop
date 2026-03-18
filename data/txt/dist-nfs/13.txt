@@ -1,0 +1,47 @@
+14
+SUN’S NETWORK FILE SYSTEM (NFS)
+concerns as well.
+When data (and metadata) is read from disk, NFS
+servers will keep it in memory, and subsequent reads of said data (and
+metadata) will not go to disk, a potential (small) boost in performance.
+More intriguing is the case of write buffering. An NFS server abso-
+lutely may not return success on a WRITE protocol request until the write
+has been forced to stable storage (e.g., to disk or some other persistent
+device). While the server can place a copy of the data in its memory, re-
+turning success to the client on a WRITE protocol request could result in
+incorrect behavior; can you ﬁgure out why?
+The answer lies in our assumptions about how clients handle server
+failure. Imagine the following sequence of writes as issued by a client:
+write(fd, a_buffer, size); // fill 1st block with a’s
+write(fd, b_buffer, size); // fill 2nd block with b’s
+write(fd, c_buffer, size); // fill 3rd block with c’s
+These writes overwrite the three blocks of a ﬁle with a block of a’s,
+then b’s, and then c’s. Thus, if the ﬁle initially looked like this:
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+We might expect the ﬁnal result after these writes to be like this, with the
+x’s, y’s, and z’s, would be overwritten with a’s, b’s, and c’s, respectively.
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cccccccccccccccccccccccccccccccccccccccccccc
+Now let’s assume for the sake of the example that these three client
+writes were issued to the server as three distinct WRITE protocol mes-
+sages. Assume the ﬁrst WRITE message is received by the server and
+issued to the disk, and the client informed of its success. Now assume
+the second write is just buffered in memory, and the server also reports
+it success to the client before forcing it to disk; unfortunately, the server
+crashes before writing it to disk. The server quickly restarts and receives
+the third write request, which also succeeds.
+Thus, to the client, all the requests succeeded, but we are surprised
+that the ﬁle contents look like this:
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy <--- oops
+cccccccccccccccccccccccccccccccccccccccccccc
+Yikes! Because the server told the client that the second write was
+successful before committing it to disk, an old chunk is left in the ﬁle,
+which, depending on the application, might be catastrophic.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

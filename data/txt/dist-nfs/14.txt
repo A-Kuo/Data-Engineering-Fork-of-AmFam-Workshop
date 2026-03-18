@@ -1,0 +1,47 @@
+SUN’S NETWORK FILE SYSTEM (NFS)
+15
+ASIDE: INNOVATION BREEDS INNOVATION
+As with many pioneering technologies, bringing NFS into the world also
+required other fundamental innovations to enable its success. Probably
+the most lasting is the Virtual File System (VFS) / Virtual Node (vnode)
+interface, introduced by Sun to allow different ﬁle systems to be readily
+plugged into the operating system [K86].
+The VFS layer includes operations that are done to an entire ﬁle system,
+such as mounting and unmounting, getting ﬁle-system wide statistics,
+and forcing all dirty (not yet written) writes to disk. The vnode layer
+consists of all operations one can perform on a ﬁle, such as open, close,
+reads, writes, and so forth.
+To build a new ﬁle system, one simply has to deﬁne these “methods”; the
+framework then handles the rest, connecting system calls to the particular
+ﬁle system implementation, performing generic functions common to all
+ﬁle systems (e.g., caching) in a centralized manner, and thus providing a
+way for multiple ﬁle system implementations to operate simultaneously
+within the same system.
+Although some of the details have changed, many modern systems have
+some form of a VFS/vnode layer, including Linux, BSD variants, macOS,
+and even Windows (in the form of the Installable File System). Even if
+NFS becomes less relevant to the world, some of the necessary founda-
+tions beneath it will live on.
+To avoid this problem, NFS servers must commit each write to stable
+(persistent) storage before informing the client of success; doing so en-
+ables the client to detect server failure during a write, and thus retry until
+it ﬁnally succeeds. Doing so ensures we will never end up with ﬁle con-
+tents intermingled as in the above example.
+The problem that this requirement gives rise to in NFS server im-
+plementation is that write performance, without great care, can be the
+major performance bottleneck. Indeed, some companies (e.g., Network
+Appliance) came into existence with the simple objective of building an
+NFS server that can perform writes quickly; one trick they use is to ﬁrst
+put writes in a battery-backed memory, thus enabling to quickly reply
+to WRITE requests without fear of losing the data and without the cost
+of having to write to disk right away; the second trick is to use a ﬁle sys-
+tem design speciﬁcally designed to write to disk quickly when one ﬁnally
+needs to do so [HLM94, RO91].
+49.12 Summary
+We have seen the introduction of the NFS distributed ﬁle system. NFS
+is centered around the idea of simple and fast recovery in the face of
+server failure, and achieves this end through careful protocol design. Idem-
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

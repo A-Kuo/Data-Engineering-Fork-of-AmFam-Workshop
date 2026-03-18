@@ -1,0 +1,64 @@
+I/O DEVICES
+7
+THE CRUX: HOW TO LOWER PIO OVERHEADS
+With PIO, the CPU spends too much time moving data to and from
+devices by hand. How can we ofﬂoad this work and thus allow the CPU
+to be more effectively utilized?
+The solution to this problem is something we refer to as Direct Mem-
+ory Access (DMA). A DMA engine is essentially a very speciﬁc device
+within a system that can orchestrate transfers between devices and main
+memory without much CPU intervention.
+DMA works as follows. To transfer data to the device, for example, the
+OS would program the DMA engine by telling it where the data lives in
+memory, how much data to copy, and which device to send it to. At that
+point, the OS is done with the transfer and can proceed with other work.
+When the DMA is complete, the DMA controller raises an interrupt, and
+the OS thus knows the transfer is complete. The revised timeline:
+CPU
+DMA
+Disk
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+2
+2
+2
+2
+2
+2
+2
+2
+1
+1
+c
+c
+c
+From the timeline, you can see that the copying of data is now handled
+by the DMA controller. Because the CPU is free during that time, the OS
+can do something else, here choosing to run Process 2. Process 2 thus gets
+to use more CPU before Process 1 runs again.
+36.6 Methods Of Device Interaction
+Now that we have some sense of the efﬁciency issues involved with
+performing I/O, there are a few other problems we need to handle to
+incorporate devices into modern systems. One problem you may have
+noticed thus far: we have not really said anything about how the OS ac-
+tually communicates with the device! Thus, the problem:
+THE CRUX: HOW TO COMMUNICATE WITH DEVICES
+How should the hardware communicate with a device? Should there
+be explicit instructions? Or are there other ways to do it?
+Over time, two primary methods of device communication have de-
+veloped. The ﬁrst, oldest method (used by IBM mainframes for many
+years) is to have explicit I/O instructions. These instructions specify a
+way for the OS to send data to speciﬁc device registers and thus allow the
+construction of the protocols described above.
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

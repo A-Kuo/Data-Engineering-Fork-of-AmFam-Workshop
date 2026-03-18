@@ -1,0 +1,67 @@
+LOCALITY AND THE FAST FILE SYSTEM
+11
+0
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Spindle
+0
+11
+5
+10
+4
+9
+3
+8
+2
+7
+1
+6
+Spindle
+Figure 41.3: FFS: Standard Versus Parameterized Placement
+waste an entire 4KB block. As the ﬁle grew, the ﬁle system will continue
+allocating 512-byte blocks to it until it acquires a full 4KB of data. At that
+point, FFS will ﬁnd a 4KB block, copy the sub-blocks into it, and free the
+sub-blocks for future use.
+You might observe that this process is inefﬁcient, requiring a lot of ex-
+tra work for the ﬁle system (in particular, a lot of extra I/O to perform the
+copy). And you’d be right again! Thus, FFS generally avoided this pes-
+simal behavior by modifying the libc library; the library would buffer
+writes and then issue them in 4KB chunks to the ﬁle system, thus avoid-
+ing the sub-block specialization entirely in most cases.
+A second neat thing that FFS introduced was a disk layout that was
+optimized for performance. In those times (before SCSI and other more
+modern device interfaces), disks were much less sophisticated and re-
+quired the host CPU to control their operation in a more hands-on way.
+A problem arose in FFS when a ﬁle was placed on consecutive sectors of
+the disk, as on the left in Figure 41.3.
+In particular, the problem arose during sequential reads. FFS would
+ﬁrst issue a read to block 0; by the time the read was complete, and FFS
+issued a read to block 1, it was too late: block 1 had rotated under the
+head and now the read to block 1 would incur a full rotation.
+FFS solved this problem with a different layout, as you can see on the
+right in Figure 41.3. By skipping over every other block (in the example),
+FFS has enough time to request the next block before it went past the
+disk head. In fact, FFS was smart enough to ﬁgure out for a particular
+disk how many blocks it should skip in doing layout in order to avoid the
+extra rotations; this technique was called parameterization, as FFS would
+ﬁgure out the speciﬁc performance parameters of the disk and use those
+to decide on the exact staggered layout scheme.
+You might be thinking: this scheme isn’t so great after all. In fact, you
+will only get 50% of peak bandwidth with this type of layout, because
+you have to go around each track twice just to read each block once. For-
+tunately, modern disks are much smarter: they internally read the entire
+track in and buffer it in an internal disk cache (often called a track buffer
+for this very reason). Then, on subsequent reads to the track, the disk will
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

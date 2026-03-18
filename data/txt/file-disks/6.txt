@@ -1,0 +1,65 @@
+HARD DISK DRIVES
+7
+Cheetah 15K.5
+Barracuda
+Capacity
+300 GB
+1 TB
+RPM
+15,000
+7,200
+Average Seek
+4 ms
+9 ms
+Max Transfer
+125 MB/s
+105 MB/s
+Platters
+4
+4
+Cache
+16 MB
+16/32 MB
+Connects via
+SCSI
+SATA
+Figure 37.5: Disk Drive Specs: SCSI Versus SATA
+comparison between drives (as we will do below), is easily computed
+from the time. Simply divide the size of the transfer by the time it took:
+RI/O = SizeT ransfer
+TI/O
+(37.2)
+To get a better feel for I/O time, let us perform the following calcu-
+lation. Assume there are two workloads we are interested in. The ﬁrst,
+known as the random workload, issues small (e.g., 4KB) reads to random
+locations on the disk. Random workloads are common in many impor-
+tant applications, including database management systems. The second,
+known as the sequential workload, simply reads a large number of sec-
+tors consecutively from the disk, without jumping around. Sequential
+access patterns are quite common and thus important as well.
+To understand the difference in performance between random and se-
+quential workloads, we need to make a few assumptions about the disk
+drive ﬁrst. Let’s look at a couple of modern disks from Seagate. The ﬁrst,
+known as the Cheetah 15K.5 [S09b], is a high-performance SCSI drive.
+The second, the Barracuda [S09a], is a drive built for capacity. Details on
+both are found in Figure 37.5.
+As you can see, the drives have quite different characteristics, and
+in many ways nicely summarize two important components of the disk
+drive market. The ﬁrst is the “high performance” drive market, where
+drives are engineered to spin as fast as possible, deliver low seek times,
+and transfer data quickly. The second is the “capacity” market, where
+cost per byte is the most important aspect; thus, the drives are slower but
+pack as many bits as possible into the space available.
+From these numbers, we can start to calculate how well the drives
+would do under our two workloads outlined above. Let’s start by looking
+at the random workload. Assuming each 4 KB read occurs at a random
+location on disk, we can calculate how long each such read would take.
+On the Cheetah:
+Tseek = 4 ms, Trotation = 2 ms, Ttransfer = 30 microsecs
+(37.3)
+The average seek time (4 milliseconds) is just taken as the average time
+reported by the manufacturer; note that a full seek (from one end of the
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

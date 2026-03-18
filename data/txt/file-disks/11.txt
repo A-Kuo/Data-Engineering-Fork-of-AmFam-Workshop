@@ -1,0 +1,70 @@
+12
+HARD DISK DRIVES
+CRUX: HOW TO ACCOUNT FOR DISK ROTATION COSTS
+How can we implement an algorithm that more closely approximates SJF
+by taking both seek and rotation into account?
+SPTF: Shortest Positioning Time First
+Before discussing shortest positioning time ﬁrst or SPTF scheduling (some-
+times also called shortest access time ﬁrst or SATF), which is the solution
+to our problem, let us make sure we understand the problem in more de-
+tail. Figure 37.8 presents an example.
+In the example, the head is currently positioned over sector 30 on the
+inner track. The scheduler thus has to decide: should it schedule sector 16
+(on the middle track) or sector 8 (on the outer track) for its next request.
+So which should it service next?
+The answer, of course, is “it depends”. In engineering, it turns out
+“it depends” is almost always the answer, reﬂecting that trade-offs are
+part of the life of the engineer; such maxims are also good in a pinch,
+e.g., when you don’t know an answer to your boss’s question, you might
+want to try this gem. However, it is almost always better to know why it
+depends, which is what we discuss here.
+What it depends on here is the relative time of seeking as compared
+to rotation. If, in our example, seek time is much higher than rotational
+delay, then SSTF (and variants) are just ﬁne. However, imagine if seek is
+quite a bit faster than rotation. Then, in our example, it would make more
+sense to seek further to service request 8 on the outer track than it would
+to perform the shorter seek to the middle track to service 16, which has to
+rotate all the way around before passing under the disk head.
+0
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+12
+23
+22
+21
+20
+19
+18
+17
+16
+15
+14
+13
+24
+35
+34
+33
+32
+31
+30
+29
+28
+27
+26
+25
+Spindle
+Rotates this way
+Figure 37.8: SSTF: Sometimes Not Good Enough
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

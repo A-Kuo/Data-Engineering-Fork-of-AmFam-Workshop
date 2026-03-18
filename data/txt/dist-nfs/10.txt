@@ -1,0 +1,46 @@
+SUN’S NETWORK FILE SYSTEM (NFS)
+11
+TIP: PERFECT IS THE ENEMY OF THE GOOD (VOLTAIRE’S LAW)
+Even when you design a beautiful system, sometimes all the corner cases
+don’t work out exactly as you might like. Take the mkdir example above;
+one could redesign mkdir to have different semantics, thus making it
+idempotent (think about how you might do so); however, why bother?
+The NFS design philosophy covers most of the important cases, and over-
+all makes the system design clean and simple with regards to failure.
+Thus, accepting that life isn’t perfect and still building the system is a sign
+of good engineering. Apparently, this wisdom is attributed to Voltaire,
+for saying “... a wise Italian says that the best is the enemy of the good”
+[V72], and thus we call it Voltaire’s Law.
+49.8 Improving Performance: Client-side Caching
+Distributed ﬁle systems are good for a number of reasons, but sending
+all read and write requests across the network can lead to a big perfor-
+mance problem: the network generally isn’t that fast, especially as com-
+pared to local memory or disk. Thus, another problem: how can we im-
+prove the performance of a distributed ﬁle system?
+The answer, as you might guess from reading the big bold words in
+the sub-heading above, is client-side caching. The NFS client-side ﬁle
+system caches ﬁle data (and metadata) that it has read from the server in
+client memory. Thus, while the ﬁrst access is expensive (i.e., it requires
+network communication), subsequent accesses are serviced quite quickly
+out of client memory.
+The cache also serves as a temporary buffer for writes. When a client
+application ﬁrst writes to a ﬁle, the client buffers the data in client mem-
+ory (in the same cache as the data it read from the ﬁle server) before writ-
+ing the data out to the server. Such write buffering is useful because it de-
+couples application write() latency from actual write performance, i.e.,
+the application’s call to write() succeeds immediately (and just puts
+the data in the client-side ﬁle system’s cache); only later does the data get
+written out to the ﬁle server.
+Thus, NFS clients cache data and performance is usually great and
+we are done, right? Unfortunately, not quite. Adding caching into any
+sort of system with multiple client caches introduces a big and interesting
+challenge which we will refer to as the cache consistency problem.
+49.9 The Cache Consistency Problem
+The cache consistency problem is best illustrated with three clients and
+a single server. Imagine client C1 reads a ﬁle F, and keeps a copy of the
+ﬁle in its local cache. Now imagine a different client, C2, overwrites the
+ﬁle F, thus changing its contents; let’s call the new version of the ﬁle F
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

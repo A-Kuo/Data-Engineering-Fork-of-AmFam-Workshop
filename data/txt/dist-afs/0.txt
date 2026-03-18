@@ -1,0 +1,34 @@
+50
+The Andrew File System (AFS)
+The Andrew File System was introduced at Carnegie-Mellon University
+(CMU) 1 in the 1980’s [H+88]. Led by the well-known Professor M. Satya-
+narayanan of Carnegie-Mellon University (“Satya” for short), the main
+goal of this project was simple: scale. Speciﬁcally, how can one design a
+distributed ﬁle system such that a server can support as many clients as
+possible?
+Interestingly, there are numerous aspects of design and implementa-
+tion that affect scalability. Most important is the design of the protocol be-
+tween clients and servers. In NFS, for example, the protocol forces clients
+to check with the server periodically to determine if cached contents have
+changed; because each check uses server resources (including CPU and
+network bandwidth), frequent checks like this will limit the number of
+clients a server can respond to and thus limit scalability.
+AFS also differs from NFS in that from the beginning, reasonable user-
+visible behavior was a ﬁrst-class concern. In NFS, cache consistency is
+hard to describe because it depends directly on low-level implementa-
+tion details, including client-side cache timeout intervals. In AFS, cache
+consistency is simple and readily understood: when the ﬁle is opened, a
+client will generally receive the latest consistent copy from the server.
+50.1 AFS Version 1
+We will discuss two versions of AFS [H+88, S+85]. The ﬁrst version
+(which we will call AFSv1, but actually the original system was called
+the ITC distributed ﬁle system [S+85]) had some of the basic design in
+place, but didn’t scale as desired, which led to a re-design and the ﬁnal
+protocol (which we will call AFSv2, or just AFS) [H+88]. We now discuss
+the ﬁrst version.
+1Though originally referred to as “Carnegie-Mellon University”, CMU later dropped
+the hyphen, and thus was born the modern form, “Carnegie Mellon University.” As AFS
+derived from work in the early 80’s, we refer to CMU in its original fully-hyphenated form. See
+https://www.quora.com/When-did-Carnegie-Mellon-University-remove-the-
+hyphen-in-the-university-name for more details, if you are into really boring minutiae.
+1

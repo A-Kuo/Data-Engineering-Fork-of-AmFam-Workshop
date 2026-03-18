@@ -1,0 +1,71 @@
+LOCALITY AND THE FAST FILE SYSTEM
+9
+As you can see in the picture, /a ﬁlls up most of the data blocks in
+Group 0, whereas other groups remain empty. If some other ﬁles are now
+created in the root directory (/), there is not much room for their data in
+the group.
+With the large-ﬁle exception (here set to ﬁve blocks in each chunk),
+FFS instead spreads the ﬁle across groups, and the resulting utilization
+within any one group is not too high:
+group inodes
+data
+0
+/a-------- /aaaaa---- ---------- ---------- ----------
+1
+---------- aaaaa----- ---------- ---------- ----------
+2
+---------- aaaaa----- ---------- ---------- ----------
+3
+---------- aaaaa----- ---------- ---------- ----------
+4
+---------- aaaaa----- ---------- ---------- ----------
+5
+---------- aaaaa----- ---------- ---------- ----------
+6
+---------- ---------- ---------- ---------- ----------
+The astute reader (that’s you) will note that spreading blocks of a ﬁle
+across the disk will hurt performance, particularly in the relatively com-
+mon case of sequential ﬁle access (e.g., when a user or application reads
+chunks 0 through 29 in order). And you are right, oh astute reader of
+ours! But you can address this problem by choosing chunk size carefully.
+Speciﬁcally, if the chunk size is large enough, the ﬁle system will spend
+most of its time transferring data from disk and just a (relatively) little
+time seeking between chunks of the block. This process of reducing an
+overhead by doing more work per overhead paid is called amortization
+and is a common technique in computer systems.
+Let’s do an example: assume that the average positioning time (i.e.,
+seek and rotation) for a disk is 10 ms. Assume further that the disk trans-
+fers data at 40 MB/s. If your goal was to spend half our time seeking
+between chunks and half our time transferring data (and thus achieve
+50% of peak disk performance), you would thus need to spend 10 ms
+transferring data for every 10 ms positioning. So the question becomes:
+how big does a chunk have to be in order to spend 10 ms in transfer?
+Easy, just use our old friend, math, in particular the dimensional analysis
+mentioned in the chapter on disks [AD18a]:
+40 ✘✘
+MB
+✟✟
+sec
+· 1024 KB
+1 ✘✘
+MB
+·
+1 ✟✟
+sec
+1000 ✟✟
+ms · 10 ✟✟
+ms = 409.6 KB
+(41.1)
+Basically, what this equation says is this: if you transfer data at 40
+MB/s, you need to transfer only 409.6KB every time you seek in order to
+spend half your time seeking and half your time transferring. Similarly,
+you can compute the size of the chunk you would need to achieve 90%
+of peak bandwidth (turns out it is about 3.6MB), or even 99% of peak
+bandwidth (39.6MB!). As you can see, the closer you want to get to peak,
+the bigger these chunks get (see Figure 41.2 for a plot of these values).
+FFS did not use this type of calculation in order to spread large ﬁles
+across groups, however. Instead, it took a simple approach, based on the
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

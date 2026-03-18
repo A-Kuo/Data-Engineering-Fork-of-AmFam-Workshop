@@ -1,0 +1,53 @@
+2
+HARD DISK DRIVES
+0
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+Spindle
+Figure 37.1: A Disk With Just A Single Track
+called this the “unwritten contract” of disk drives [SG04]. Speciﬁcally,
+one can usually assume that accessing two blocks1 near one-another within
+the drive’s address space will be faster than accessing two blocks that are
+far apart. One can also usually assume that accessing blocks in a contigu-
+ous chunk (i.e., a sequential read or write) is the fastest access mode, and
+usually much faster than any more random access pattern.
+37.2 Basic Geometry
+Let’s start to understand some of the components of a modern disk.
+We start with a platter, a circular hard surface on which data is stored
+persistently by inducing magnetic changes to it. A disk may have one
+or more platters; each platter has 2 sides, each of which is called a sur-
+face. These platters are usually made of some hard material (such as
+aluminum), and then coated with a thin magnetic layer that enables the
+drive to persistently store bits even when the drive is powered off.
+The platters are all bound together around the spindle, which is con-
+nected to a motor that spins the platters around (while the drive is pow-
+ered on) at a constant (ﬁxed) rate. The rate of rotation is often measured in
+rotations per minute (RPM), and typical modern values are in the 7,200
+RPM to 15,000 RPM range. Note that we will often be interested in the
+time of a single rotation, e.g., a drive that rotates at 10,000 RPM means
+that a single rotation takes about 6 milliseconds (6 ms).
+Data is encoded on each surface in concentric circles of sectors; we call
+one such concentric circle a track. A single surface contains many thou-
+sands and thousands of tracks, tightly packed together, with hundreds of
+tracks ﬁtting into the width of a human hair.
+To read and write from the surface, we need a mechanism that allows
+us to either sense (i.e., read) the magnetic patterns on the disk or to in-
+duce a change in (i.e., write) them. This process of reading and writing is
+accomplished by the disk head; there is one such head per surface of the
+drive. The disk head is attached to a single disk arm, which moves across
+the surface to position the head over the desired track.
+1We, and others, often use the terms block and sector interchangeably, assuming the
+reader will know exactly what is meant per context. Sorry about this!
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

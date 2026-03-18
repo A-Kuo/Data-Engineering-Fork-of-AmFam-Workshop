@@ -1,0 +1,42 @@
+8
+SUN’S NETWORK FILE SYSTEM (NFS)
+Client
+Server
+fd = open(”/foo”, ...);
+Send LOOKUP (rootdir FH, ”foo”)
+Receive LOOKUP request
+look for ”foo” in root dir
+return foo’s FH + attributes
+Receive LOOKUP reply
+allocate ﬁle desc in open ﬁle table
+store foo’s FH in table
+store current ﬁle position (0)
+return ﬁle descriptor to application
+read(fd, buffer, MAX);
+Index into open ﬁle table with fd
+get NFS ﬁle handle (FH)
+use current ﬁle position as offset
+Send READ (FH, offset=0, count=MAX)
+Receive READ request
+use FH to get volume/inode num
+read inode from disk (or cache)
+compute block location (using offset)
+read data from disk (or cache)
+return data to client
+Receive READ reply
+update ﬁle position (+bytes read)
+set current ﬁle position = MAX
+return data/error code to app
+read(fd, buffer, MAX);
+Same except offset=MAX and set current ﬁle position = 2*MAX
+read(fd, buffer, MAX);
+Same except offset=2*MAX and set current ﬁle position = 3*MAX
+close(fd);
+Just need to clean up local structures
+Free descriptor ”fd” in open ﬁle table
+(No need to talk to server)
+Figure 49.5: Reading A File: Client-side And File Server Actions
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

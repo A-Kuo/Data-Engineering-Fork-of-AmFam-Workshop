@@ -1,0 +1,33 @@
+48
+Distributed Systems
+Distributed systems have changed the face of the world. When your web
+browser connects to a web server somewhere else on the planet, it is par-
+ticipating in what seems to be a simple form of a client/server distributed
+system. When you contact a modern web service such as Google or Face-
+book, you are not just interacting with a single machine, however; be-
+hind the scenes, these complex services are built from a large collection
+(i.e., thousands) of machines, each of which cooperate to provide the par-
+ticular service of the site. Thus, it should be clear what makes studying
+distributed systems interesting. Indeed, it is worthy of an entire class;
+here, we just introduce a few of the major topics.
+A number of new challenges arise when building a distributed system.
+The major one we focus on is failure; machines, disks, networks, and
+software all fail from time to time, as we do not (and likely, will never)
+know how to build “perfect” components and systems. However, when
+we build a modern web service, we’d like it to appear to clients as if it
+never fails; how can we accomplish this task?
+THE CRUX:
+HOW TO BUILD SYSTEMS THAT WORK WHEN COMPONENTS FAIL
+How can we build a working system out of parts that don’t work correctly
+all the time? The basic question should remind you of some of the topics
+we discussed in RAID storage arrays; however, the problems here tend
+to be more complex, as are the solutions.
+Interestingly, while failure is a central challenge in constructing dis-
+tributed systems, it also represents an opportunity. Yes, machines fail;
+but the mere fact that a machine fails does not imply the entire system
+must fail. By collecting together a set of machines, we can build a system
+that appears to rarely fail, despite the fact that its components fail regu-
+larly. This reality is the central beauty and value of distributed systems,
+and why they underlie virtually every modern web service you use, in-
+cluding Google, Facebook, etc.
+1

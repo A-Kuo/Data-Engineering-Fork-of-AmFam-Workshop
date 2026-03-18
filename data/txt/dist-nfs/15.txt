@@ -1,0 +1,45 @@
+16
+SUN’S NETWORK FILE SYSTEM (NFS)
+ASIDE: KEY NFS TERMS
+• The key to realizing the main goal of fast and simple crash recovery
+in NFS is in the design of a stateless protocol. After a crash, the
+server can quickly restart and begin serving requests again; clients
+just retry requests until they succeed.
+• Making requests idempotent is a central aspect of the NFS protocol.
+An operation is idempotent when the effect of performing it multi-
+ple times is equivalent to performing it once. In NFS, idempotency
+enables client retry without worry, and uniﬁes client lost-message
+retransmission and how the client handles server crashes.
+• Performance concerns dictate the need for client-side caching and
+write buffering, but introduces a cache consistency problem.
+• NFS implementations provide an engineering solution to cache
+consistency through multiple means: a ﬂush-on-close (close-to-
+open) approach ensures that when a ﬁle is closed, its contents are
+forced to the server, enabling other clients to observe the updates
+to it. An attribute cache reduces the frequency of checking with the
+server whether a ﬁle has changed (via GETATTR requests).
+• NFS servers must commit writes to persistent media before return-
+ing success; otherwise, data loss can arise.
+• To support NFS integration into the operating system, Sun intro-
+duced the VFS/Vnode interface, enabling multiple ﬁle system im-
+plementations to coexist in the same operating system.
+potency of operations is essential; because a client can safely replay a
+failed operation, it is OK to do so whether or not the server has executed
+the request.
+We also have seen how the introduction of caching into a multiple-
+client, single-server system can complicate things. In particular, the sys-
+tem must resolve the cache consistency problem in order to behave rea-
+sonably; however, NFS does so in a slightly ad hoc fashion which can
+occasionally result in observably weird behavior. Finally, we saw how
+server caching can be tricky: writes to the server must be forced to stable
+storage before returning success (otherwise data can be lost).
+We haven’t talked about other issues which are certainly relevant, no-
+tably security. Security in early NFS implementations was remarkably
+lax; it was rather easy for any user on a client to masquerade as other
+users and thus gain access to virtually any ﬁle. Subsequent integration
+with more serious authentication services (e.g., Kerberos [NT94]) have
+addressed these obvious deﬁciencies.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

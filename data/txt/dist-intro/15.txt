@@ -1,0 +1,51 @@
+16
+DISTRIBUTED SYSTEMS
+Homework (Code)
+In this section, we’ll write some simple communication code to get
+you familiar with the task of doing so. Have fun!
+Questions
+1. Using the code provided in the chapter, build a simple UDP-based
+server and client.
+The server should receive messages from the
+client, and reply with an acknowledgment. In this ﬁrst attempt,
+do not add any retransmission or robustness (assume that commu-
+nication works perfectly). Run this on a single machine for testing;
+later, run it on two different machines.
+2. Turn your code into a communication library. Speciﬁcally, make
+your own API, with send and receive calls, as well as other API
+calls as needed. Rewrite your client and server to use your library
+instead of raw socket calls.
+3. Add reliable communication to your burgeoning communication li-
+brary, in the form of timeout/retry. Speciﬁcally, your library should
+make a copy of any message that it is going to send. When sending
+it, it should start a timer, so it can track how long it has been since
+the message was sent. On the receiver, the library should acknowl-
+edge received messages. The client send should block when send-
+ing, i.e., it should wait until the message has been acknowledged
+before returning. It should also be willing to retry sending indef-
+initely. The maximum message size should be that of the largest
+single message you can send with UDP. Finally, be sure to perform
+timeout/retry efﬁciently by putting the caller to sleep until either
+an ack arrives or the transmission times out; do not spin and waste
+the CPU!
+4. Make your library more efﬁcient and feature-ﬁlled. First, add very-
+large message transfer. Speciﬁcally, although the network limit max-
+imum message size, your library should take a message of arbitrar-
+ily large size and transfer it from client to server. The client should
+transmit these large messages in pieces to the server; the server-side
+library code should assemble received fragments into the contigu-
+ous whole, and pass the single large buffer to the waiting server
+code.
+5. Do the above again, but with high performance. Instead of sending
+each fragment one at a time, you should rapidly send many pieces,
+thus allowing the network to be much more highly utilized. To do
+so, carefully mark each piece of the transfer so that the re-assembly
+on the receiver side does not scramble the message.
+6. A ﬁnal implementation challenge: asynchronous message send with
+in-order delivery. That is, the client should be able to repeatedly call
+send to send one message after the other; the receiver should call re-
+ceive and get each message in order, reliably; many messages from
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,50 @@
+DISTRIBUTED SYSTEMS
+9
+operate in a distributed environment. For example, distributed shared
+memory (DSM) systems enable processes on different machines to share
+a large, virtual address space [LH89]. This abstraction turns a distributed
+computation into something that looks like a multi-threaded application;
+the only difference is that these threads run on different machines instead
+of different processors within the same machine.
+The way most DSM systems work is through the virtual memory sys-
+tem of the OS. When a page is accessed on one machine, two things can
+happen. In the ﬁrst (best) case, the page is already local on the machine,
+and thus the data is fetched quickly. In the second case, the page is cur-
+rently on some other machine. A page fault occurs, and the page fault
+handler sends a message to some other machine to fetch the page, install
+it in the page table of the requesting process, and continue execution.
+This approach is not widely in use today for a number of reasons. The
+largest problem for DSM is how it handles failure. Imagine, for example,
+if a machine fails; what happens to the pages on that machine? What if
+the data structures of the distributed computation are spread across the
+entire address space? In this case, parts of these data structures would
+suddenly become unavailable. Dealing with failure when parts of your
+address space go missing is hard; imagine a linked list where a “next”
+pointer points into a portion of the address space that is gone. Yikes!
+A further problem is performance. One usually assumes, when writ-
+ing code, that access to memory is cheap. In DSM systems, some accesses
+are inexpensive, but others cause page faults and expensive fetches from
+remote machines. Thus, programmers of such DSM systems had to be
+very careful to organize computations such that almost no communica-
+tion occurred at all, defeating much of the point of such an approach.
+Though much research was performed in this space, there was little prac-
+tical impact; nobody builds reliable distributed systems using DSM today.
+48.5 Remote Procedure Call (RPC)
+While OS abstractions turned out to be a poor choice for building dis-
+tributed systems, programming language (PL) abstractions make much
+more sense. The most dominant abstraction is based on the idea of a re-
+mote procedure call, or RPC for short [BN84]1.
+Remote procedure call packages all have a simple goal: to make the
+process of executing code on a remote machine as simple and straight-
+forward as calling a local function. Thus, to a client, a procedure call is
+made, and some time later, the results are returned. The server simply
+deﬁnes some routines that it wishes to export. The rest of the magic is
+handled by the RPC system, which in general has two pieces: a stub gen-
+erator (sometimes called a protocol compiler), and the run-time library.
+We’ll now take a look at each of these pieces in more detail.
+1In modern programming languages, we might instead say remote method invocation
+(RMI), but who likes these languages anyhow, with all of their fancy objects?
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

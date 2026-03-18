@@ -1,0 +1,41 @@
+LOCALITY AND THE FAST FILE SYSTEM
+3
+41.2 FFS: Disk Awareness Is The Solution
+A group at Berkeley decided to build a better, faster ﬁle system, which
+they cleverly called the Fast File System (FFS). The idea was to design
+the ﬁle system structures and allocation policies to be “disk aware” and
+thus improve performance, which is exactly what they did. FFS thus ush-
+ered in a new era of ﬁle system research; by keeping the same interface
+to the ﬁle system (the same APIs, including open(), read(), write(),
+close(), and other ﬁle system calls) but changing the internal implemen-
+tation, the authors paved the path for new ﬁle system construction, work
+that continues today. Virtually all modern ﬁle systems adhere to the ex-
+isting interface (and thus preserve compatibility with applications) while
+changing their internals for performance, reliability, or other reasons.
+41.3 Organizing Structure: The Cylinder Group
+The ﬁrst step was to change the on-disk structures. FFS divides the
+disk into a number of cylinder groups. A single cylinder is a set of tracks
+on different surfaces of a hard drive that are the same distance from the
+center of the drive; it is called a cylinder because of its clear resemblance
+to the so-called geometrical shape. FFS aggregates N consecutive cylin-
+ders into a group, and thus the entire disk can thus be viewed as a collec-
+tion of cylinder groups. Here is a simple example, showing the four outer
+most tracks of a drive with six platters, and a cylinder group that consists
+of three cylinders:
+Single track (e.g., dark gray)
+Cylinder:
+Tracks at same distance from center
+of drive across different surfaces
+[all tracks with same color]
+Cylinder Group:
+Set of N consecutive cylinders
+[if N=3, first group does
+not include black track]
+Note that modern drives do not export enough information for the
+ﬁle system to truly understand whether a particular cylinder is in use;
+as discussed previously [AD18a], disks export a logical address space of
+blocks and hide details of their geometry from clients. Thus, modern ﬁle
+© 2008–26, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

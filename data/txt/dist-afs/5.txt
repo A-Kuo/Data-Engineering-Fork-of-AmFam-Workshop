@@ -1,0 +1,48 @@
+6
+THE ANDREW FILE SYSTEM (AFS)
+ASIDE: CACHE CONSISTENCY IS NOT A PANACEA
+When discussing distributed ﬁle systems, much is made of the cache con-
+sistency the ﬁle systems provide. However, this baseline consistency does
+not solve all problems with regards to ﬁle access from multiple clients.
+For example, if you are building a code repository, with multiple clients
+performing check-ins and check-outs of code, you can’t simply rely on
+the underlying ﬁle system to do all of the work for you; rather, you have
+to use explicit ﬁle-level locking in order to ensure that the “right” thing
+happens when such concurrent accesses take place. Indeed, any applica-
+tion that truly cares about concurrent updates will add extra machinery
+to handle conﬂicts. The baseline consistency described in this chapter and
+the previous one are useful primarily for casual usage, i.e., when a user
+logs into a different client, they expect some reasonable version of their
+ﬁles to show up there. Expecting more from these protocols is setting
+yourself up for failure, disappointment, and tear-ﬁlled frustration.
+thus ensuring that the server would notify the client of a change in its
+cached state. The beneﬁt is obvious: although the ﬁrst access to /home/
+remzi/notes.txt generates many client-server messages (as described
+above), it also establishes callbacks for all the directories as well as the
+ﬁle notes.txt, and thus subsequent accesses are entirely local and require
+no server interaction at all. Thus, in the common case where a ﬁle is
+cached at the client, AFS behaves nearly identically to a local disk-based
+ﬁle system. If one accesses a ﬁle more than once, the second access should
+be just as fast as accessing a ﬁle locally.
+50.5 Cache Consistency
+When we discussed NFS, there were two aspects of cache consistency
+we considered: update visibility and cache staleness. With update visi-
+bility, the question is: when will the server be updated with a new version
+of a ﬁle? With cache staleness, the question is: once the server has a new
+version, how long before clients see the new version instead of an older
+cached copy?
+Because of callbacks and whole-ﬁle caching, the cache consistency pro-
+vided by AFS is easy to describe and understand. There are two im-
+portant cases to consider: consistency between processes on different ma-
+chines, and consistency between processes on the same machine.
+Between different machines, AFS makes updates visible at the server
+and invalidates cached copies at the exact same time, which is when the
+updated ﬁle is closed. A client opens a ﬁle, and then writes to it (perhaps
+repeatedly). When it is ﬁnally closed, the new ﬁle is ﬂushed to the server
+(and thus visible). At this point, the server then “breaks” callbacks for
+any clients with cached copies; the break is accomplished by contacting
+each client and informing it that the callback it has on the ﬁle is no longer
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

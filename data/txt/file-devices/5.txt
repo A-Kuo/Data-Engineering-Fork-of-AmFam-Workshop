@@ -1,0 +1,67 @@
+6
+I/O DEVICES
+TIP: INTERRUPTS NOT ALWAYS BETTER THAN POLLING
+Although interrupts allow for overlap of computation and I/O, they only
+really make sense for slow devices. Otherwise, the cost of interrupt han-
+dling and context switching may outweigh the beneﬁts interrupts pro-
+vide. There are also cases where a ﬂood of interrupts may overload a sys-
+tem and lead it to livelock [MR96]; in such cases, polling provides more
+control to the OS in its scheduling and thus is again useful.
+overlap, are best. If the speed of the device is not known, or sometimes
+fast and sometimes slow, it may be best to use a hybrid that polls for a
+little while and then, if the device is not yet ﬁnished, uses interrupts. This
+two-phased approach may achieve the best of both worlds.
+Another reason not to use interrupts arises in networks [MR96]. When
+a huge stream of incoming packets each generate an interrupt, it is pos-
+sible for the OS to livelock, that is, ﬁnd itself only processing interrupts
+and never allowing a user-level process to run and actually service the re-
+quests. For example, imagine a web server that experiences a load burst
+because it became the top-ranked entry on hacker news [H18]. In this
+case, it is better to occasionally use polling to better control what is hap-
+pening in the system and allow the web server to service some requests
+before going back to the device to check for more packet arrivals.
+Another interrupt-based optimization is coalescing. In such a setup, a
+device which needs to raise an interrupt ﬁrst waits for a bit before deliv-
+ering the interrupt to the CPU. While waiting, other requests may soon
+complete, and thus multiple interrupts can be coalesced into a single in-
+terrupt delivery, thus lowering the overhead of interrupt processing. Of
+course, waiting too long will increase the latency of a request, a common
+trade-off in systems. See Ahmad et al. [A+11] for an excellent summary.
+36.5 More Efﬁcient Data Movement With DMA
+Unfortunately, there is one other aspect of our canonical protocol that
+requires our attention. In particular, when using programmed I/O (PIO)
+to transfer a large chunk of data to a device, the CPU is once again over-
+burdened with a rather trivial task, and thus wastes a lot of time and
+effort that could better be spent running other processes. This timeline
+illustrates the problem:
+CPU
+Disk
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+c
+c
+c
+2
+2
+2
+2
+2
+1
+1
+In the timeline, Process 1 is running and then wishes to write some data to
+the disk. It then initiates the I/O, which must copy the data from memory
+to the device explicitly, one word at a time (marked c in the diagram).
+When the copy is complete, the I/O begins on the disk and the CPU can
+ﬁnally be used for something else.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

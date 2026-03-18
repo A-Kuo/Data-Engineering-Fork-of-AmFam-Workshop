@@ -1,0 +1,28 @@
+49
+Sun’s Network File System (NFS)
+One of the ﬁrst uses of distributed client/server computing was in the
+realm of distributed ﬁle systems. In such an environment, there are a
+number of client machines and one server (or a few); the server stores the
+data on its disks, and clients request data through well-formed protocol
+messages. Figure 49.1 depicts the basic setup.
+Client 0
+Client 1
+Client 2
+Client 3
+Server
+RAID
+Network
+Figure 49.1: A Generic Client/Server System
+As you can see from the picture, the server has the disks, and clients
+send messages across a network to access their directories and ﬁles on
+those disks. Why do we bother with this arrangement? (i.e., why don’t
+we just let clients use their local disks?) Well, primarily this setup allows
+for easy sharing of data across clients. Thus, if you access a ﬁle on one
+machine (Client 0) and then later use another (Client 2), you will have the
+same view of the ﬁle system. Your data is naturally shared across these
+different machines. A secondary beneﬁt is centralized administration;
+for example, backing up ﬁles can be done from the few server machines
+instead of from the multitude of clients. Another advantage could be
+security; having all servers in a locked machine room prevents certain
+types of problems from arising.
+1

@@ -1,0 +1,57 @@
+2
+LOCALITY AND THE FAST FILE SYSTEM
+Worse, the ﬁle system would end up getting quite fragmented, as the
+free space was not carefully managed. The free list would end up point-
+ing to a bunch of blocks spread across the disk, and as ﬁles got allocated,
+they would simply take the next free block. The result was that a logi-
+cally contiguous ﬁle would be accessed by going back and forth across
+the disk, thus reducing performance dramatically.
+For example, imagine the following data block region, which contains
+four ﬁles (A, B, C, and D), each of size 2 blocks:
+A1
+A2
+B1
+B2
+C1
+C2
+D1
+D2
+If B and D are deleted, the resulting layout is:
+A1
+A2
+C1
+C2
+As you can see, the free space is fragmented into two chunks of two
+blocks, instead of one nice contiguous chunk of four. Let’s say you now
+wish to allocate a ﬁle E, of size four blocks:
+A1
+A2
+E1
+E2
+C1
+C2
+E3
+E4
+You can see what happens: E gets spread across the disk, and as a
+result, when accessing E, you don’t get peak (sequential) performance
+from the disk. Rather, you ﬁrst read E1 and E2, then seek, then read E3
+and E4. This fragmentation problem happened all the time in the old
+UNIX ﬁle system, and it hurt performance. A side note: this problem is
+exactly what disk defragmentation tools help with; they reorganize on-
+disk data to place ﬁles contiguously and make free space for one or a few
+contiguous regions, moving data around and then rewriting inodes and
+such to reﬂect the changes.
+One other problem: the original block size was too small (512 bytes).
+Thus, transferring data from the disk was inherently inefﬁcient. Smaller
+blocks were good because they minimized internal fragmentation (waste
+within the block), but bad for transfer as each block might require a posi-
+tioning overhead to reach it. Thus, the problem:
+THE CRUX:
+HOW TO ORGANIZE ON-DISK DATA TO IMPROVE PERFORMANCE
+How can we organize ﬁle system data structures so as to improve per-
+formance? What types of allocation policies do we need on top of those
+data structures? How do we make the ﬁle system “disk aware”?
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

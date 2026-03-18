@@ -1,0 +1,46 @@
+I/O DEVICES
+11
+• Data transfer (for writes): Wait until drive status is READY and
+DRQ (drive request for data); write data to data port.
+• Handle interrupts. In the simplest case, handle an interrupt for
+each sector transferred; more complex approaches allow batching
+and thus one ﬁnal interrupt when the entire transfer is complete.
+• Error handling. After each operation, read the status register. If the
+ERROR bit is on, read the error register for details.
+Most of this protocol is found in the xv6 IDE driver (Figure 36.6),
+which (after initialization) works through four primary functions. The
+ﬁrst is ide_rw(), which queues a request (if there are others pending),
+or issues it directly to the disk (via ide_start_request()); in either
+case, the routine waits for the request to complete and the calling process
+is put to sleep. The second is ide_start_request(), which is used
+to send a request (and perhaps data, in the case of a write) to the disk;
+the in and out x86 instructions are called to read and write device regis-
+ters, respectively. The start request routine uses the third function, ide_-
+wait_ready(), to ensure the drive is ready before issuing a request to it.
+Finally, ide_intr() is invoked when an interrupt takes place; it reads
+data from the device (if the request is a read, not a write), wakes the pro-
+cess waiting for the I/O to complete, and (if there are more requests in
+the I/O queue), launches the next I/O via ide_start_request().
+36.9 Historical Notes
+Before ending, we include a brief historical note on the origin of some
+of these fundamental ideas. If you are interested in learning more, read
+Smotherman’s excellent summary [S08].
+Interrupts are an ancient idea, existing on the earliest of machines. For
+example, the UNIVAC in the early 1950’s had some form of interrupt vec-
+toring, although it is unclear in exactly which year this feature was avail-
+able [S08]. Sadly, even in its infancy, we are beginning to lose the origins
+of computing history.
+There is also some debate as to which machine ﬁrst introduced the idea
+of DMA. For example, Knuth and others point to the DYSEAC (a “mo-
+bile” machine, which at the time meant it could be hauled in a trailer),
+whereas others think the IBM SAGE may have been the ﬁrst [S08]. Ei-
+ther way, by the mid 50’s, systems with I/O devices that communicated
+directly with memory and interrupted the CPU when ﬁnished existed.
+The history here is difﬁcult to trace because the inventions are tied to
+real, and sometimes obscure, machines. For example, some think that the
+Lincoln Labs TX-2 machine was ﬁrst with vectored interrupts [S08], but
+this is hardly clear.
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

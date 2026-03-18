@@ -1,0 +1,34 @@
+36
+I/O Devices
+Before delving into the main content of this part of the book (on persis-
+tence), we ﬁrst introduce the concept of an input/output (I/O) device and
+show how the operating system might interact with such an entity. I/O is
+quite critical to computer systems, of course; imagine a program without
+any input (it produces the same result each time); now imagine a pro-
+gram with no output (what was the purpose of it running?). Clearly, for
+computer systems to be interesting, both input and output are required.
+And thus, our general problem:
+CRUX: HOW TO INTEGRATE I/O INTO SYSTEMS
+How should I/O be integrated into systems? What are the general
+mechanisms? How can we make them efﬁcient?
+36.1 System Architecture
+To begin our discussion, let’s look at a “classical” diagram of a typical
+system (Figure 36.1, page 2). The picture shows a single CPU attached
+to the main memory of the system via some kind of memory bus or in-
+terconnect. Some devices are connected to the system via a general I/O
+bus, which in many modern systems would be PCI (or one of its many
+derivatives); graphics and some other higher-performance I/O devices
+might be found here. Finally, even lower down are one or more of what
+we call a peripheral bus, such as SCSI, SATA, or USB. These connect
+slow devices to the system, including disks, mice, and keyboards.
+One question you might ask is: why do we need a hierarchical struc-
+ture like this? Put simply: physics, and cost. The faster a bus is, the
+shorter it must be; thus, a high-performance memory bus does not have
+much room to plug devices and such into it. In addition, engineering
+a bus for high performance is quite costly. Thus, system designers have
+adopted this hierarchical approach, where components that demand high
+performance (such as the graphics card) are nearer the CPU. Lower per-
+formance components are further away. The beneﬁts of placing disks and
+other slow devices on a peripheral bus are manifold; in particular, you
+can place a large number of devices on it.
+1

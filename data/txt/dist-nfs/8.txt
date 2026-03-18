@@ -1,0 +1,49 @@
+SUN’S NETWORK FILE SYSTEM (NFS)
+9
+TIP: IDEMPOTENCY IS POWERFUL
+Idempotency is a useful property when building reliable systems. When
+an operation can be issued more than once, it is much easier to handle
+failure of the operation; you can just retry it. If an operation is not idem-
+potent, life becomes more difﬁcult.
+49.7 Handling Server Failure With Idempotent Operations
+When a client sends a message to the server, it sometimes does not re-
+ceive a reply. There are many possible reasons for this failure to respond.
+In some cases, the message may be dropped by the network; networks do
+lose messages, and thus either the request or the reply could be lost and
+thus the client would never receive a response.
+It is also possible that the server has crashed, and thus is not currently
+responding to messages. After a bit, the server will be rebooted and start
+running again, but in the meanwhile all requests have been lost. In all of
+these cases, clients are left with a question: what should they do when
+the server does not reply in a timely manner?
+In NFSv2, a client handles all of these failures in a single, uniform, and
+elegant way: it simply retries the request. Speciﬁcally, after sending the
+request, the client sets a timer to go off after a speciﬁed time period. If a
+reply is received before the timer goes off, the timer is canceled and all is
+well. If, however, the timer goes off before any reply is received, the client
+assumes the request has not been processed and resends it. If the server
+replies, all is well and the client has neatly handled the problem.
+The ability of the client to simply retry the request (regardless of what
+caused the failure) is due to an important property of most NFS requests:
+they are idempotent. An operation is called idempotent when the effect
+of performing the operation multiple times is equivalent to the effect of
+performing the operation a single time. For example, if you store a value
+to a memory location three times, it is the same as doing so once; thus
+“store value to memory” is an idempotent operation. If, however, you in-
+crement a counter three times, it results in a different amount than doing
+so just once; thus, “increment counter” is not idempotent. More gener-
+ally, any operation that just reads data is obviously idempotent; an oper-
+ation that updates data must be more carefully considered to determine
+if it has this property.
+The heart of the design of crash recovery in NFS is the idempotency
+of most common operations. LOOKUP and READ requests are trivially
+idempotent, as they only read information from the ﬁle server and do not
+update it. More interestingly, WRITE requests are also idempotent. If,
+for example, a WRITE fails, the client can simply retry it. The WRITE
+message contains the data, the count, and (importantly) the exact offset
+to write the data to. Thus, it can be repeated with the knowledge that the
+outcome of multiple writes is the same as the outcome of a single one.
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES
