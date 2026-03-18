@@ -1,0 +1,70 @@
+MULTIPROCESSOR SCHEDULING (ADVANCED)
+7
+to run on the same CPU if possible. Speciﬁcally, one might provide afﬁn-
+ity for some jobs, but move others around to balance load. For example,
+imagine the same ﬁve jobs scheduled as follows:
+CPU 3
+CPU 2
+CPU 1
+CPU 0
+D
+D
+D
+D
+E
+C
+C
+C
+E
+C
+B
+B
+E
+B
+B
+A
+E
+A
+A
+A
+ ... (repeat) ...
+ ... (repeat) ...
+ ... (repeat) ...
+ ... (repeat) ...
+In this arrangement, jobs A through D are not moved across proces-
+sors, with only job E migrating from CPU to CPU, thus preserving afﬁn-
+ity for most. You could then decide to migrate a different job the next
+time through, thus achieving some kind of afﬁnity fairness as well. Im-
+plementing such a scheme, however, can be complex.
+Thus, we can see the SQMS approach has its strengths and weak-
+nesses. It is straightforward to implement given an existing single-CPU
+scheduler, which by deﬁnition has only a single queue. However, it does
+not scale well (due to synchronization overheads), and it does not readily
+preserve cache afﬁnity.
+10.5 Multi-Queue Scheduling
+Because of the problems caused in single-queue schedulers, some sys-
+tems opt for multiple queues, e.g., one per CPU. We call this approach
+multi-queue multiprocessor scheduling (or MQMS).
+In MQMS, our basic scheduling framework consists of multiple schedul-
+ing queues. Each queue will likely follow a particular scheduling disci-
+pline, such as round robin, though of course any algorithm can be used.
+When a job enters the system, it is placed on exactly one scheduling
+queue, according to some heuristic (e.g., random, or picking one with
+fewer jobs than others). Then it is scheduled essentially independently,
+thus avoiding the problems of information sharing and synchronization
+found in the single-queue approach.
+For example, assume we have a system where there are just two CPUs
+(labeled CPU 0 and CPU 1), and some number of jobs enter the system:
+A, B, C, and D for example. Given that each CPU has a scheduling queue
+now, the OS has to decide into which queue to place each job. It might do
+something like this:
+Q0
+A
+C
+Q1
+B
+D
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

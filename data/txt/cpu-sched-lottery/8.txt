@@ -1,0 +1,86 @@
+SCHEDULING: PROPORTIONAL SHARE
+9
+of a process to less than this value, ensuring that not too much time is
+spent in scheduling overhead.
+For example, if there are ten processes running, our original calcula-
+tion would divide sched latency by ten to determine the time slice
+(result: 4.8 ms). However, because of min granularity, CFS will set
+the time slice of each process to 6 ms instead. Although CFS won’t (quite)
+be perfectly fair over the target scheduling latency (sched latency) of
+48 ms, it will be close, while still achieving high CPU efﬁciency.
+Note that CFS utilizes a periodic timer interrupt, which means it can
+only make decisions at ﬁxed time intervals. This interrupt goes off fre-
+quently (e.g., every 1 ms), giving CFS a chance to wake up and determine
+if the current job has reached the end of its run. If a job has a time slice
+that is not a perfect multiple of the timer interrupt interval, that is OK;
+CFS tracks vruntime precisely, which means that over the long haul, it
+will eventually approximate ideal sharing of the CPU.
+Weighting (Niceness)
+CFS also enables controls over process priority, enabling users or admin-
+istrators to give some processes a higher share of the CPU. It does this
+not with tickets, but through a classic UNIX mechanism known as the
+nice level of a process. The nice parameter can be set anywhere from -20
+to +19 for a process, with a default of 0. Positive nice values imply lower
+priority and negative values imply higher priority; when you’re too nice,
+you just don’t get as much (scheduling) attention, alas.
+CFS maps the nice value of each process to a weight, as shown here:
+static const int prio_to_weight[40] = {
+/* -20 */ 88761, 71755, 56483, 46273, 36291,
+/* -15 */ 29154, 23254, 18705, 14949, 11916,
+/* -10 */
+9548,
+7620,
+6100,
+4904,
+3906,
+/*
+-5 */
+3121,
+2501,
+1991,
+1586,
+1277,
+/*
+0 */
+1024,
+820,
+655,
+526,
+423,
+/*
+5 */
+335,
+272,
+215,
+172,
+137,
+/*
+10 */
+110,
+87,
+70,
+56,
+45,
+/*
+15 */
+36,
+29,
+23,
+18,
+15,
+};
+These weights allow us to compute the effective time slice of each pro-
+cess (as we did before), but now accounting for their priority differences.
+The formula used to do so is as follows, assuming n processes:
+time slicek =
+weightk
+Pn−1
+i=0 weighti
+· sched latency
+(9.1)
+Let’s do an example to see how this works. Assume there are two
+jobs, A and B. A, because it’s our most precious job, is given a higher pri-
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

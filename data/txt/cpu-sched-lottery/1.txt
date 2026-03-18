@@ -1,0 +1,63 @@
+2
+SCHEDULING: PROPORTIONAL SHARE
+TIP: USE RANDOMNESS
+One of the most beautiful aspects of lottery scheduling is its use of ran-
+domness. When you have to make a decision, using such a randomized
+approach is often a robust and simple way of doing so.
+Random approaches have at least three advantages over more traditional
+decisions. First, random often avoids strange corner-case behaviors that
+a more traditional algorithm may have trouble handling. For example,
+consider the LRU replacement policy (studied in more detail in a future
+chapter on virtual memory); while often a good replacement algorithm,
+LRU attains worst-case performance for some cyclic-sequential work-
+loads. Random, on the other hand, has no such worst case.
+Second, random also is lightweight, requiring little state to track alter-
+natives. In a traditional fair-share scheduling algorithm, tracking how
+much CPU each process has received requires per-process accounting,
+which must be updated after running each process. Doing so randomly
+necessitates only the most minimal of per-process state (e.g., the number
+of tickets each has).
+Finally, random can be quite fast. As long as generating a random num-
+ber is quick, making the decision is also, and thus random can be used
+in a number of places where speed is required. Of course, the faster the
+need, the more random tends towards pseudo-random.
+a winning ticket, which is a number from 0 to 991. Assuming A holds
+tickets 0 through 74 and B 75 through 99, the winning ticket simply de-
+termines whether A or B runs. The scheduler then loads the state of that
+winning process and runs it.
+Here is an example output of a lottery scheduler’s winning tickets:
+63 85 70 39 76 17 29 41 36 39 10 99 68 83 63 62 43
+0 49 12
+Here is the resulting schedule:
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+B
+B
+B
+B
+As you can see from the example, the use of randomness in lottery
+scheduling leads to a probabilistic correctness in meeting the desired pro-
+portion, but no guarantee. In our example above, B only gets to run 4 out
+of 20 time slices (20%), instead of the desired 25% allocation. However,
+the longer these two jobs compete, the more likely they are to achieve the
+desired percentages.
+1Computer Scientists always start counting at 0. It is so odd to non-computer-types that
+famous people have felt obliged to write about why we do it this way [D82].
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,59 @@
+SCHEDULING: INTRODUCTION
+3
+FIFO has a number of positive properties: it is clearly simple and thus
+easy to implement. And, given our assumptions, it works pretty well.
+Let’s do a quick example together. Imagine three jobs arrive in the
+system, A, B, and C, at roughly the same time (Tarrival = 0). Because
+FIFO has to put some job ﬁrst, let’s assume that while they all arrived
+simultaneously, A arrived just a hair before B which arrived just a hair
+before C. Assume also that each job runs for 10 seconds. What will the
+average turnaround time be for these jobs?
+0
+20
+40
+60
+80
+100
+120
+Time
+A
+B
+C
+Figure 7.1: FIFO Simple Example
+From Figure 7.1, you can see that A ﬁnished at 10, B at 20, and C at 30.
+Thus, the average turnaround time for the three jobs is simply 10+20+30
+3
+=
+20. Computing turnaround time is as easy as that.
+Now let’s relax one of our assumptions. In particular, let’s relax as-
+sumption 1, and thus no longer assume that each job runs for the same
+amount of time. How does FIFO perform now? What kind of workload
+could you construct to make FIFO perform poorly?
+(think about this before reading on ... keep thinking ... got it?!)
+Presumably you’ve ﬁgured this out by now, but just in case, let’s do
+an example to show how jobs of different lengths can lead to trouble for
+FIFO scheduling. In particular, let’s again assume three jobs (A, B, and
+C), but this time A runs for 100 seconds while B and C run for 10 each.
+0
+20
+40
+60
+80
+100
+120
+Time
+A
+B
+C
+Figure 7.2: Why FIFO Is Not That Great
+As you can see in Figure 7.2, Job A runs ﬁrst for the full 100 seconds
+before B or C even get a chance to run. Thus, the average turnaround
+time for the system is high: a painful 110 seconds ( 100+110+120
+3
+= 110).
+This problem is generally referred to as the convoy effect [B+79], where
+a number of relatively-short potential consumers of a resource get queued
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

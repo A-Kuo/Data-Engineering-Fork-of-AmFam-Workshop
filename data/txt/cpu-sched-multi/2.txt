@@ -1,0 +1,41 @@
+MULTIPROCESSOR SCHEDULING (ADVANCED)
+3
+Memory
+CPU
+CPU
+Cache
+Cache
+Bus
+Figure 10.2: Two CPUs With Caches Sharing Memory
+As an example, consider a program that issues an explicit load instruc-
+tion to fetch a value from memory, and a simple system with only a single
+CPU; the CPU has a small cache (say 64 KB) and a large main memory.
+The ﬁrst time a program issues this load, the data resides in main mem-
+ory, and thus takes a long time to fetch (perhaps in the tens of nanosec-
+onds, or even hundreds). The processor, anticipating that the data may be
+reused, puts a copy of the loaded data into the CPU cache. If the program
+later fetches this same data item again, the CPU ﬁrst checks for it in the
+cache; if it ﬁnds it there, the data is fetched much more quickly (say, just
+a few nanoseconds), and thus the program runs faster.
+Caches are thus based on the notion of locality, of which there are
+two kinds: temporal locality and spatial locality. The idea behind tem-
+poral locality is that when a piece of data is accessed, it is likely to be
+accessed again in the near future; imagine variables or even instructions
+themselves being accessed over and over again in a loop. The idea be-
+hind spatial locality is that if a program accesses a data item at address
+x, it is likely to access data items near x as well; here, think of a program
+streaming through an array, or instructions being executed one after the
+other. Because locality of these types exist in many programs, hardware
+systems can make good guesses about which data to put in a cache and
+thus work well.
+Now for the tricky part: what happens when you have multiple pro-
+cessors in a single system, with a single shared main memory, as we see
+in Figure 10.2?
+As it turns out, caching with multiple CPUs is much more compli-
+cated. Imagine, for example, that a program running on CPU 1 reads
+a data item (with value D) at address A; because the data is not in the
+cache on CPU 1, the system fetches it from main memory, and gets the
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

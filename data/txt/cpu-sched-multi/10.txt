@@ -1,0 +1,47 @@
+MULTIPROCESSOR SCHEDULING (ADVANCED)
+11
+References
+[A90] “The Performance of Spin Lock Alternatives for Shared-Memory Multiprocessors” by
+Thomas E. Anderson. IEEE TPDS Volume 1:1, January 1990. A classic paper on how different
+locking alternatives do and don’t scale. By Tom Anderson, very well known researcher in both systems
+and networking. And author of a very ﬁne OS textbook, we must say.
+[B+10] “An Analysis of Linux Scalability to Many Cores Abstract” by Silas Boyd-Wickizer,
+Austin T. Clements, Yandong Mao, Aleksey Pesterev, M. Frans Kaashoek, Robert Morris, Nick-
+olai Zeldovich. OSDI ’10, Vancouver, Canada, October 2010. A terriﬁc modern paper on the
+difﬁculties of scaling Linux to many cores.
+[CSG99] “Parallel Computer Architecture: A Hardware/Software Approach” by David E.
+Culler, Jaswinder Pal Singh, and Anoop Gupta. Morgan Kaufmann, 1999. A treasure ﬁlled
+with details about parallel machines and algorithms. As Mark Hill humorously observes on the jacket,
+the book contains more information than most research papers.
+[FLR98] “The Implementation of the Cilk-5 Multithreaded Language” by Matteo Frigo, Charles
+E. Leiserson, Keith Randall.
+PLDI ’98, Montreal, Canada, June 1998.
+Cilk is a lightweight
+language and runtime for writing parallel programs, and an excellent example of the work-stealing
+paradigm.
+[G83] “Using Cache Memory To Reduce Processor-Memory Trafﬁc” by James R. Goodman.
+ISCA ’83, Stockholm, Sweden, June 1983. The pioneering paper on how to use bus snooping, i.e.,
+paying attention to requests you see on the bus, to build a cache coherence protocol. Goodman’s research
+over many years at Wisconsin is full of cleverness, this being but one example.
+[M11] “Towards Transparent CPU Scheduling” by Joseph T. Meehean. Doctoral Dissertation
+at University of Wisconsin—Madison, 2011. A dissertation that covers a lot of the details of how
+modern Linux multiprocessor scheduling works. Pretty awesome! But, as co-advisors of Joe’s, we may
+be a bit biased here.
+[SHW11] “A Primer on Memory Consistency and Cache Coherence” by Daniel J. Sorin, Mark
+D. Hill, and David A. Wood. Synthesis Lectures in Computer Architecture. Morgan and Clay-
+pool Publishers, May 2011. A deﬁnitive overview of memory consistency and multiprocessor caching.
+Required reading for anyone who likes to know way too much about a given topic.
+[SA96] “Earliest Eligible Virtual Deadline First: A Flexible and Accurate Mechanism for Pro-
+portional Share Resource Allocation” by Ion Stoica and Hussein Abdel-Wahab. Technical Re-
+port TR-95-22, Old Dominion University, 1996. A tech report on this cool scheduling idea, from
+Ion Stoica, now a professor at U.C. Berkeley and world expert in networking, distributed systems, and
+many other things.
+[TTG95] “Evaluating the Performance of Cache-Afﬁnity Scheduling in Shared-Memory Mul-
+tiprocessors” by Josep Torrellas, Andrew Tucker, Anoop Gupta. Journal of Parallel and Dis-
+tributed Computing, Volume 24:2, February 1995. This is not the ﬁrst paper on the topic, but it has
+citations to earlier work, and is a more readable and practical paper than some of the earlier queuing-
+based analysis papers.
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

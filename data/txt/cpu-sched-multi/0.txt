@@ -1,0 +1,33 @@
+10
+Multiprocessor Scheduling (Advanced)
+This chapter will introduce the basics of multiprocessor scheduling.
+As this topic is relatively advanced, it may be best to cover it after you
+have studied the topic of concurrency in some detail (i.e., the second ma-
+jor “easy piece” of the book).
+After years of existence only in the high-end of the computing spec-
+trum, multiprocessor systems are increasingly commonplace, and have
+found their way into desktop machines, laptops, and even mobile de-
+vices. The rise of the multicore processor, in which multiple CPU cores
+are packed onto a single chip, is the source of this proliferation; these
+chips have become popular as computer architects have had a difﬁcult
+time making a single CPU much faster without using (way) too much
+power. And thus we all now have a few CPUs available to us, which is a
+good thing, right?
+Of course, there are many difﬁculties that arise with the arrival of more
+than a single CPU. A primary one is that a typical application (i.e., some C
+program you wrote) only uses a single CPU; adding more CPUs does not
+make that single application run faster. To remedy this problem, you’ll
+have to rewrite your application to run in parallel, perhaps using threads
+(as discussed in great detail in the second piece of this book). Multi-
+threaded applications can spread work across multiple CPUs and thus
+run faster when given more CPU resources.
+ASIDE: ADVANCED CHAPTERS
+Advanced chapters require material from a broad swath of the book to
+truly understand, while logically ﬁtting into a section that is earlier than
+said set of prerequisite materials. For example, this chapter on multipro-
+cessor scheduling makes much more sense if you’ve ﬁrst read the middle
+piece on concurrency; however, it logically ﬁts into the part of the book
+on virtualization (generally) and CPU scheduling (speciﬁcally). Thus, it
+is recommended such chapters be covered out of order; in this case, after
+the second piece of the book.
+1

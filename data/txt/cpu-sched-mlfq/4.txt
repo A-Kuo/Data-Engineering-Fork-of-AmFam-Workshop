@@ -1,0 +1,52 @@
+SCHEDULING:
+THE MULTI-LEVEL FEEDBACK QUEUE
+5
+Q0
+Q1
+Q2
+0
+50
+100
+150
+200
+Q0
+Q1
+Q2
+0
+50
+100
+150
+200
+Figure 8.3: Along Came An Interactive Job: Two Examples
+Example 3: What About I/O?
+Let’s now look at an example with some I/O. As Rule 4b states above, if a
+process gives up the processor before using up its allotment, we keep it at
+the same priority level. The intent of this rule is simple: if an interactive
+job, for example, is doing a lot of I/O (say by waiting for user input from
+the keyboard or mouse), it will relinquish the CPU before its allotment is
+complete; in such case, we don’t wish to penalize the job and thus simply
+keep it at the same level.
+Figure 8.3 (right) shows an example of how this works, with an in-
+teractive job B (shown in gray) that needs the CPU only for 1 ms before
+performing an I/O competing for the CPU with a long-running batch job
+A (shown in black). The MLFQ approach keeps B at the highest prior-
+ity because B keeps releasing the CPU; if B is an interactive job, MLFQ
+further achieves its goal of running interactive jobs quickly.
+Problems With Our Current MLFQ
+We thus have a basic MLFQ. It seems to do a fairly good job, sharing the
+CPU fairly between long-running jobs, and letting short or I/O-intensive
+interactive jobs run quickly. Unfortunately, the approach we have devel-
+oped thus far contains serious ﬂaws. Can you think of any?
+(This is where you pause and think as deviously as you can)
+First, there is the problem of starvation: if there are “too many” in-
+teractive jobs in the system, they will combine to consume all CPU time,
+and thus long-running jobs will never receive any CPU time (they starve).
+We’d like to make some progress on these jobs even in this scenario.
+Second, a smart user could rewrite their program to game the sched-
+uler. Gaming the scheduler generally refers to the idea of doing some-
+thing sneaky to trick the scheduler into giving you more than your fair
+share of the resource. The algorithm we have described is susceptible to
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

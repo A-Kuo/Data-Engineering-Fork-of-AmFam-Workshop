@@ -1,0 +1,31 @@
+11
+Summary Dialogue on CPU Virtualization
+Professor: So, Student, did you learn anything?
+Student: Well, Professor, that seems like a loaded question. I think you only
+want me to say “yes.”
+Professor: That’s true. But it’s also still an honest question. Come on, give a
+professor a break, will you?
+Student: OK, OK. I think I did learn a few things. First, I learned a little about
+how the OS virtualizes the CPU. There are a bunch of important mechanisms
+that I had to understand to make sense of this: traps and trap handlers, timer
+interrupts, and how the OS and the hardware have to carefully save and restore
+state when switching between processes.
+Professor: Good, good!
+Student: All those interactions do seem a little complicated though; how can I
+learn more?
+Professor: Well, that’s a good question. I think there is no substitute for doing;
+just reading about these things doesn’t quite give you the proper sense. Do the
+class projects and I bet by the end it will all kind of make sense.
+Student: Sounds good. What else can I tell you?
+Professor: Well, did you get some sense of the philosophy of the OS in your
+quest to understand its basic machinery?
+Student: Hmm... I think so. It seems like the OS is fairly paranoid. It wants
+to make sure it stays in charge of the machine. While it wants a program to run
+as efﬁciently as possible (and hence the whole reasoning behind limited direct
+execution), the OS also wants to be able to say “Ah! Not so fast my friend”
+in case of an errant or malicious process. Paranoia rules the day, and certainly
+keeps the OS in charge of the machine. Perhaps that is why we think of the OS
+as a resource manager.
+Professor: Yes indeed — sounds like you are starting to put it together! Nice.
+Student: Thanks.
+1

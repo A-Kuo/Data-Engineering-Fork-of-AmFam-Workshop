@@ -1,0 +1,55 @@
+8
+SCHEDULING: INTRODUCTION
+TIP: AMORTIZATION CAN REDUCE COSTS
+The general technique of amortization is commonly used in systems
+when there is a ﬁxed cost to some operation. By incurring that cost less
+often (i.e., by performing the operation fewer times), the total cost to the
+system is reduced. For example, if the time slice is set to 10 ms, and the
+context-switch cost is 1 ms, roughly 10% of time is spent context switch-
+ing and is thus wasted. If we want to amortize this cost, we can increase
+the time slice, e.g., to 100 ms. In this case, less than 1% of time is spent
+context switching, and thus the cost of time-slicing has been amortized.
+they each wish to run for 5 seconds. An SJF scheduler runs each job to
+completion before running another (Figure 7.6). In contrast, RR with a
+time-slice of 1 second would cycle through the jobs quickly (Figure 7.7).
+The average response time of RR is:
+0+1+2
+3
+= 1; for SJF, average re-
+sponse time is: 0+5+10
+3
+= 5.
+As you can see, the length of the time slice is critical for RR. The shorter
+it is, the better the performance of RR under the response-time metric.
+However, making the time slice too short is problematic: suddenly the
+cost of context switching will dominate overall performance. Thus, de-
+ciding on the length of the time slice presents a trade-off to a system de-
+signer, making it long enough to amortize the cost of switching without
+making it so long that the system is no longer responsive.
+Note that the cost of context switching does not arise solely from the
+OS actions of saving and restoring a few registers. When programs run,
+they build up a great deal of state in CPU caches, TLBs, branch predictors,
+and other on-chip hardware. Switching to another job causes this state
+to be ﬂushed and new state relevant to the currently-running job to be
+brought in, which may exact a noticeable performance cost [MB91].
+RR, with a reasonable time slice, is thus an excellent scheduler if re-
+sponse time is our only metric. But what about our old friend turnaround
+time? Let’s look at our example above again. A, B, and C, each with run-
+ning times of 5 seconds, arrive at the same time, and RR is the scheduler
+with a (long) 1-second time slice. We can see from the picture above that
+A ﬁnishes at 13, B at 14, and C at 15, for an average of 14. Pretty awful!
+It is not surprising, then, that RR is indeed one of the worst policies if
+turnaround time is our metric. Intuitively, this should make sense: what
+RR is doing is stretching out each job as long as it can, by only running
+each job for a short bit before moving to the next. Because turnaround
+time only cares about when jobs ﬁnish, RR is nearly pessimal, even worse
+than simple FIFO in many cases.
+More generally, any policy (such as RR) that is fair, i.e., that evenly di-
+vides the CPU among active processes on a small time scale, will perform
+poorly on metrics such as turnaround time. Indeed, this is an inherent
+trade-off: if you are willing to be unfair, you can run shorter jobs to com-
+pletion, but at the cost of response time; if you instead value fairness,
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

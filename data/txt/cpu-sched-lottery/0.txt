@@ -1,0 +1,31 @@
+9
+Scheduling: Proportional Share
+In this chapter, we’ll examine a different type of scheduler known as a
+proportional-share scheduler, also sometimes referred to as a fair-share
+scheduler. Proportional-share is based around a simple concept: instead
+of optimizing for turnaround or response time, a scheduler might instead
+try to guarantee that each job obtain a certain percentage of CPU time.
+An excellent early example of proportional-share scheduling is found
+in research by Waldspurger and Weihl [WW94], and is known as lottery
+scheduling; however, the idea is certainly older [KL88]. The basic idea
+is quite simple: every so often, hold a lottery to determine which process
+should get to run next; processes that should run more often should be
+given more chances to win the lottery. Easy, no? Now, onto the details!
+But not before our crux:
+CRUX: HOW TO SHARE THE CPU PROPORTIONALLY
+How can we design a scheduler to share the CPU in a proportional
+manner? What are the key mechanisms for doing so? How effective are
+they?
+9.1 Basic Concept: Tickets Represent Your Share
+Underlying lottery scheduling is one very basic concept: tickets, which
+are used to represent the share of a resource that a process (or user or
+whatever) should receive. The percent of tickets that a process has repre-
+sents its share of the system resource in question.
+Let’s look at an example. Imagine two processes, A and B, and further
+that A has 75 tickets while B has only 25. Thus, what we would like is for
+A to receive 75% of the CPU and B the remaining 25%.
+Lottery scheduling achieves this probabilistically (but not determinis-
+tically) by holding a lottery every so often (say, every time slice). Holding
+a lottery is straightforward: the scheduler must know how many total
+tickets there are (in our example, there are 100). The scheduler then picks
+1

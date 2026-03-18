@@ -1,0 +1,54 @@
+6
+SCHEDULING: INTRODUCTION
+0
+20
+40
+60
+80
+100
+120
+Time
+A
+B
+C
+A
+[B,C arrive]
+Figure 7.5: STCF Simple Example
+certainly do something else when B and C arrive: it can preempt job A
+and decide to run another job, perhaps continuing A later. SJF by our deﬁ-
+nition is a non-preemptive scheduler, and thus suffers from the problems
+described above.
+Fortunately, there is a scheduler which does exactly that: add preemp-
+tion to SJF, known as the Shortest Time-to-Completion First (STCF) or
+Preemptive Shortest Job First (PSJF) scheduler [CK68]. Any time a new
+job enters the system, the STCF scheduler determines which of the re-
+maining jobs (including the new job) has the least time left, and schedules
+that one. Thus, in our example, STCF would preempt A and run B and C
+to completion; only when they are ﬁnished would A’s remaining time be
+scheduled. Figure 7.5 shows an example.
+The result is a much-improved average turnaround time: 50 seconds
+( (120−0)+(20−10)+(30−10)
+3
+). And as before, given our new assumptions,
+STCF is provably optimal; given that SJF is optimal if all jobs arrive at
+the same time, you should probably be able to see the intuition behind
+the optimality of STCF.
+7.6 A New Metric: Response Time
+Thus, if we knew job lengths, and that jobs only used the CPU, and our
+only metric was turnaround time, STCF would be a great policy. In fact,
+for a number of early batch computing systems, these types of scheduling
+algorithms made some sense. However, the introduction of time-shared
+machines changed all that. Now users would sit at a terminal and de-
+mand interactive performance from the system as well. And thus, a new
+metric was born: response time.
+We deﬁne response time as the time from when the job arrives in a
+system to the ﬁrst time it is scheduled3. More formally:
+Tresponse = Tfirstrun −Tarrival
+(7.2)
+3Some deﬁne it slightly differently, e.g., to also include the time until the job produces
+some kind of “response”; our deﬁnition is the best-case version of this, essentially assuming
+that the job produces a response instantaneously.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

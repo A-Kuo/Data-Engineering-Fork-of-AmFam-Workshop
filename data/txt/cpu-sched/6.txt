@@ -1,0 +1,53 @@
+SCHEDULING: INTRODUCTION
+7
+0
+5
+10
+15
+20
+25
+30
+Time
+A
+B
+C
+Figure 7.6: SJF Again (Bad for Response Time)
+0
+5
+10
+15
+20
+25
+30
+Time
+ABCABCABCABCABC
+Figure 7.7: Round Robin (Good For Response Time)
+For example, if we had the schedule from Figure 7.5 (with A arriving
+at time 0, and B and C at time 10), the response time of each job is as
+follows: 0 for job A, 0 for B, and 10 for C (average: 3.33).
+As you might be thinking, STCF and related disciplines are not par-
+ticularly good for response time. If three jobs arrive at the same time,
+for example, the third job has to wait for the previous two jobs to run in
+their entirety before being scheduled just once. While great for turnaround
+time, this approach is quite bad for response time and interactivity. In-
+deed, imagine sitting at a terminal, typing, and having to wait 10 seconds
+to see a response from the system just because some other job got sched-
+uled in front of yours: not too pleasant.
+Thus, we are left with another problem: how can we build a scheduler
+that is sensitive to response time?
+7.7 Round Robin
+To solve this problem, we will introduce a new scheduling algorithm,
+classically referred to as Round-Robin (RR) scheduling [K64]. The basic
+idea is simple: instead of running jobs to completion, RR runs a job for a
+time slice (sometimes called a scheduling quantum) and then switches
+to the next job in the run queue. It repeatedly does so until the jobs are
+ﬁnished. For this reason, RR is sometimes called time-slicing. Note that
+the length of a time slice must be a multiple of the timer-interrupt period;
+thus if the timer interrupts every 10 milliseconds, the time slice could be
+10, 20, or any other multiple of 10 ms.
+To understand RR in more detail, let’s look at an example. Assume
+three jobs A, B, and C arrive at the same time in the system, and that
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

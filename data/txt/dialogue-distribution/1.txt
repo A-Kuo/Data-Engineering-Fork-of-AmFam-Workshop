@@ -1,0 +1,15 @@
+2
+A DIALOGUE ON DISTRIBUTION
+Professor: Yes, it is amazing. And that’s despite all of those failures taking
+place! Those companies build a huge amount of machinery into their systems so
+as to ensure that even though some machines have failed, the entire system stays
+up and running. They use a lot of techniques to do this: replication, retry, and
+various other tricks people have developed over time to detect and recover from
+failures.
+Student: Sounds interesting. Time to learn something for real?
+Professor: It does seem so. Let’s get to work! But ﬁrst things ﬁrst ...
+(bites into peach he has been holding, which unfortunately is rotten)
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

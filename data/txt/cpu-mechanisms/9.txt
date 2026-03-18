@@ -1,0 +1,50 @@
+10
+MECHANISM: LIMITED DIRECT EXECUTION
+TIP: REBOOT IS USEFUL
+Earlier on, we noted that the only solution to inﬁnite loops (and similar
+behaviors) under cooperative preemption is to reboot the machine. While
+you may scoff at this hack, researchers have shown that reboot (or in gen-
+eral, starting over some piece of software) can be a hugely useful tool in
+building robust systems [C+04].
+Speciﬁcally, reboot is useful because it moves software back to a known
+and likely more tested state.
+Reboots also reclaim stale or leaked re-
+sources (e.g., memory) which may otherwise be hard to handle. Finally,
+reboots are easy to automate. For all of these reasons, it is not uncommon
+in large-scale cluster Internet services for system management software
+to periodically reboot sets of machines in order to reset them and thus
+obtain the advantages listed above.
+Thus, next time you reboot, you are not just enacting some ugly hack.
+Rather, you are using a time-tested approach to improving the behavior
+of a computer system. Well done!
+one). When the OS then ﬁnally executes a return-from-trap instruction,
+the soon-to-be-executing process becomes the currently-running process.
+And thus the context switch is complete.
+A timeline of the entire process is shown in Figure 6.3. In this example,
+Process A is running and then is interrupted by the timer interrupt. The
+hardware saves its registers (onto its kernel stack) and enters the kernel
+(switching to kernel mode). In the timer interrupt handler, the OS decides
+to switch from running Process A to Process B. At that point, it calls the
+switch() routine, which carefully saves current register values (into the
+process structure of A), restores the registers of Process B (from its process
+structure entry), and then switches contexts, speciﬁcally by changing the
+stack pointer to use B’s kernel stack (and not A’s). Finally, the OS returns-
+from-trap, which restores B’s registers and starts running it.
+Note that there are two types of register saves/restores that happen
+during this protocol. The ﬁrst is when the timer interrupt occurs; in this
+case, the user registers of the running process are implicitly saved by the
+hardware, using the kernel stack of that process. The second is when the
+OS decides to switch from A to B; in this case, the kernel registers are ex-
+plicitly saved by the software (i.e., the OS), but this time into memory in
+the process structure of the process. The latter action moves the system
+from running as if it just trapped into the kernel from A to as if it just
+trapped into the kernel from B.
+To give you a better sense of how such a switch is enacted, Figure 6.4
+shows the context switch code for xv6. See if you can make sense of it
+(you’ll have to know a bit of x86, as well as some xv6, to do so). The
+context structures old and new are found in the old and new process’s
+process structures, respectively.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

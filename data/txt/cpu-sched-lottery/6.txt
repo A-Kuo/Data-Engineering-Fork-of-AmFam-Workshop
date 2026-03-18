@@ -1,0 +1,82 @@
+SCHEDULING: PROPORTIONAL SHARE
+7
+Pass(A)
+Pass(B)
+Pass(C)
+Who Runs?
+(stride=100)
+(stride=200)
+(stride=40)
+0
+0
+0
+A
+100
+0
+0
+B
+100
+200
+0
+C
+100
+200
+40
+C
+100
+200
+80
+C
+100
+200
+120
+A
+200
+200
+120
+C
+200
+200
+160
+C
+200
+200
+200
+...
+Figure 9.3: Stride Scheduling: A Trace
+run again (still the lowest pass value), raising its pass to 120. A will run
+now, updating its pass to 200 (now equal to B’s). Then C will run twice
+more, updating its pass to 160 then 200. At this point, all pass values are
+equal again, and the process will repeat, ad inﬁnitum. Figure 9.3 traces
+the behavior of the scheduler over time.
+As we can see from the ﬁgure, C ran ﬁve times, A twice, and B just
+once, exactly in proportion to their ticket values of 250, 100, and 50. Lot-
+tery scheduling achieves the proportions probabilistically over time; stride
+scheduling gets them exactly right at the end of each scheduling cycle.
+So you might be wondering: given the precision of stride scheduling,
+why use lottery scheduling at all? Well, lottery scheduling has one nice
+property that stride scheduling does not: no global state. Imagine a new
+job enters in the middle of our stride scheduling example above; what
+should its pass value be? Should it be set to 0? If so, it will monopolize
+the CPU. With lottery scheduling, there is no global state per process;
+we simply add a new process with whatever tickets it has, update the
+single global variable to track how many total tickets we have, and go
+from there. In this way, lottery makes it much easier to incorporate new
+processes in a sensible manner.
+9.7 The Linux Completely Fair Scheduler (CFS)
+Despite these earlier works in fair-share scheduling, the current Linux
+approach achieves similar goals in an alternate manner. The scheduler,
+entitled the Completely Fair Scheduler (or CFS) [J09], implements fair-
+share scheduling, but does so in a highly efﬁcient and scalable manner.
+To achieve its efﬁciency goals, CFS aims to spend very little time mak-
+ing scheduling decisions, through both its inherent design and its clever
+use of data structures well-suited to the task. Recent studies have shown
+that scheduler efﬁciency is surprisingly important; speciﬁcally, in a study
+of Google datacenters, Kanev et al. show that even after aggressive opti-
+mization, scheduling uses about 5% of overall datacenter CPU time [K+15].
+Reducing that overhead as much as possible is thus a key goal in modern
+scheduler architecture.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

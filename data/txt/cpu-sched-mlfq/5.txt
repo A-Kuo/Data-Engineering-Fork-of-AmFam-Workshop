@@ -1,0 +1,46 @@
+6
+SCHEDULING:
+THE MULTI-LEVEL FEEDBACK QUEUE
+TIP: SCHEDULING MUST BE SECURE FROM ATTACK
+You might think that a scheduling policy, whether inside the OS itself
+(as discussed herein), or in a broader context (e.g., in a distributed stor-
+age system’s I/O request handling [Y+18]), is not a security concern, but
+in increasingly many cases, it is exactly that. Consider the modern dat-
+acenter, in which users from around the world share CPUs, memories,
+networks, and storage systems; without care in policy design and en-
+forcement, a single user may be able to adversely harm others and gain
+advantage for itself. Thus, scheduling policy forms an important part of
+the security of a system, and should be carefully constructed.
+the following attack: before the allotment is used, issue an I/O operation
+(e.g., to a ﬁle) and thus relinquish the CPU; doing so allows you to remain
+in the same queue, and thus gain a higher percentage of CPU time. When
+done right (e.g., by running for 99% of the allotment before relinquishing
+the CPU), a job could nearly monopolize the CPU.
+Finally, a program may change its behavior over time; what was CPU-
+bound may transition to a phase of interactivity. With our current ap-
+proach, such a job would be out of luck and not be treated like the other
+interactive jobs in the system.
+8.3 Attempt #2: The Priority Boost
+Let’s try to change the rules and see if we can avoid the problem of
+starvation. What could we do in order to guarantee that CPU-bound jobs
+will make some progress (even if it is not much?).
+The simple idea here is to periodically boost the priority of all the jobs
+in the system. There are many ways to achieve this, but let’s just do some-
+thing simple: throw them all in the topmost queue; hence, a new rule:
+• Rule 5: After some time period S, move all the jobs in the system
+to the topmost queue.
+Our new rule solves two problems at once. First, processes are guar-
+anteed not to starve: by sitting in the top queue, a job will share the CPU
+with other high-priority jobs in a round-robin fashion, and thus eventu-
+ally receive service. Second, if a CPU-bound job has become interactive,
+the scheduler treats it properly once it has received the priority boost.
+Let’s see an example. In this scenario, we just show the behavior of
+a long-running job when competing for the CPU with two short-running
+interactive jobs. Two graphs are shown in Figure 8.4 (page 7). On the left,
+there is no priority boost, and thus the long-running job gets starved once
+the two short jobs arrive; on the right, there is a priority boost every 100
+ms (which is likely too small of a value, but used here for the example),
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

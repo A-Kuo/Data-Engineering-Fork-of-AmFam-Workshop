@@ -1,0 +1,47 @@
+SCHEDULING: INTRODUCTION
+9
+TIP: OVERLAP ENABLES HIGHER UTILIZATION
+When possible, overlap operations to maximize the utilization of sys-
+tems. Overlap is useful in many different domains, including when per-
+forming disk I/O or sending messages to remote machines; in either case,
+starting the operation and then switching to other work is a good idea,
+and improves the overall utilization and efﬁciency of the system.
+response time is lowered, but at the cost of turnaround time. This type of
+trade-off is common in systems; you can’t have your cake and eat it too4.
+We have developed two types of schedulers. The ﬁrst type (SJF, STCF)
+optimizes turnaround time, but is bad for response time. The second type
+(RR) optimizes response time but is bad for turnaround. And we still
+have two assumptions which need to be relaxed: assumption 4 (that jobs
+do no I/O), and assumption 5 (that the run-time of each job is known).
+Let’s tackle those assumptions next.
+7.8 Incorporating I/O
+First we will relax assumption 4 — of course all programs perform
+I/O. Imagine a program that didn’t take any input: it would produce the
+same output each time. Imagine one without output: it is the proverbial
+tree falling in the forest, with no one to see it; it doesn’t matter that it ran.
+A scheduler clearly has a decision to make when a job initiates an I/O
+request, because the currently-running job won’t be using the CPU dur-
+ing the I/O; it is blocked waiting for I/O completion. If the I/O is sent to
+a hard disk drive, the process might be blocked for a few milliseconds or
+longer, depending on the current I/O load of the drive. Thus, the sched-
+uler should probably schedule another job on the CPU at that time.
+The scheduler also has to make a decision when the I/O completes.
+When that occurs, an interrupt is raised, and the OS runs and moves
+the process that issued the I/O from blocked back to the ready state. Of
+course, it could even decide to run the job at that point. How should the
+OS treat each job?
+To understand this issue better, let us assume we have two jobs, A and
+B, which each need 50 ms of CPU time. However, there is one obvious
+difference: A runs for 10 ms and then issues an I/O request (assume here
+that I/Os each take 10 ms), whereas B simply uses the CPU for 50 ms and
+performs no I/O. The scheduler runs A ﬁrst, then B after (Figure 7.8).
+Assume we are trying to build a STCF scheduler. How should such a
+scheduler account for the fact that A is broken up into 5 10-ms sub-jobs,
+4A saying that confuses people, because it should be “You can’t keep your cake and eat it
+too” (which is kind of obvious, no?). Amazingly, there is a wikipedia page about this saying;
+even more amazingly, it is kind of fun to read [W15]. As they say in Italian, you can’t Avere la
+botte piena e la moglie ubriaca.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

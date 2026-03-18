@@ -1,0 +1,63 @@
+6
+THE ABSTRACTION: THE PROCESS
+Running
+Ready
+Blocked
+Descheduled
+Scheduled
+I/O: initiate
+I/O: done
+Figure 4.2: Process: State Transitions
+• Blocked: In the blocked state, a process has performed some kind
+of operation that makes it not ready to run until some other event
+takes place. A common example: when a process initiates an I/O
+request to a disk, it becomes blocked and thus some other process
+can use the processor.
+If we were to map these states to a graph, we would arrive at the di-
+agram in Figure 4.2. As you can see in the diagram, a process can be
+moved between the ready and running states at the discretion of the OS.
+Being moved from ready to running means the process has been sched-
+uled; being moved from running to ready means the process has been
+descheduled. Once a process has become blocked (e.g., by initiating an
+I/O operation), the OS will keep it as such until some event occurs (e.g.,
+I/O completion); at that point, the process moves to the ready state again
+(and potentially immediately to running again, if the OS so decides).
+Let’s look at an example of how two processes might transition through
+some of these states. First, imagine two processes running, each of which
+only use the CPU (they do no I/O). In this case, a trace of the state of each
+process might look like this (Figure 4.3).
+Time
+Process0
+Process1
+Notes
+1
+Running
+Ready
+2
+Running
+Ready
+3
+Running
+Ready
+4
+Running
+Ready
+Process0 now done
+5
+–
+Running
+6
+–
+Running
+7
+–
+Running
+8
+–
+Running
+Process1 now done
+Figure 4.3: Tracing Process State: CPU Only
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

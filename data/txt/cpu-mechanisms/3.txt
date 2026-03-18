@@ -1,0 +1,49 @@
+4
+MECHANISM: LIMITED DIRECT EXECUTION
+TIP: USE PROTECTED CONTROL TRANSFER
+The hardware assists the OS by providing different modes of execution.
+In user mode, applications do not have full access to hardware resources.
+In kernel mode, the OS has access to the full resources of the machine.
+Special instructions to trap into the kernel and return-from-trap back to
+user-mode programs are also provided, as well as instructions that allow
+the OS to tell the hardware where the trap table resides in memory.
+memory. Most operating systems provide a few hundred calls (see the
+POSIX standard for details [P10]); early Unix systems exposed a more
+concise subset of around twenty calls.
+To execute a system call, a program must execute a special trap instruc-
+tion. This instruction simultaneously jumps into the kernel and raises the
+privilege level to kernel mode; once in the kernel, the system can now per-
+form whatever privileged operations are needed (if allowed), and thus do
+the required work for the calling process. When ﬁnished, the OS calls a
+special return-from-trap instruction, which, as you might expect, returns
+into the calling user program while simultaneously reducing the privi-
+lege level back to user mode.
+The hardware needs to be a bit careful when executing a trap, in that it
+must make sure to save enough of the caller’s registers in order to be able
+to return correctly when the OS issues the return-from-trap instruction.
+On x86, for example, the processor will push the program counter, ﬂags,
+and a few other registers onto a per-process kernel stack; the return-from-
+trap will pop these values off the stack and resume execution of the user-
+mode program (see the Intel systems manuals [I11] for details). Other
+hardware systems use different conventions, but the basic concepts are
+similar across platforms.
+There is one important detail left out of this discussion: how does the
+trap know which code to run inside the OS? Clearly, the calling process
+can’t specify an address to jump to (as you would when making a pro-
+cedure call); doing so would allow programs to jump anywhere into the
+kernel which clearly is a Very Bad Idea1. Thus the kernel must carefully
+control what code executes upon a trap.
+The kernel does so by setting up a trap table at boot time. When the
+machine boots up, it does so in privileged (kernel) mode, and thus is free
+to conﬁgure machine hardware as need be. One of the ﬁrst things the OS
+thus does is to tell the hardware what code to run when certain excep-
+tional events occur. For example, what code should run when a hard-
+disk interrupt takes place, when a keyboard interrupt occurs, or when
+a program makes a system call? The OS informs the hardware of the
+1Imagine jumping into code to access a ﬁle, but just after a permission check; in fact, it is
+likely such an ability would enable a wily programmer to get the kernel to run arbitrary code
+sequences [S07]. In general, try to avoid Very Bad Ideas like this one.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,68 @@
+MULTIPROCESSOR SCHEDULING (ADVANCED)
+5
+1
+typedef struct __Node_t {
+2
+int
+value;
+3
+struct __Node_t *next;
+4
+} Node_t;
+5
+6
+int List_Pop() {
+7
+Node_t *tmp = head;
+// remember old head
+8
+int value
+= head->value;
+// ... and its value
+9
+head
+= head->next;
+// advance to next
+10
+free(tmp);
+// free old head
+11
+return value;
+// return value @head
+12
+}
+Figure 10.3: Simple List Delete Code
+Thread 1 executes the ﬁrst line, it will have the current value of head
+stored in its tmp variable; if Thread 2 then executes the ﬁrst line as well,
+it also will have the same value of head stored in its own private tmp
+variable (tmp is allocated on the stack, and thus each thread will have
+its own private storage for it). Thus, instead of each thread removing
+an element from the head of the list, each thread will try to remove the
+same head element, leading to all sorts of problems (such as an attempted
+double free of the head element at Line 10, as well as potentially returning
+the same data value twice).
+The solution, of course, is to make such routines correct via lock-
+ing. In this case, allocating a simple mutex (e.g., pthread_mutex_t
+m;) and then adding a lock(&m) at the beginning of the routine and
+an unlock(&m) at the end will solve the problem, ensuring that the code
+will execute as desired. Unfortunately, as we will see, such an approach is
+not without problems, in particular with regards to performance. Speciﬁ-
+cally, as the number of CPUs grows, access to a synchronized shared data
+structure becomes quite slow.
+10.3 One Final Issue: Cache Afﬁnity
+One ﬁnal issue arises in building a multiprocessor cache scheduler,
+known as cache afﬁnity [TTG95]. This notion is simple: a process, when
+run on a particular CPU, builds up a fair bit of state in the caches (and
+TLBs) of the CPU. The next time the process runs, it is often advanta-
+geous to run it on the same CPU, as it will run faster if some of its state
+is already present in the caches on that CPU. If, instead, one runs a pro-
+cess on a different CPU each time, the performance of the process will be
+worse, as it will have to reload the state each time it runs (note it will run
+correctly on a different CPU thanks to the cache coherence protocols of
+the hardware). Thus, a multiprocessor scheduler should consider cache
+afﬁnity when making its scheduling decisions, perhaps preferring to keep
+a process on the same CPU if at all possible.
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

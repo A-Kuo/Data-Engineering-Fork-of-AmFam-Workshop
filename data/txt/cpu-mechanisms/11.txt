@@ -1,0 +1,85 @@
+12
+MECHANISM: LIMITED DIRECT EXECUTION
+1
+# void swtch(struct context *old, struct context *new);
+2
+#
+3
+# Save current register context in old
+4
+# and then load register context from new.
+5
+.globl swtch
+6
+swtch:
+7
+# Save old registers
+8
+movl 4(%esp), %eax
+# put old ptr into eax
+9
+popl 0(%eax)
+# save the old IP
+10
+movl %esp, 4(%eax)
+# and stack
+11
+movl %ebx, 8(%eax)
+# and other registers
+12
+movl %ecx, 12(%eax)
+13
+movl %edx, 16(%eax)
+14
+movl %esi, 20(%eax)
+15
+movl %edi, 24(%eax)
+16
+movl %ebp, 28(%eax)
+17
+18
+# Load new registers
+19
+movl 4(%esp), %eax
+# put new ptr into eax
+20
+movl 28(%eax), %ebp # restore other registers
+21
+movl 24(%eax), %edi
+22
+movl 20(%eax), %esi
+23
+movl 16(%eax), %edx
+24
+movl 12(%eax), %ecx
+25
+movl 8(%eax), %ebx
+26
+movl 4(%eax), %esp
+# stack is switched here
+27
+pushl 0(%eax)
+# return addr put in place
+28
+ret
+# finally return into new ctxt
+Figure 6.4: The xv6 Context Switch Code
+Of course, the OS has to be careful in doing so; disabling interrupts for
+too long could lead to lost interrupts, which is (in technical terms) bad.
+Operating systems also have developed a number of sophisticated
+locking schemes to protect concurrent access to internal data structures.
+This enables multiple activities to be on-going within the kernel at the
+same time, particularly useful on multiprocessors. As we’ll see in the
+next piece of this book on concurrency, though, such locking can be com-
+plicated and lead to a variety of interesting and hard-to-ﬁnd bugs.
+6.5 Summary
+We have described some key low-level mechanisms to implement CPU
+virtualization, a set of techniques which we collectively refer to as limited
+direct execution. The basic idea is straightforward: just run the program
+you want to run on the CPU, but ﬁrst make sure to set up the hardware
+so as to limit what the process can do without OS assistance.
+This general approach is taken in real life as well. For example, those
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

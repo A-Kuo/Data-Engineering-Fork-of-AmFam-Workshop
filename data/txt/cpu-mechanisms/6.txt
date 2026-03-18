@@ -1,0 +1,46 @@
+MECHANISM: LIMITED DIRECT EXECUTION
+7
+privileged instruction (all privileged instructions are highlighted in bold).
+In the second (when running a process), the kernel sets up a few things
+(e.g., allocating a node on the process list, allocating memory) before us-
+ing a return-from-trap instruction to start the execution of the process;
+this switches the CPU to user mode and begins running the process.
+When the process wishes to issue a system call, it traps back into the OS,
+which handles it and once again returns control via a return-from-trap
+to the process. The process then completes its work, and returns from
+main(); this usually will return into some stub code which will properly
+exit the program (say, by calling the exit() system call, which traps into
+the OS). At this point, the OS cleans up and we are done.
+6.3 Problem #2: Switching Between Processes
+The next problem with direct execution is achieving a switch between
+processes. Switching between processes should be simple, right? The
+OS should just decide to stop one process and start another. What’s the
+big deal? But it actually is a little bit tricky: speciﬁcally, if a process is
+running on the CPU, this by deﬁnition means the OS is not running. If
+the OS is not running, how can it do anything at all? (hint: it can’t) While
+this sounds almost philosophical, it is a real problem: there is clearly no
+way for the OS to take an action if it is not running on the CPU. Thus we
+arrive at the crux of the problem.
+THE CRUX: HOW TO REGAIN CONTROL OF THE CPU
+How can the operating system regain control of the CPU so that it can
+switch between processes?
+A Cooperative Approach: Wait For System Calls
+One approach that some systems have taken in the past (for example,
+early versions of the Macintosh operating system [M11], or the old Xerox
+Alto system [A79]) is known as the cooperative approach. In this style,
+the OS trusts the processes of the system to behave reasonably. Processes
+that run for too long are assumed to periodically give up the CPU so that
+the OS can decide to run some other task.
+Thus, you might ask, how does a friendly process give up the CPU in
+this utopian world? Most processes, as it turns out, transfer control of
+the CPU to the OS quite frequently by making system calls, for example,
+to open a ﬁle and subsequently read it, or to send a message to another
+machine, or to create a new process. Systems like this often include an
+explicit yield system call, which does nothing except to transfer control
+to the OS so it can run other processes.
+Applications also transfer control to the OS when they do something
+illegal. For example, if an application divides by zero, or tries to access
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

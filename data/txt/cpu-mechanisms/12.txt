@@ -1,0 +1,39 @@
+MECHANISM: LIMITED DIRECT EXECUTION
+13
+ASIDE: HOW LONG CONTEXT SWITCHES TAKE
+A natural question you might have is: how long does something like a
+context switch take? Or even a system call? For those of you that are cu-
+rious, there is a tool called lmbench [MS96] that measures exactly those
+things, as well as a few other performance measures that might be rele-
+vant.
+Results have improved quite a bit over time, roughly tracking processor
+performance. For example, in 1996 running Linux 1.3.37 on a 200-MHz
+P6 CPU, system calls took roughly 4 microseconds, and a context switch
+roughly 6 microseconds [MS96]. Modern systems perform almost an or-
+der of magnitude better, with sub-microsecond results on systems with
+2- or 3-GHz processors.
+It should be noted that not all operating-system actions track CPU per-
+formance. As Ousterhout observed, many OS operations are memory
+intensive, and memory bandwidth has not improved as dramatically as
+processor speed over time [O90]. Thus, depending on your workload,
+buying the latest and greatest processor may not speed up your OS as
+much as you might hope.
+of you who have children, or, at least, have heard of children, may be
+familiar with the concept of baby prooﬁng a room: locking cabinets con-
+taining dangerous stuff and covering electrical sockets. When the room is
+thus readied, you can let your baby roam freely, secure in the knowledge
+that the most dangerous aspects of the room have been restricted.
+In an analogous manner, the OS “baby proofs” the CPU, by ﬁrst (dur-
+ing boot time) setting up the trap handlers and starting an interrupt timer,
+and then by only running processes in a restricted mode. By doing so, the
+OS can feel quite assured that processes can run efﬁciently, only requir-
+ing OS intervention to perform privileged operations or when they have
+monopolized the CPU for too long and thus need to be switched out.
+We thus have the basic mechanisms for virtualizing the CPU in place.
+But a major question is left unanswered: which process should we run at
+a given time? It is this question that the scheduler must answer, and thus
+the next topic of our study.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

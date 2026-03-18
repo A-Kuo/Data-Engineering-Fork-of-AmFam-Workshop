@@ -1,0 +1,52 @@
+SCHEDULING: PROPORTIONAL SHARE
+3
+TIP: USE TICKETS TO REPRESENT SHARES
+One of the most powerful (and basic) mechanisms in the design of lottery
+(and stride) scheduling is that of the ticket. The ticket is used to represent
+a process’s share of the CPU in these examples, but can be applied much
+more broadly. For example, in more recent work on virtual memory man-
+agement for hypervisors, Waldspurger shows how tickets can be used to
+represent a guest operating system’s share of memory [W02]. Thus, if you
+are ever in need of a mechanism to represent a proportion of ownership,
+this concept just might be ... (wait for it) ... the ticket.
+9.2 Ticket Mechanisms
+Lottery scheduling also provides a number of mechanisms to manip-
+ulate tickets in different and sometimes useful ways. One way is with
+the concept of ticket currency. Currency allows a user with a set of tick-
+ets to allocate tickets among their own jobs in whatever currency they
+would like; the system then automatically converts said currency into the
+correct global value.
+For example, assume users A and B have each been given 100 tickets.
+User A is running two jobs, A1 and A2, and gives them each 500 tickets
+(out of 1000 total) in A’s currency. User B is running only 1 job and gives
+it 10 tickets (out of 10 total). The system converts A1’s and A2’s allocation
+from 500 each in A’s currency to 50 each in the global currency; similarly,
+B1’s 10 tickets is converted to 100 tickets. The lottery is then held over the
+global ticket currency (200 total) to determine which job runs.
+User A -> 500 (A’s currency) to A1 ->
+50 (global currency)
+-> 500 (A’s currency) to A2 ->
+50 (global currency)
+User B ->
+10 (B’s currency) to B1 -> 100 (global currency)
+Another useful mechanism is ticket transfer. With transfers, a process
+can temporarily hand off its tickets to another process. This ability is
+especially useful in a client/server setting, where a client process sends
+a message to a server asking it to do some work on the client’s behalf.
+To speed up the work, the client can pass the tickets to the server and
+thus try to maximize the performance of the server while the server is
+handling the client’s request. When ﬁnished, the server then transfers the
+tickets back to the client and all is as before.
+Finally, ticket inﬂation can sometimes be a useful technique. With
+inﬂation, a process can temporarily raise or lower the number of tickets
+it owns. Of course, in a competitive scenario with processes that do not
+trust one another, this makes little sense; one greedy process could give
+itself a vast number of tickets and take over the machine. Rather, inﬂation
+can be applied in an environment where a group of processes trust one
+another; in such a case, if any one process knows it needs more CPU time,
+it can boost its ticket value as a way to reﬂect that need to the system, all
+without communicating with any other processes.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

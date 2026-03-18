@@ -1,0 +1,50 @@
+SCHEDULING: PROPORTIONAL SHARE
+13
+References
+[AC97] “Extending Proportional-Share Scheduling to a Network of Workstations” by Andrea
+C. Arpaci-Dusseau and David E. Culler. PDPTA’97, June 1997. A paper by one of the authors on
+how to extend proportional-share scheduling to work better in a clustered environment.
+[B+18] “The Battle of the Schedulers: FreeBSD ULE vs. Linux CFS” by J. Bouron, S. Chevalley,
+B. Lepers, W. Zwaenepoel, R. Gouicem, J. Lawall, G. Muller, J. Sopena. USENIX ATC ’18,
+July 2018, Boston, Massachusetts. A recent, detailed work comparing Linux CFS and the FreeBSD
+schedulers. An excellent overview of each scheduler is also provided. The result of the comparison:
+inconclusive. In some cases CFS was better, and in others, ULE (the BSD scheduler), was. Sometimes
+in life there are no easy answers.
+[B72] “Symmetric binary B-Trees: Data Structure And Maintenance Algorithms” by Rudolf
+Bayer. Acta Informatica, Volume 1, Number 4, December 1972. A cool balanced tree introduced
+before you were born (most likely). One of many balanced trees out there; study your algorithms book
+for more alternatives!
+[D82] “Why Numbering Should Start At Zero” by Edsger Dijkstra, August 1982. Available:
+http://www.cs.utexas.edu/users/EWD/ewd08xx/EWD831.PDF. A short note from E.
+Dijkstra, one of the pioneers of computer science. We’ll be hearing much more on this guy in the
+section on Concurrency. In the meanwhile, enjoy this note, which includes this motivating quote: “One
+of my colleagues — not a computing scientist — accused a number of younger computing scientists of
+’pedantry’ because they started numbering at zero.” The note explains why doing so is logical.
+[K+15] “Proﬁling A Warehouse-scale Computer” by S. Kanev, P. Ranganathan, J. P. Darago,
+K. Hazelwood, T. Moseley, G. Wei, D. Brooks. ISCA ’15, June, 2015, Portland, Oregon. A
+fascinating study of where the cycles go in modern data centers, which are increasingly where most of
+computing happens. Almost 20% of CPU time is spent in the operating system, 5% in the scheduler
+alone!
+[J09] “Inside The Linux 2.6 Completely Fair Scheduler” by M. Tim Jones. December 15, 2009.
+http://ostep.org/Citations/inside-cfs.pdf. A simple overview of CFS from its ear-
+lier days. CFS was created by Ingo Molnar in a short burst of creativity which led to a 100K kernel
+patch developed in 62 hours.
+[KL88] “A Fair Share Scheduler” by J. Kay and P. Lauder. CACM, Volume 31 Issue 1, January
+1988. An early reference to a fair-share scheduler.
+[WW94] “Lottery Scheduling: Flexible Proportional-Share Resource Management” by Carl A.
+Waldspurger and William E. Weihl. OSDI ’94, November 1994. The landmark paper on lottery
+scheduling that got the systems community re-energized about scheduling, fair sharing, and the power
+of simple randomized algorithms.
+[W95] “Lottery and Stride Scheduling: Flexible Proportional-Share Resource Management” by
+Carl A. Waldspurger. Ph.D. Thesis, MIT, 1995. The award-winning thesis of Waldspurger’s that
+outlines lottery and stride scheduling. If you’re thinking of writing a Ph.D. dissertation at some point,
+you should always have a good example around, to give you something to strive for: this is such a good
+one.
+[W02] “Memory Resource Management in VMware ESX Server” by Carl A. Waldspurger.
+OSDI ’02, Boston, Massachusetts. The paper to read about memory management in VMMs (a.k.a.,
+hypervisors). In addition to being relatively easy to read, the paper contains numerous cool ideas about
+this new type of VMM-level memory management.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,50 @@
+SCHEDULING:
+THE MULTI-LEVEL FEEDBACK QUEUE
+11
+References
+[A+17] “Automatic Database Management System Tuning Through Large-scale Machine Learn-
+ing” by Dana Van Aken, Andrew Pavlo, Geoffrey J. Gordon, Bohan Zhang. SIGMOD ’17. This
+isn’t about the application of machine learning to CPU scheduling in the OS, but rather a cool early
+example of automatically tuning parameters of a database via ML techniques. Worth a read, if you like
+ML... which, alas, everyone seems to these days.
+[AD00] “Multilevel Feedback Queue Scheduling in Solaris” by Andrea Arpaci-Dusseau. Avail-
+able: http://www.ostep.org/Citations/notes-solaris.pdf. A great short set of notes by one of the
+authors on the details of the Solaris scheduler. OK, we are probably biased in this description, but the
+notes are pretty darn good.
+[B86] “The Design of the UNIX Operating System” by M.J. Bach. Prentice-Hall, 1986. One of the
+classic old books on how a real UNIX operating system is built; a deﬁnite must-read for kernel hackers.
+[C+62] “An Experimental Time-Sharing System” by F. J. Corbato, M. M. Daggett, R. C. Daley.
+IFIPS 1962. A bit hard to read, but the source of many of the ﬁrst ideas in multi-level feedback schedul-
+ing. Much of this later went into Multics, which one could argue was the most inﬂuential operating
+system of all time.
+[CS97] “Inside Windows NT” by Helen Custer and David A. Solomon. Microsoft Press, 1997.
+The NT book, if you want to learn about something other than UNIX. Of course, why would you? OK,
+we’re kidding; you might actually work for Microsoft some day you know.
+[E95] “An Analysis of Decay-Usage Scheduling in Multiprocessors” by D.H.J. Epema. SIG-
+METRICS ’95. A nice paper on the state of the art of scheduling back in the mid 1990s, including a
+good overview of the basic approach behind decay-usage schedulers.
+[LM+89] “The Design and Implementation of the 4.3BSD UNIX Operating System” by S.J. Lef-
+ﬂer, M.K. McKusick, M.J. Karels, J.S. Quarterman. Addison-Wesley, 1989. Another OS classic,
+written by four of the main people behind BSD. The later versions of this book, while more up to date,
+don’t quite match the beauty of this one.
+[M06] “Solaris Internals: Solaris 10 and OpenSolaris Kernel Architecture” by Richard Mc-
+Dougall. Prentice-Hall, 2006. A good book about Solaris and how it works.
+[O11] “John Ousterhout’s Home Page” by John Ousterhout. www.stanford.edu/˜ouster/.
+The home page of the famous Professor Ousterhout. The two co-authors of this book had the pleasure of
+taking graduate operating systems from Ousterhout while in graduate school; indeed, this is where the
+two co-authors got to know each other, eventually leading to marriage, kids, and even this book. Thus,
+you really can blame Ousterhout for this entire mess you’re in.
+[P+95] “Informed Prefetching and Caching” by R.H. Patterson, G.A. Gibson, E. Ginting, D.
+Stodolsky, J. Zelenka. SOSP ’95, Copper Mountain, Colorado, October 1995. A fun paper about
+some very cool ideas in ﬁle systems, including how applications can give the OS advice about what ﬁles
+it is accessing and how it plans to access them.
+[Y+18] “Principled Schedulability Analysis for Distributed Storage Systems using Thread Ar-
+chitecture Models” by Suli Yang, Jing Liu, Andrea C. Arpaci-Dusseau, Remzi H. Arpaci-
+Dusseau. OSDI ’18, San Diego, California. A recent work of our group that demonstrates the
+difﬁculty of scheduling I/O requests within modern distributed storage systems such as Hive/HDFS,
+Cassandra, MongoDB, and Riak. Without care, a single user might be able to monopolize system re-
+sources.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,47 @@
+MECHANISM: LIMITED DIRECT EXECUTION
+9
+sequence, the OS must start the timer, which is of course a privileged
+operation. Once the timer has begun, the OS can thus feel safe in that
+control will eventually be returned to it, and thus the OS is free to run
+user programs. The timer can also be turned off (also a privileged opera-
+tion), something we will discuss later when we understand concurrency
+in more detail.
+Note that the hardware has some responsibility when an interrupt oc-
+curs, in particular to save enough of the state of the program that was
+running when the interrupt occurred such that a subsequent return-from-
+trap instruction will be able to resume the running program correctly.
+This set of actions is quite similar to the behavior of the hardware during
+an explicit system-call trap into the kernel, with various registers thus
+getting saved (e.g., onto a kernel stack) and thus easily restored by the
+return-from-trap instruction.
+Saving and Restoring Context
+Now that the OS has regained control, whether cooperatively via a sys-
+tem call, or more forcefully via a timer interrupt, a decision has to be
+made: whether to continue running the currently-running process, or
+switch to a different one. This decision is made by a part of the operating
+system known as the scheduler; we will discuss scheduling policies in
+great detail in the next few chapters.
+If the decision is made to switch, the OS then executes a low-level
+piece of code which we refer to as a context switch. A context switch is
+conceptually simple: all the OS has to do is save a few register values
+for the currently-executing process (onto its kernel stack, for example)
+and restore a few for the soon-to-be-executing process (from its kernel
+stack). By doing so, the OS thus ensures that when the return-from-trap
+instruction is ﬁnally executed, instead of returning to the process that was
+running, the system resumes execution of another process.
+To save the context of the currently-running process, the OS will ex-
+ecute some low-level assembly code to save the general purpose regis-
+ters, PC, and the kernel stack pointer of the currently-running process,
+and then restore said registers, PC, and switch to the kernel stack for the
+soon-to-be-executing process. By switching stacks, the kernel enters the
+call to the switch code in the context of one process (the one that was in-
+terrupted) and returns in the context of another (the soon-to-be-executing
+TIP: USE THE TIMER INTERRUPT TO REGAIN CONTROL
+The addition of a timer interrupt gives the OS the ability to run again
+on a CPU even if processes act in a non-cooperative fashion. Thus, this
+hardware feature is essential in helping the OS maintain control of the
+machine.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

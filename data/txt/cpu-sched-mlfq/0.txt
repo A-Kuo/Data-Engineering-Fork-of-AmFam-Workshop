@@ -1,0 +1,31 @@
+8
+Scheduling:
+The Multi-Level Feedback Queue
+In this chapter, we’ll tackle the problem of developing one of the most
+well-known approaches to scheduling, known as the Multi-level Feed-
+back Queue (MLFQ). The Multi-level Feedback Queue (MLFQ) sched-
+uler was ﬁrst described by Corbato et al. in 1962 [C+62] in a system
+known as the Compatible Time-Sharing System (CTSS), and this work,
+along with later work on Multics, led the ACM to award Corbato its
+highest honor, the Turing Award. The scheduler has subsequently been
+reﬁned throughout the years to the implementations you will encounter
+in some modern systems.
+The fundamental problem MLFQ tries to address is two-fold. First, it
+would like to optimize turnaround time, which, as we saw in the previous
+note, is done by running shorter jobs ﬁrst; unfortunately, the OS doesn’t
+generally know how long a job will run for, exactly the knowledge that
+algorithms like SJF (or STCF) require. Second, MLFQ would like to make
+a system feel responsive to interactive users (i.e., users sitting and staring
+at the screen, waiting for a process to ﬁnish), and thus minimize response
+time; unfortunately, algorithms like Round Robin reduce response time
+but are terrible for turnaround time. Thus, our problem: given that we
+in general do not know anything about a process, how can we build a
+scheduler to achieve these goals? How can the scheduler learn, as the
+system runs, the characteristics of the jobs it is running, and thus make
+better scheduling decisions?
+THE CRUX:
+HOW TO SCHEDULE WITHOUT PERFECT KNOWLEDGE?
+How can we design a scheduler that both minimizes response time for
+interactive jobs while also minimizing turnaround time without a priori
+knowledge of job length?
+1

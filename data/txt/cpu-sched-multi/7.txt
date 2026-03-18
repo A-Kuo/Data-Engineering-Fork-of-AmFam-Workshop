@@ -1,0 +1,108 @@
+8
+MULTIPROCESSOR SCHEDULING (ADVANCED)
+Depending on the queue scheduling policy, each CPU now has two
+jobs to choose from when deciding what should run. For example, with
+round robin, the system might produce a schedule that looks like this:
+CPU 1
+CPU 0
+A
+A
+C
+C
+A
+A
+C
+C
+A
+A
+C
+C
+B
+B
+D
+D
+B
+B
+D
+D
+B
+B
+D
+D
+ ... 
+ ... 
+MQMS has a distinct advantage over SQMS in that it should be inher-
+ently more scalable. As the number of CPUs grows, so too does the num-
+ber of queues, and thus lock and cache contention should not become a
+central problem. In addition, MQMS intrinsically provides cache afﬁnity;
+jobs stay on the same CPU and thus reap the advantage of reusing cached
+contents therein.
+But, if you’ve been paying attention, you might see that we have a new
+problem, which is fundamental in the multi-queue based approach: load
+imbalance. Let’s assume we have the same set up as above (four jobs,
+two CPUs), but then one of the jobs (say C) ﬁnishes. We now have the
+following scheduling queues:
+Q0
+A
+Q1
+B
+D
+If we then run our round-robin policy on each queue of the system, we
+will see this resulting schedule:
+CPU 1
+CPU 0
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+B
+B
+D
+D
+B
+B
+D
+D
+B
+B
+D
+D
+ ... 
+ ... 
+As you can see from this diagram, A gets twice as much CPU as B
+and D, which is not the desired outcome. Even worse, let’s imagine that
+both A and C ﬁnish, leaving just jobs B and D in the system. The two
+scheduling queues, and resulting timeline, will look like this:
+Q0
+Q1
+B
+D
+CPU 0
+CPU 1
+B
+B
+D
+D
+B
+B
+D
+D
+B
+B
+D
+D
+ ... 
+How terrible – CPU 0 is idle! (insert dramatic and sinister music here)
+And thus our CPU usage timeline looks quite sad.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

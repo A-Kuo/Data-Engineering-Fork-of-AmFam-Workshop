@@ -1,0 +1,49 @@
+6
+MECHANISM: LIMITED DIRECT EXECUTION
+TIP: BE WARY OF USER INPUTS IN SECURE SYSTEMS
+Even though we have taken great pains to protect the OS during system
+calls (by adding a hardware trapping mechanism, and ensuring all calls to
+the OS are routed through it), there are still many other aspects to imple-
+menting a secure operating system that we must consider. One of these
+is the handling of arguments at the system call boundary; the OS must
+check what the user passes in and ensure that arguments are properly
+speciﬁed, or otherwise reject the call.
+For example, with a write() system call, the user speciﬁes an address
+of a buffer as a source of the write call. If the user (either accidentally
+or maliciously) passes in a “bad” address (e.g., one inside the kernel’s
+portion of the address space), the OS must detect this and reject the call.
+Otherwise, it would be possible for a user to read all of kernel memory;
+given that kernel (virtual) memory also usually includes all of the physi-
+cal memory of the system, this small slip would enable a program to read
+the memory of any other process in the system.
+In general, a secure system must treat user inputs with great suspicion.
+Not doing so will undoubtedly lead to easily hacked software, a despair-
+ing sense that the world is an unsafe and scary place, and the loss of job
+security for the all-too-trusting OS developer.
+To specify the exact system call, a system-call number is usually as-
+signed to each system call. The user code is thus responsible for placing
+the desired system-call number in a register or at a speciﬁed location on
+the stack; the OS, when handling the system call inside the trap handler,
+examines this number, ensures it is valid, and, if it is, executes the corre-
+sponding code. This level of indirection serves as a form of protection;
+user code cannot specify an exact address to jump to, but rather must
+request a particular service via number.
+One last aside: being able to execute the instruction to tell the hard-
+ware where the trap tables are is a very powerful capability. Thus, as you
+might have guessed, it is also a privileged operation. If you try to exe-
+cute this instruction in user mode, the hardware won’t let you, and you
+can probably guess what will happen (hint: adios, offending program).
+Point to ponder: what horrible things could you do to a system if you
+could install your own trap table? Could you take over the machine?
+The timeline (with time increasing downward, in Figure 6.2) summa-
+rizes the protocol. We assume each process has a kernel stack where reg-
+isters (including general purpose registers and the program counter) are
+saved to and restored from (by the hardware) when transitioning into and
+out of the kernel.
+There are two phases in the limited direct execution (LDE) protocol.
+In the ﬁrst (at boot time), the kernel initializes the trap table, and the
+CPU remembers its location for subsequent use. The kernel does so via a
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,77 @@
+THE ABSTRACTION: THE PROCESS
+7
+Time
+Process0
+Process1
+Notes
+1
+Running
+Ready
+2
+Running
+Ready
+3
+Running
+Ready
+Process0 initiates I/O
+4
+Blocked
+Running
+Process0 is blocked,
+5
+Blocked
+Running
+so Process1 runs
+6
+Blocked
+Running
+7
+Ready
+Running
+I/O done
+8
+Ready
+Running
+Process1 now done
+9
+Running
+–
+10
+Running
+–
+Process0 now done
+Figure 4.4: Tracing Process State: CPU and I/O
+In this next example, the ﬁrst process issues an I/O after running for
+some time. At that point, the process is blocked, giving the other process
+a chance to run. Figure 4.4 shows a trace of this scenario.
+More speciﬁcally, Process0 initiates an I/O and becomes blocked wait-
+ing for it to complete; processes become blocked, for example, when read-
+ing from a disk or waiting for a packet from a network. The OS recog-
+nizes Process0 is not using the CPU and starts running Process1. While
+Process1 is running, the I/O completes, moving Process0 back to ready.
+Finally, Process1 ﬁnishes, and Process0 runs and then is done.
+Note that there are many decisions the OS must make, even in this
+simple example. First, the system had to decide to run Process1 while
+Process0 issued an I/O; doing so improves resource utilization by keep-
+ing the CPU busy. Second, the system decided not to switch back to
+Process0 when its I/O completed; it is not clear if this is a good deci-
+sion or not. What do you think? These types of decisions are made by the
+OS scheduler, a topic we will discuss a few chapters in the future.
+4.5 Data Structures
+The OS is a program, and like any program, it has some key data struc-
+tures that track various relevant pieces of information. To track the state
+of each process, for example, the OS likely will keep some kind of pro-
+cess list for all processes that are ready and some additional informa-
+tion to track which process is currently running. The OS must also track,
+in some way, blocked processes; when an I/O event completes, the OS
+should make sure to wake the correct process and ready it to run again.
+Figure 4.5 shows what type of information an OS needs to track about
+each process in the xv6 kernel [CK+08]. Similar process structures exist
+in “real” operating systems such as Linux, Mac OS X, or Windows; look
+them up and see how much more complex they are.
+From the ﬁgure, you can see a couple of important pieces of informa-
+tion the OS tracks about a process. The register context will hold, for a
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

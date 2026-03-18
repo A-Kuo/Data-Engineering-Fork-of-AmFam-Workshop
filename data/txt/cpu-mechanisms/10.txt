@@ -1,0 +1,53 @@
+MECHANISM: LIMITED DIRECT EXECUTION
+11
+OS @ boot
+Hardware
+(kernel mode)
+initialize trap table
+remember addresses of...
+syscall handler
+timer handler
+start interrupt timer
+start timer
+interrupt CPU in X ms
+OS @ run
+Hardware
+Program
+(kernel mode)
+(user mode)
+Process A
+...
+timer interrupt
+save regs(A) →k-stack(A)
+move to kernel mode
+jump to trap handler
+Handle the trap
+Call switch() routine
+save regs(A) →proc t(A)
+restore regs(B) ←proc t(B)
+switch to k-stack(B)
+return-from-trap (into B)
+restore regs(B) ←k-stack(B)
+move to user mode
+jump to B’s PC
+Process B
+...
+Figure 6.3: Limited Direct Execution Protocol (Timer Interrupt)
+6.4 Worried About Concurrency?
+Some of you, as attentive and thoughtful readers, may be now think-
+ing: “Hmm... what happens when, during a system call, a timer interrupt
+occurs?” or “What happens when you’re handling one interrupt and an-
+other one happens? Doesn’t that get hard to handle in the kernel?” Good
+questions — we really have some hope for you yet!
+The answer is yes, the OS does indeed need to be concerned as to what
+happens if, during interrupt or trap handling, another interrupt occurs.
+This, in fact, is the exact topic of the entire second piece of this book, on
+concurrency; we’ll defer a detailed discussion until then.
+To whet your appetite, we’ll just sketch some basics of how the OS
+handles these tricky situations. One simple thing an OS might do is dis-
+able interrupts during interrupt processing; doing so ensures that when
+one interrupt is being handled, no other one will be delivered to the CPU.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

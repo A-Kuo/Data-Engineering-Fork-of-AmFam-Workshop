@@ -1,0 +1,53 @@
+10
+SCHEDULING: PROPORTIONAL SHARE
+ority by assigning it a nice value of -5; B, because we hates it3, just has the
+default priority (nice value equal to 0). This means weightA (from the ta-
+ble) is 3121, whereas weightB is 1024. If you then compute the time slice
+of each job, you’ll ﬁnd that A’s time slice is about 3
+4 of sched latency
+(hence, 36 ms), and B’s about 1
+4 (hence, 12 ms).
+In addition to generalizing the time slice calculation, the way CFS cal-
+culates vruntime must also be adapted. Here is the new formula, which
+takes the actual run time that process i has accrued (runtimei) and scales
+it inversely by the weight of the process, by dividing the default weight
+of 1024 (weight0) by its weight, weighti. In our running example, A’s
+vruntime will accumulate at one-third the rate of B’s.
+vruntimei = vruntimei + weight0
+weighti
+· runtimei
+(9.2)
+One smart aspect of the construction of the table of weights above is
+that the table preserves CPU proportionality ratios when the difference in
+nice values is constant. For example, if process A instead had a nice value
+of 5 (not -5), and process B had a nice value of 10 (not 0), CFS would
+schedule them in exactly the same manner as before. Run through the
+math yourself to see why.
+Using Red-Black Trees
+One major focus of CFS is efﬁciency, as stated above. For a scheduler,
+there are many facets of efﬁciency, but one of them is as simple as this:
+when the scheduler has to ﬁnd the next job to run, it should do so as
+quickly as possible. Simple data structures like lists don’t scale: modern
+systems sometimes are comprised of 1000s of processes, and thus search-
+ing through a long-list every so many milliseconds is wasteful.
+CFS addresses this by keeping processes in a red-black tree [B72]. A
+red-black tree is one of many types of balanced trees; in contrast to a
+simple binary tree (which can degenerate to list-like performance un-
+der worst-case insertion patterns), balanced trees do a little extra work
+to maintain low depths, and thus ensure that operations are logarithmic
+(and not linear) in time.
+CFS does not keep all processes in this structure; rather, only running
+(or runnable) processes are kept therein. If a process goes to sleep (say,
+waiting on an I/O to complete, or for a network packet to arrive), it is
+removed from the tree and kept track of elsewhere.
+Let’s look at an example to make this more clear. Assume there are ten
+jobs, and that they have the following values of vruntime: 1, 5, 9, 10, 14,
+18, 17, 21, 22, and 24. If we kept these jobs in an ordered list, ﬁnding the
+next job to run would be simple: just remove the ﬁrst element. However,
+3Yes, yes, we are using bad grammar here on purpose, please don’t send in a bug ﬁx.
+Why? Well, just a most mild of references to the Lord of the Rings, and our favorite anti-hero
+Gollum, nothing to get too excited about.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

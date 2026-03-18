@@ -1,0 +1,31 @@
+2
+A DIALOGUE ON SECURITY
+Student: True, those would all pretty much suck.
+Professor:
+Let’s try to keep a professional tone here. After all, this is a class-
+room. Kind of. That’s what operating system security is all about, and that’s
+what I’m here to tell you about. How can you ensure that secrets remain con-
+ﬁdential? How can you guarantee the integrity of your important data? How
+can you ensure that you can use your computer resources when you want to?
+And these questions apply to all of the resources in your computer, all the time,
+forever.
+Student: All this sounds a little like reliability stuff we talked about before...
+Professor:
+Yes and no. Bad things can happen more or less by accident or
+through poor planning, and reliability is about those sorts of things. But we’re
+going a step further. SOMEBODY WANTS YOUR PEACH!!!!
+Student: Stop shouting! You were the one asking for a professional tone.
+Professor: My apologies, I get excited about this stuff sometimes. The point
+I was trying to make is that when we talk about security, we’re talking about
+genuine adversaries, human adversaries who are trying to make things go wrong
+for you. That has some big implications. They’re likely to be clever, malevolent,
+persistent, ﬂexible, and sneaky. You may already feel like the universe has it in
+for you (most students feel that way, at any rate), but these folks really, truly are
+out to get you. You’re going to have to protect your assets despite anything they
+try.
+Student: This sounds challenging.
+Professor: You have no idea... But you will! YOU WILL!! (maniacal laughter)
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

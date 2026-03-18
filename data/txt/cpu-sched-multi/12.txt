@@ -1,0 +1,43 @@
+MULTIPROCESSOR SCHEDULING (ADVANCED)
+13
+to see a step-by-step and then -C to see whether caches got warmed
+effectively for these jobs. What do you notice?
+6. Now we’ll apply some explicit controls to study cache afﬁnity, as
+described in the chapter. To do this, you’ll need the -A ﬂag. This
+ﬂag can be used to limit which CPUs the scheduler can place a par-
+ticular job upon. In this case, let’s use it to place jobs ’b’ and ’c’ on
+CPU 1, while restricting ’a’ to CPU 0. This magic is accomplished
+by typing this ./multi.py -n 2 -L a:100:100,b:100:50,
+c:100:50 -A a:0,b:1,c:1 ; don’t forget to turn on various trac-
+ing options to see what is really happening! Can you predict how
+fast this version will run? Why does it do better? Will other com-
+binations of ’a’, ’b’, and ’c’ onto the two processors run faster or
+slower?
+7. One interesting aspect of caching multiprocessors is the opportu-
+nity for better-than-expected speed up of jobs when using multi-
+ple CPUs (and their caches) as compared to running jobs on a sin-
+gle processor. Speciﬁcally, when you run on N CPUs, sometimes
+you can speed up by more than a factor of N, a situation entitled
+super-linear speedup. To experiment with this, use the job descrip-
+tion here (-L a:100:100,b:100:100,c:100:100) with a small
+cache (-M 50) to create three jobs. Run this on systems with 1, 2,
+and 3 CPUs (-n 1, -n 2, -n 3). Now, do the same, but with a
+larger per-CPU cache of size 100. What do you notice about per-
+formance as the number of CPUs scales? Use -c to conﬁrm your
+guesses, and other tracing ﬂags to dive even deeper.
+8. One other aspect of the simulator worth studying is the per-CPU
+scheduling option, the -p ﬂag. Run with two CPUs again, and this
+three job conﬁguration (-L a:100:100,b:100:50,c:100:50).
+How does this option do, as opposed to the hand-controlled afﬁnity
+limits you put in place above? How does performance change as
+you alter the ’peek interval’ (-P) to lower or higher values? How
+does this per-CPU approach work as the number of CPUs scales?
+9. Finally, feel free to just generate random workloads and see if you
+can predict their performance on different numbers of processors,
+cache sizes, and scheduling options. If you do this, you’ll soon be
+a multi-processor scheduling master, which is a pretty awesome
+thing to be. Good luck!
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

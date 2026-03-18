@@ -1,0 +1,50 @@
+2
+SCHEDULING:
+THE MULTI-LEVEL FEEDBACK QUEUE
+TIP: LEARN FROM HISTORY
+The multi-level feedback queue is an excellent example of a system that
+learns from the past to predict the future. Such approaches are com-
+mon in operating systems (and many other places in Computer Science,
+including hardware branch predictors and caching algorithms).
+Such
+approaches work when jobs have phases of behavior and are thus pre-
+dictable; of course, one must be careful with such techniques, as they can
+easily be wrong and drive a system to make worse decisions than they
+would have with no knowledge at all.
+8.1 MLFQ: Basic Rules
+To build such a scheduler, in this chapter we will describe the basic
+algorithms behind a multi-level feedback queue; although the speciﬁcs of
+many implemented MLFQs differ [E95], most approaches are similar.
+In our treatment, the MLFQ has a number of distinct queues, each
+assigned a different priority level. At any given time, a job that is ready
+to run is on a single queue. MLFQ uses priorities to decide which job
+should run at a given time: a job with higher priority (i.e., a job on a
+higher queue) is chosen to run.
+Of course, more than one job may be on a given queue, and thus have
+the same priority. In this case, we will just use round-robin scheduling
+among those jobs.
+Thus, we arrive at the ﬁrst two basic rules for MLFQ:
+• Rule 1: If Priority(A) > Priority(B), A runs (B doesn’t).
+• Rule 2: If Priority(A) = Priority(B), A & B run in RR.
+The key to MLFQ scheduling therefore lies in how the scheduler sets
+priorities. Rather than giving a ﬁxed priority to each job, MLFQ varies
+the priority of a job based on its observed behavior. If, for example, a job
+repeatedly relinquishes the CPU while waiting for input from the key-
+board, MLFQ will keep its priority high, as this is how an interactive
+process might behave. If, instead, a job uses the CPU intensively for long
+periods of time, MLFQ will reduce its priority. In this way, MLFQ will try
+to learn about processes as they run, and thus use the history of the job to
+predict its future behavior.
+If we were to put forth a picture of what the queues might look like at a
+given instant, we might see something like the following (Figure 8.1, page
+3). In the ﬁgure, two jobs (A and B) are at the highest priority level, while
+job C is in the middle and Job D is at the lowest priority. Given our current
+knowledge of how MLFQ works, the scheduler would just alternate time
+slices between A and B because they are the highest priority jobs in the
+system; poor jobs C and D would never even get to run — an outrage!
+Of course, just showing a static snapshot of some queues does not re-
+ally give you an idea of how MLFQ works. What we need is to under-
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

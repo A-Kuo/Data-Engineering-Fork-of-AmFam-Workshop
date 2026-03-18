@@ -1,0 +1,50 @@
+4
+MULTIPROCESSOR SCHEDULING (ADVANCED)
+value D. The program then modiﬁes the value at address A, just updat-
+ing its cache with the new value D′; writing the data through all the way
+to main memory is slow, so the system will (usually) do that later. Then
+assume the OS decides to stop running the program and move it to CPU
+2. The program then re-reads the value at address A; there is no such
+data in CPU 2’s cache, and thus the system fetches the value from main
+memory, and gets the old value D instead of the correct value D′. Oops!
+This general problem is called the problem of cache coherence, and
+there is a vast research literature that describes many different subtleties
+involved with solving the problem [SHW11]. Here, we will skip all of the
+nuance and make some major points; take a computer architecture class
+(or three) to learn more.
+The basic solution is provided by the hardware: by monitoring mem-
+ory accesses, hardware can ensure that basically the “right thing” hap-
+pens and that the view of a single shared memory is preserved. One way
+to do this on a bus-based system (as described above) is to use an old
+technique known as bus snooping [G83]; each cache pays attention to
+memory updates by observing the bus that connects them to main mem-
+ory. When a CPU then sees an update for a data item it holds in its cache,
+it will notice the change and either invalidate its copy (i.e., remove it
+from its own cache) or update it (i.e., put the new value into its cache
+too). Write-back caches, as hinted at above, make this more complicated
+(because the write to main memory isn’t visible until later), but you can
+imagine how the basic scheme might work.
+10.2 Don’t Forget Synchronization
+Given that the caches do all of this work to provide coherence, do pro-
+grams (or the OS itself) have to worry about anything when they access
+shared data? The answer, unfortunately, is yes, and is documented in
+great detail in the second piece of this book on the topic of concurrency.
+While we won’t get into the details here, we’ll sketch/review some of the
+basic ideas here (assuming you’re familiar with concurrency).
+When accessing (and in particular, updating) shared data items or
+structures across CPUs, mutual exclusion primitives (such as locks) should
+likely be used to guarantee correctness (other approaches, such as build-
+ing lock-free data structures, are complex and only used on occasion;
+see the chapter on deadlock in the piece on concurrency for details). For
+example, assume we have a shared queue being accessed on multiple
+CPUs concurrently. Without locks, adding or removing elements from
+the queue concurrently will not work as expected, even with the under-
+lying coherence protocols; one needs locks to atomically update the data
+structure to its new state.
+To make this more concrete, imagine this code sequence, which is used
+to remove an element from a shared linked list, as we see in Figure 10.3.
+Imagine if threads on two CPUs enter this routine at the same time. If
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,27 @@
+THE ABSTRACTION: THE PROCESS
+11
+References
+[BH70] “The Nucleus of a Multiprogramming System” by Per Brinch Hansen. Communica-
+tions of the ACM, Volume 13:4, April 1970. This paper introduces one of the ﬁrst microkernels in
+operating systems history, called Nucleus. The idea of smaller, more minimal systems is a theme that
+rears its head repeatedly in OS history; it all began with Brinch Hansen’s work described herein.
+[CK+08] “The xv6 Operating System” by Russ Cox, Frans Kaashoek, Robert Morris, Nickolai
+Zeldovich. From: https://github.com/mit-pdos/xv6-public. The coolest real and little OS in the
+world. Download and play with it to learn more about the details of how operating systems actually
+work. We have been using an older version (2012-01-30-1-g1c41342) and hence some examples in the
+book may not match the latest in the source.
+[DV66] “Programming Semantics for Multiprogrammed Computations” by Jack B. Dennis,
+Earl C. Van Horn. Communications of the ACM, Volume 9, Number 3, March 1966 . This paper
+deﬁned many of the early terms and concepts around building multiprogrammed systems.
+[L+75] “Policy/mechanism separation in Hydra” by R. Levin, E. Cohen, W. Corwin, F. Pollack,
+W. Wulf. SOSP ’75, Austin, Texas, November 1975. An early paper about how to structure operat-
+ing systems in a research OS known as Hydra. While Hydra never became a mainstream OS, some of
+its ideas inﬂuenced OS designers.
+[V+65] “Structure of the Multics Supervisor” by V.A. Vyssotsky, F. J. Corbato, R. M. Graham.
+Fall Joint Computer Conference, 1965. An early paper on Multics, which described many of the basic
+ideas and terms that we ﬁnd in modern systems. Some of the vision behind computing as a utility are
+ﬁnally being realized in modern cloud systems.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

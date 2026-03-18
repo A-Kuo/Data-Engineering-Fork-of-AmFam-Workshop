@@ -1,0 +1,31 @@
+7
+Scheduling: Introduction
+By now low-level mechanisms of running processes (e.g., context switch-
+ing) should be clear; if they are not, go back a chapter or two, and read the
+description of how that stuff works again. However, we have yet to un-
+derstand the high-level policies that an OS scheduler employs. We will
+now do just that, presenting a series of scheduling policies (sometimes
+called disciplines) that various smart and hard-working people have de-
+veloped over the years.
+The origins of scheduling, in fact, predate computer systems; early
+approaches were taken from the ﬁeld of operations management and ap-
+plied to computers. This reality should be no surprise: assembly lines
+and many other human endeavors also require scheduling, and many of
+the same concerns exist therein, including a laser-like desire for efﬁciency.
+And thus, our problem:
+THE CRUX: HOW TO DEVELOP SCHEDULING POLICY
+How should we develop a basic framework for thinking about
+scheduling policies? What are the key assumptions? What metrics are
+important? What basic approaches have been used in the earliest of com-
+puter systems?
+7.1 Workload Assumptions
+Before getting into the range of possible policies, let us ﬁrst make a
+number of simplifying assumptions about the processes running in the
+system, sometimes collectively called the workload.
+Determining the
+workload is a critical part of building policies, and the more you know
+about workload, the more ﬁne-tuned your policy can be.
+The workload assumptions we make here are mostly unrealistic, but
+that is alright (for now), because we will relax them as we go, and even-
+tually develop what we will refer to as ... (dramatic pause) ...
+1

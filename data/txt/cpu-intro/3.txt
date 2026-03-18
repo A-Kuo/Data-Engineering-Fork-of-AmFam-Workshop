@@ -1,0 +1,38 @@
+4
+THE ABSTRACTION: THE PROCESS
+Memory
+CPU
+Disk
+code
+static data
+heap
+stack
+Process
+code
+static data
+Program
+Loading:
+Takes on-disk program
+and reads it into the
+address space of process
+Figure 4.1: Loading: From Program To Process
+4.3 Process Creation: A Little More Detail
+One mystery that we should unmask a bit is how programs are trans-
+formed into processes. Speciﬁcally, how does the OS get a program up
+and running? How does process creation actually work?
+The ﬁrst thing that the OS must do to run a program is to load its code
+and any static data (e.g., initialized variables) into memory, into the ad-
+dress space of the process. Programs initially reside on disk (or, in some
+modern systems, ﬂash-based SSDs) in some kind of executable format;
+thus, the process of loading a program and static data into memory re-
+quires the OS to read those bytes from disk and place them in memory
+somewhere (as shown in Figure 4.1).
+In early (or simple) operating systems, the loading process is done ea-
+gerly, i.e., all at once before running the program; modern OSes perform
+the process lazily, i.e., by loading pieces of code or data only as they are
+needed during program execution. To truly understand how lazy loading
+of pieces of code and data works, you’ll have to understand more about
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

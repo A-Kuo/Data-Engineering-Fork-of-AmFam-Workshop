@@ -1,0 +1,45 @@
+8
+MECHANISM: LIMITED DIRECT EXECUTION
+memory that it shouldn’t be able to access, it will generate a trap to the
+OS. The OS will then have control of the CPU again (and likely terminate
+the offending process).
+Thus, in a cooperative scheduling system, the OS regains control of
+the CPU by waiting for a system call or an illegal operation of some kind
+to take place. You might also be thinking: isn’t this passive approach less
+than ideal? What happens, for example, if a process (whether malicious,
+or just full of bugs) ends up in an inﬁnite loop, and never makes a system
+call? What can the OS do then?
+A Non-Cooperative Approach: The OS Takes Control
+Without some additional help from the hardware, it turns out the OS can’t
+do much at all when a process refuses to make system calls (or mistakes)
+and thus return control to the OS. In fact, in the cooperative approach,
+your only recourse when a process gets stuck in an inﬁnite loop is to
+resort to the age-old solution to all problems in computer systems: reboot
+the machine. Thus, we again arrive at a subproblem of our general quest
+to gain control of the CPU.
+THE CRUX: HOW TO GAIN CONTROL WITHOUT COOPERATION
+How can the OS gain control of the CPU even if processes are not being
+cooperative? What can the OS do to ensure a rogue process does not take
+over the machine?
+The answer turns out to be simple and was discovered by a number
+of people building computer systems many years ago: a timer interrupt
+[M+63]. A timer device can be programmed to raise an interrupt every
+so many milliseconds; when the interrupt is raised, the currently running
+process is halted, and a pre-conﬁgured interrupt handler in the OS runs.
+At this point, the OS has regained control of the CPU, and thus can do
+what it pleases: stop the current process, and start a different one.
+As we discussed before with system calls, the OS must inform the
+hardware of which code to run when the timer interrupt occurs; thus,
+at boot time, the OS does exactly that.
+Second, also during the boot
+TIP: DEALING WITH APPLICATION MISBEHAVIOR
+Operating systems often have to deal with misbehaving processes, those
+that either through design (maliciousness) or accident (bugs) attempt to
+do something that they shouldn’t. In modern systems, the way the OS
+tries to handle such malfeasance is to simply terminate the offender. One
+strike and you’re out! Perhaps brutal, but what else should the OS do
+when you try to access memory illegally or execute an illegal instruction?
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

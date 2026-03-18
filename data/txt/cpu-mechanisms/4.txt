@@ -1,0 +1,53 @@
+MECHANISM: LIMITED DIRECT EXECUTION
+5
+OS @ boot
+Hardware
+(kernel mode)
+initialize trap table
+remember address of...
+syscall handler
+OS @ run
+Hardware
+Program
+(kernel mode)
+(user mode)
+Create entry for process list
+Allocate memory for program
+Load program into memory
+Setup user stack with argv
+Fill kernel stack with reg/PC
+return-from-trap
+restore regs
+(from kernel stack)
+move to user mode
+jump to main
+Run main()
+...
+Call system call
+trap into OS
+save regs
+(to kernel stack)
+move to kernel mode
+jump to trap handler
+Handle trap
+Do work of syscall
+return-from-trap
+restore regs
+(from kernel stack)
+move to user mode
+jump to PC after trap
+...
+return from main
+trap (via exit())
+Free memory of process
+Remove from process list
+Figure 6.2: Limited Direct Execution Protocol
+locations of these trap handlers, usually with some kind of special in-
+struction. Once the hardware is informed, it remembers the location of
+these handlers until the machine is next rebooted, and thus the hardware
+knows what to do (i.e., what code to jump to) when system calls and other
+exceptional events take place.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

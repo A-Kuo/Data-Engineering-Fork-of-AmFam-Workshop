@@ -1,0 +1,44 @@
+SCHEDULING:
+THE MULTI-LEVEL FEEDBACK QUEUE
+3
+Q1
+Q2
+Q3
+Q4
+Q5
+Q6
+Q7
+Q8
+[Low Priority]
+[High Priority]
+D
+C
+A
+B
+Figure 8.1: MLFQ Example
+stand how job priority changes over time. And that, in a surprise only
+to those who are reading a chapter from this book for the ﬁrst time, is
+exactly what we will do next.
+8.2 Attempt #1: How To Change Priority
+We now must decide how MLFQ is going to change the priority level
+of a job (and thus which queue it is on) over the lifetime of a job. To do
+this, we must keep in mind our workload: a mix of interactive jobs that
+are short-running (and may frequently relinquish the CPU), and some
+longer-running “CPU-bound” jobs that need a lot of CPU time but where
+response time isn’t important.
+For this, we need a new concept, which we will call the job’s allotment.
+The allotment is the amount of time a job can spend at a given priority
+level before the scheduler reduces its priority. For simplicity, at ﬁrst, we
+will assume the allotment is equal to a single time slice.
+Here is our ﬁrst attempt at a priority-adjustment algorithm:
+• Rule 3: When a job enters the system, it is placed at the highest
+priority (the topmost queue).
+• Rule 4a: If a job uses up its allotment while running, its priority is
+reduced (i.e., it moves down one queue).
+• Rule 4b: If a job gives up the CPU (for example, by performing
+an I/O operation) before the allotment is up, it stays at the same
+priority level (i.e., its allotment is reset).
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

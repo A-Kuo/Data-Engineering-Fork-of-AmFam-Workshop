@@ -1,0 +1,44 @@
+SCHEDULING: PROPORTIONAL SHARE
+11
+1
+5
+9
+10
+14
+18
+17
+22
+21
+24
+Figure 9.5: CFS Red-Black Tree
+when placing that job back into the list (in order), we would have to scan
+the list, looking for the right spot to insert it, an O(n) operation. Any
+search is also quite inefﬁcient, also taking linear time on average.
+Keeping the same values in a red-black tree makes most operations
+more efﬁcient, as depicted in Figure 9.5. Processes are ordered in the tree
+by vruntime, and most operations (such as insertion and deletion) are
+logarithmic in time, i.e., O(log n). When n is in the thousands, logarith-
+mic is noticeably more efﬁcient than linear.
+Dealing With I/O And Sleeping Processes
+One problem with picking the lowest vruntime to run next arises with
+jobs that have gone to sleep for a long period of time. Imagine two pro-
+cesses, A and B, one of which (A) runs continuously, and the other (B)
+which has gone to sleep for a long period of time (say, 10 seconds). When
+B wakes up, its vruntime will be 10 seconds behind A’s, and thus (if
+we’re not careful), B will now monopolize the CPU for the next 10 sec-
+onds while it catches up, effectively starving A.
+CFS handles this case by altering the vruntime of a job when it wakes
+up. Speciﬁcally, CFS sets the vruntime of that job to the minimum value
+found in the tree (remember, the tree only contains running jobs) [B+18].
+In this way, CFS avoids starvation, but not without a cost: jobs that sleep
+for short periods of time frequently do not ever get their fair share of the
+CPU [AC97].
+Other CFS Fun
+CFS has many other features, too many to discuss at this point in the
+book. It includes numerous heuristics to improve cache performance, has
+strategies for handling multiple CPUs effectively (as discussed later in the
+book), can schedule across large groups of processes (instead of treating
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

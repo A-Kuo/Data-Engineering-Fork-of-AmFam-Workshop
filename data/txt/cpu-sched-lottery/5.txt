@@ -1,0 +1,52 @@
+6
+SCHEDULING: PROPORTIONAL SHARE
+9.5 How To Assign Tickets?
+One problem we have not addressed with lottery scheduling is: how
+to assign tickets to jobs? This problem is a tough one, because of course
+how the system behaves is strongly dependent on how tickets are allo-
+cated. One approach is to assume that the users know best; in such a
+case, each user is handed some number of tickets, and a user can allocate
+tickets to any jobs they run as desired. However, this solution is a non-
+solution: it really doesn’t tell you what to do. Thus, given a set of jobs,
+the “ticket-assignment problem” remains open.
+9.6 Stride Scheduling
+You might also be wondering: why use randomness at all? As we saw
+above, while randomness gets us a simple (and approximately correct)
+scheduler, it occasionally will not deliver the exact right proportions, es-
+pecially over short time scales. For this reason, Waldspurger invented
+stride scheduling, a deterministic fair-share scheduler [W95].
+Stride scheduling is also straightforward. Each job in the system has
+a stride, which is inverse in proportion to the number of tickets it has. In
+our example above, with jobs A, B, and C, with 100, 50, and 250 tickets,
+respectively, we can compute the stride of each by dividing some large
+number by the number of tickets each process has been assigned. For
+example, if we divide 10,000 by each of those ticket values, we obtain
+the following stride values for A, B, and C: 100, 200, and 40. We call
+this value the stride of each process; every time a process runs, we will
+increment a counter for it (called its pass value) by its stride to track its
+global progress.
+The scheduler then uses the stride and pass to determine which pro-
+cess should run next. The basic idea is simple: at any given time, pick
+the process to run that has the lowest pass value so far; when you run
+a process, increment its pass counter by its stride. A pseudocode imple-
+mentation is provided by Waldspurger [W95]:
+curr = remove_min(queue);
+// pick client with min pass
+schedule(curr);
+// run for quantum
+curr->pass += curr->stride; // update pass using stride
+insert(queue, curr);
+// return curr to queue
+In our example, we start with three processes (A, B, and C), with stride
+values of 100, 200, and 40, and all with pass values initially at 0. Thus, at
+ﬁrst, any of the processes might run, as their pass values are equally low.
+Assume we pick A (arbitrarily; any of the processes with equal low pass
+values can be chosen). A runs; when ﬁnished with the time slice, we
+update its pass value to 100. Then we run B, whose pass value is then
+set to 200. Finally, we run C, whose pass value is incremented to 40. At
+this point, the algorithm will pick the lowest pass value, which is C’s, and
+run it, updating its pass to 80 (C’s stride is 40, as you recall). Then C will
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,33 @@
+2
+MULTIPROCESSOR SCHEDULING (ADVANCED)
+Memory
+CPU
+Cache
+Figure 10.1: Single CPU With Cache
+Beyond applications, a new problem that arises for the operating sys-
+tem is (not surprisingly!) that of multiprocessor scheduling. Thus far
+we’ve discussed a number of principles behind single-processor schedul-
+ing; how can we extend those ideas to work on multiple CPUs? What
+new problems must we overcome? And thus, our problem:
+CRUX: HOW TO SCHEDULE JOBS ON MULTIPLE CPUS
+How should the OS schedule jobs on multiple CPUs? What new prob-
+lems arise? Do the same old techniques work, or are new ideas required?
+10.1 Background: Multiprocessor Architecture
+To understand the new issues surrounding multiprocessor schedul-
+ing, we have to understand a new and fundamental difference between
+single-CPU hardware and multi-CPU hardware. This difference centers
+around the use of hardware caches (e.g., Figure 10.1), and exactly how
+data is shared across multiple processors. We now discuss this issue fur-
+ther, at a high level. Details are available elsewhere [CSG99], in particular
+in an upper-level or perhaps graduate computer architecture course.
+In a system with a single CPU, there are a hierarchy of hardware
+caches that in general help the processor run programs faster. Caches
+are small, fast memories that (in general) hold copies of popular data that
+is found in the main memory of the system. Main memory, in contrast,
+holds all of the data, but access to this larger memory is slower. By keep-
+ing frequently accessed data in a cache, the system can make the large,
+slow memory appear to be a fast one.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

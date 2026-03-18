@@ -1,0 +1,46 @@
+2
+MECHANISM: LIMITED DIRECT EXECUTION
+OS
+Program
+Create entry for process list
+Allocate memory for program
+Load program into memory
+Set up stack with argc/argv
+Clear registers
+Execute call main()
+Run main()
+Execute return from main
+Free memory of process
+Remove from process list
+Figure 6.1: Direct Execution Protocol (Without Limits)
+to it, and starts running the user’s code. Figure 6.1 shows this basic di-
+rect execution protocol (without any limits, yet), using a normal call and
+return to jump to the program’s main() and later back into the kernel.
+Sounds simple, no? But this approach gives rise to a few problems
+in our quest to virtualize the CPU. The ﬁrst is simple: if we just run a
+program, how can the OS make sure the program doesn’t do anything
+that we don’t want it to do, while still running it efﬁciently? The second:
+when we are running a process, how does the operating system stop it
+from running and switch to another process, thus implementing the time
+sharing we require to virtualize the CPU?
+In answering these questions below, we’ll get a much better sense of
+what is needed to virtualize the CPU. In developing these techniques,
+we’ll also see where the “limited” part of the name arises from; without
+limits on running programs, the OS wouldn’t be in control of anything
+and thus would be “just a library” — a very sad state of affairs for an
+aspiring operating system!
+6.2 Problem #1: Restricted Operations
+Direct execution has the obvious advantage of being fast; the program
+runs natively on the hardware CPU and thus executes as quickly as one
+would expect. But running on the CPU introduces a problem: what if
+the process wishes to perform some kind of restricted operation, such
+as issuing an I/O request to a disk, or gaining access to more system
+resources such as CPU or memory?
+THE CRUX: HOW TO PERFORM RESTRICTED OPERATIONS
+A process must be able to perform I/O and some other restricted oper-
+ations, but without giving the process complete control over the system.
+How can the OS and hardware work together to do so?
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

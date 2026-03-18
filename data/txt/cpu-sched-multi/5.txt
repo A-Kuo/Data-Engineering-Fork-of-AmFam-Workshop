@@ -1,0 +1,72 @@
+6
+MULTIPROCESSOR SCHEDULING (ADVANCED)
+10.4 Single-Queue Scheduling
+With this background in place, we now discuss how to build a sched-
+uler for a multiprocessor system. The most basic approach is to simply
+reuse the basic framework for single processor scheduling, by putting all
+jobs that need to be scheduled into a single queue; we call this single-
+queue multiprocessor scheduling or SQMS for short. This approach
+has the advantage of simplicity; it does not require much work to take an
+existing policy that picks the best job to run next and adapt it to work on
+more than one CPU (where it might pick the best two jobs to run, if there
+are two CPUs, for example).
+However, SQMS has obvious shortcomings. The ﬁrst problem is a lack
+of scalability. To ensure the scheduler works correctly on multiple CPUs,
+the developers will have inserted some form of locking into the code, as
+described above. Locks ensure that when SQMS code accesses the single
+queue (say, to ﬁnd the next job to run), the proper outcome arises.
+Locks, unfortunately, can greatly reduce performance, particularly as
+the number of CPUs in the systems grows [A90]. As contention for such
+a single lock increases, the system spends more and more time in lock
+overhead and less time doing the work the system should be doing (note:
+it would be great to include a real measurement of this in here someday).
+The second main problem with SQMS is cache afﬁnity. For example,
+let us assume we have ﬁve jobs to run (A, B, C, D, E) and four processors.
+Our scheduling queue thus looks like this:
+Queue
+A
+B
+C
+D
+E
+NULL
+Over time, assuming each job runs for a time slice and then another
+job is chosen, here is a possible job schedule across CPUs:
+CPU 3
+CPU 2
+CPU 1
+CPU 0
+D
+C
+B
+A
+E
+C
+B
+A
+E
+D
+B
+A
+E
+D
+C
+A
+E
+D
+C
+B
+ ... (repeat) ...
+ ... (repeat) ...
+ ... (repeat) ...
+ ... (repeat) ...
+Because each CPU simply picks the next job to run from the globally-
+shared queue, each job ends up bouncing around from CPU to CPU, thus
+doing exactly the opposite of what would make sense from the stand-
+point of cache afﬁnity.
+To handle this problem, most SQMS schedulers include some kind of
+afﬁnity mechanism to try to make it more likely that process will continue
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

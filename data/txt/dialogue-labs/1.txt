@@ -1,0 +1,18 @@
+2
+A DIALOGUE ON LABS
+Student: (sighing) Professors have all the control, it seems...
+Professor: Oh, hardly! But that little control they do get to exercise is one of
+the fun parts of the job. Deciding on assignments is important you know — and
+not something any professor takes lightly.
+Student: Well, that is good to hear. I guess we should see what these projects
+are all about...
+Professor: OK. And one more thing: if you’re interested in the systems pro-
+gramming part, there is also a little tutorial about the UNIX and C programming
+environment.
+Student: Sounds almost too useful to be true.
+Professor: Well, take a look. You know, classes are supposed to be about useful
+things, sometimes!
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

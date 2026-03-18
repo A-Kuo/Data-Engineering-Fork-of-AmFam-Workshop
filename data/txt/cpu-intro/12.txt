@@ -1,0 +1,12 @@
+THE ABSTRACTION: THE PROCESS
+13
+8. Now run with some randomly generated processes using ﬂags -s
+1 -l 3:50,3:50 or -s 2 -l 3:50,3:50 or -s 3 -l 3:50,
+3:50. See if you can predict how the trace will turn out. What hap-
+pens when you use the ﬂag -I IO RUN IMMEDIATE versus that
+ﬂag -I IO RUN LATER? What happens when you use the ﬂag -S
+SWITCH ON IO versus -S SWITCH ON END?
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES
