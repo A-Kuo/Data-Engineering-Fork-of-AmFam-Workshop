@@ -1,0 +1,89 @@
+10
+FLASH-BASED SSDS
+ASIDE: FTL MAPPING INFORMATION PERSISTENCE
+You might be wondering: what happens if the device loses power? Does
+the in-memory mapping table disappear? Clearly, such information can-
+not truly be lost, because otherwise the device would not function as a
+persistent storage device. An SSD must have some means of recovering
+mapping information.
+The simplest thing to do is to record some mapping information with
+each page, in what is called an out-of-band (OOB) area. When the device
+loses power and is restarted, it must reconstruct its mapping table by
+scanning the OOB areas and reconstructing the mapping table in mem-
+ory. This basic approach has its problems; scanning a large SSD to ﬁnd
+all necessary mapping information is slow. To overcome this limitation,
+some higher-end devices use more complex logging and checkpointing
+techniques to speed up recovery; learn more about logging by reading
+chapters on crash consistency and log-structured ﬁle systems [AD14a].
+Unfortunately, this basic approach to log structuring has some down-
+sides. The ﬁrst is that overwrites of logical blocks lead to something we
+call garbage, i.e., old versions of data around the drive and taking up
+space. The device has to periodically perform garbage collection (GC) to
+ﬁnd said blocks and free space for future writes; excessive garbage collec-
+tion drives up write ampliﬁcation and lowers performance. The second
+is high cost of in-memory mapping tables; the larger the device, the more
+memory such tables need. We now discuss each in turn.
+44.8 Garbage Collection
+The ﬁrst cost of any log-structured approach such as this one is that
+garbage is created, and therefore garbage collection (i.e., dead-block recla-
+mation) must be performed. Let’s use our continued example to make
+sense of this. Recall that logical blocks 100, 101, 2000, and 2001 have been
+written to the device.
+Now, let’s assume that blocks 100 and 101 are written to again, with
+contents c1 and c2. The writes are written to the next free pages (in this
+case, physical pages 4 and 5), and the mapping table is updated accord-
+ingly. Note that the device must have ﬁrst erased block 1 to make such
+programming possible:
+Memory
+Flash
+Chip
+Table:
+100
+4
+101
+5
+2000
+2
+2001
+3
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+a1
+V
+01
+a2
+V
+02
+b1
+V
+03
+b2
+V
+04
+c1
+V
+05
+c2
+V
+06
+E
+07
+E
+08
+i
+09
+i
+10
+i
+11
+i
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

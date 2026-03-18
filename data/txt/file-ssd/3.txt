@@ -1,0 +1,72 @@
+4
+FLASH-BASED SSDS
+A Detailed Example
+Because the process of writing (i.e., erasing and programming) is so un-
+usual, let’s go through a detailed example to make sure it makes sense.
+In this example, imagine we have the following four 8-bit pages, within
+a 4-page block (both unrealistically small sizes, but useful within this ex-
+ample); each page is VALID as each has been previously programmed.
+Page 0
+Page 1
+Page 2
+Page 3
+00011000
+11001110
+00000001
+00111111
+VALID
+VALID
+VALID
+VALID
+Now say we wish to write to page 0, ﬁlling it with new contents. To
+write any page, we must ﬁrst erase the entire block. Let’s assume we do
+so, thus leaving the block in this state:
+Page 0
+Page 1
+Page 2
+Page 3
+11111111
+11111111
+11111111
+11111111
+ERASED
+ERASED
+ERASED
+ERASED
+Good news! We could now go ahead and program page 0, for exam-
+ple with the contents 00000011, overwriting the old page 0 (contents
+00011000) as desired. After doing so, our block looks like this:
+Page 0
+Page 1
+Page 2
+Page 3
+00000011
+11111111
+11111111
+11111111
+VALID
+ERASED
+ERASED
+ERASED
+And now the bad news: the previous contents of pages 1, 2, and 3
+are all gone! Thus, before overwriting any page within a block, we must
+ﬁrst move any data we care about to another location (e.g., memory, or
+elsewhere on the ﬂash). The nature of erase will have a strong impact on
+how we design ﬂash-based SSDs, as we’ll soon learn about.
+Summary
+To summarize, reading a page is easy: just read the page. Flash chips
+do this quite well, and quickly; in terms of performance, they offer the
+potential to greatly exceed the random read performance of modern disk
+drives, which are slow due to mechanical seek and rotation costs.
+Writing a page is trickier; the entire block must ﬁrst be erased (taking
+care to ﬁrst move any data we care about to another location), and then
+the desired page programmed. Not only is this expensive, but frequent
+repetitions of this program/erase cycle can lead to the biggest reliability
+problem ﬂash chips have: wear out. When designing a storage system
+with ﬂash, the performance and reliability of writing is a central focus.
+We’ll soon learn more about how modern SSDs attack these issues, deliv-
+ering excellent performance and reliability despite these limitations.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

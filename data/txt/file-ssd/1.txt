@@ -1,0 +1,48 @@
+2
+FLASH-BASED SSDS
+TIP: BE CAREFUL WITH TERMINOLOGY
+You may have noticed that some terms we have used many times before
+(blocks, pages) are being used within the context of a ﬂash, but in slightly
+different ways than before. New terms are not created to make your life
+harder (although they may be doing just that), but arise because there is
+no central authority where terminology decisions are made. What is a
+block to you may be a page to someone else, and vice versa, depending
+on the context. Your job is simple: to know the appropriate terms within
+each domain, and use them such that people well-versed in the discipline
+can understand what you are talking about. It’s one of those times where
+the only solution is simple but sometimes painful: use your memory.
+Of course, there are many details as to exactly how such bit-level stor-
+age operates, down at the level of device physics. While beyond the scope
+of this book, you can read more about it on your own [J10].
+44.2 From Bits to Banks/Planes
+As they say in ancient Greece, storing a single bit (or a few) does not
+a storage system make. Hence, ﬂash chips are organized into banks or
+planes which consist of a large number of cells.
+A bank is accessed in two different sized units: blocks (sometimes
+called erase blocks), which are typically of size 128 KB or 256 KB, and
+pages, which are a few KB in size (e.g., 4KB). Within each bank there are
+a large number of blocks; within each block, there are a large number of
+pages. When thinking about ﬂash, you must remember this new termi-
+nology, which is different than the blocks we refer to in disks and RAIDs
+and the pages we refer to in virtual memory.
+Figure 44.1 shows an example of a ﬂash plane with blocks and pages;
+there are three blocks, each containing four pages, in this simple exam-
+ple. We’ll see below why we distinguish between blocks and pages; it
+turns out this distinction is critical for ﬂash operations such as reading
+and writing, and even more so for the overall performance of the device.
+The most important (and weird) thing you will learn is that to write to
+a page within a block, you ﬁrst have to erase the entire block; this tricky
+detail makes building a ﬂash-based SSD an interesting and worthwhile
+challenge, and the subject of the second-half of the chapter.
+0
+1
+2
+Block:
+Page:
+Content:
+00 01 02 03 04 05 06 07 08 09 10 11
+Figure 44.1: A Simple Flash Chip: Pages Within Blocks
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

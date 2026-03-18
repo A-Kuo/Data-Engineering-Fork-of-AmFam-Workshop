@@ -1,0 +1,73 @@
+INTRODUCTION TO OPERATING SYSTEMS
+5
+1
+#include <unistd.h>
+2
+#include <stdio.h>
+3
+#include <stdlib.h>
+4
+#include "common.h"
+5
+6
+int
+7
+main(int argc, char *argv[])
+8
+{
+9
+int *p = malloc(sizeof(int));
+// a1
+10
+assert(p != NULL);
+11
+printf("(%d) address pointed to by p: %p\n",
+12
+getpid(), p);
+// a2
+13
+*p = 0;
+// a3
+14
+while (1) {
+15
+Spin(1);
+16
+*p = *p + 1;
+17
+printf("(%d) p: %d\n", getpid(), *p);
+// a4
+18
+}
+19
+return 0;
+20
+}
+Figure 2.3: A Program That Accesses Memory (mem.c)
+2.2 Virtualizing Memory
+Now let’s consider memory.
+The model of physical memory pre-
+sented by modern machines is very simple. Memory is just an array of
+bytes; to read memory, one must specify an address to be able to access
+the data stored there; to write (or update) memory, one must also specify
+the data to be written to the given address.
+Memory is accessed all the time when a program is running. A pro-
+gram keeps all of its data structures in memory, and accesses them through
+various instructions, like loads and stores or other explicit instructions
+that access memory in doing their work. Don’t forget that each instruc-
+tion of the program is in memory too; thus memory is accessed on each
+instruction fetch.
+Let’s take a look at a program (in Figure 2.3) that allocates some mem-
+ory by calling malloc(). The output of this program can be found here:
+prompt> ./mem
+(2134) address pointed to by p: 0x200000
+(2134) p: 1
+(2134) p: 2
+(2134) p: 3
+(2134) p: 4
+(2134) p: 5
+ˆC
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

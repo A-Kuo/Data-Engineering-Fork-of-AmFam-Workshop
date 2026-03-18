@@ -1,0 +1,43 @@
+2
+LABORATORY: SYSTEMS PROJECTS
+G.2 UNIX Shell
+In this project, students build a variant of a UNIX shell. Students learn
+about process management as well as how mysterious things like pipes
+and redirects actually work. Variants include unusual features, like a
+redirection symbol that also compresses the output via gzip. Another
+variant is a batch mode which allows the user to batch up a few requests
+and then execute them, perhaps using different scheduling disciplines.
+G.3 Memory-allocation Library
+This project explores how a chunk of memory is managed, by building
+an alternative memory-allocation library (like malloc() and free()
+but with different names). The project teaches students how to use mmap()
+to get a chunk of anonymous memory, and then about pointers in great
+detail in order to build a simple (or perhaps, more complex) free list to
+manage the space. Variants include: best/worst ﬁt, buddy, and various
+other allocators.
+G.4 Intro to Concurrency
+This project introduces concurrent programming with POSIX threads.
+Build some simple thread-safe libraries: a list, hash table, and some more
+complicated data structures are good exercises in adding locks to real-
+world code. Measure the performance of coarse-grained versus ﬁne-grained
+alternatives. Variants just focus on different (and perhaps more complex)
+data structures.
+G.5 Concurrent Web Server
+This project explores the use of concurrency in a real-world applica-
+tion. Students take a simple web server (or build one) and add a thread
+pool to it, in order to serve requests concurrently. The thread pool should
+be of a ﬁxed size, and use a producer/consumer bounded buffer to pass
+requests from a main thread to the ﬁxed pool of workers. Learn how
+threads, locks, and condition variables are used to build a real server.
+Variants include scheduling policies for the threads.
+G.6 File System Checker
+This project explores on-disk data structures and their consistency.
+Students build a simple ﬁle system checker. The debugfs tool can be
+used on Linux to make real ﬁle-system images; crawl through them and
+make sure all is well. To make it more difﬁcult, also ﬁx any problems that
+are found. Variants focus on different types of problems: pointers, link
+counts, use of indirect blocks, etc.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

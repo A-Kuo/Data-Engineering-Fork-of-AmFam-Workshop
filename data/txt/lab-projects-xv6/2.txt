@@ -1,0 +1,24 @@
+LABORATORY: XV6 PROJECTS
+3
+extents (i.e., pointer, length pairs) instead of just pointers. Serves as a
+relatively light introduction to the ﬁle system.
+H.9 Fast File System
+Students transform the basic xv6 ﬁle system into the Berkeley Fast File
+System (FFS). Students build a new mkfs tool, introduce block groups
+and a new block-allocation policy, and build the large-ﬁle exception. The
+basics of how ﬁle systems work are understood at a deeper level.
+H.10 Journaling File System
+Students add a rudimentary journaling layer to xv6. For each write to
+a ﬁle, the journaling FS batches up all dirtied blocks and writes a record of
+their pending update to an on-disk log; only then are the blocks modiﬁed
+in place. Students demonstrate the correctness of their system by intro-
+ducing crash points and showing that the ﬁle system always recovers to
+a consistent state.
+H.11 File System Checker
+Students build a simple ﬁle system checker for the xv6 ﬁle system.
+Students learn about what makes a ﬁle system consistent and how exactly
+to check for it.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

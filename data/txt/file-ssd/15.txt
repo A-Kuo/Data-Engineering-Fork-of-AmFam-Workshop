@@ -1,0 +1,90 @@
+16
+FLASH-BASED SSDS
+Memory
+Flash
+Chip
+Log Table:
+1000
+0
+1001
+1
+Data Table:
+250
+8
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+a’
+V
+01
+b’
+V
+02
+i
+03
+i
+04
+i
+05
+i
+06
+i
+07
+i
+08
+a
+V
+09
+b
+V
+10
+c
+V
+11
+d
+V
+To reunite the other pages of this physical block, and thus be able to re-
+fer to them by only a single block pointer, the FTL performs what is called
+a partial merge. In this operation, logical blocks 1002 and 1003 are read
+from physical block 2, and then appended to the log. The resulting state
+of the SSD is the same as the switch merge above; however, in this case,
+the FTL had to perform extra I/O to achieve its goals, thus increasing
+write ampliﬁcation.
+The ﬁnal case encountered by the FTL known as a full merge, and re-
+quires even more work. In this case, the FTL must pull together pages
+from many other blocks to perform cleaning. For example, imagine that
+logical blocks 0, 4, 8, and 12 are written to log block A. To switch this log
+block into a block-mapped page, the FTL must ﬁrst create a data block
+containing logical blocks 0, 1, 2, and 3, and thus the FTL must read 1, 2,
+and 3 from elsewhere and then write out 0, 1, 2, and 3 together. Next, the
+merge must do the same for logical block 4, ﬁnding 5, 6, and 7 and recon-
+ciling them into a single physical block. The same must be done for logi-
+cal blocks 8 and 12, and then (ﬁnally), the log block A can be freed. Fre-
+quent full merges, as is not surprising, can seriously harm performance
+and thus should be avoided when at all possible [GY+09].
+Page Mapping Plus Caching
+Given the complexity of the hybrid approach above, others have sug-
+gested simpler ways to reduce the memory load of page-mapped FTLs.
+Probably the simplest is just to cache only the active parts of the FTL in
+memory, thus reducing the amount of memory needed [GY+09].
+This approach can work well. For example, if a given workload only
+accesses a small set of pages, the translations of those pages will be stored
+in the in-memory FTL, and performance will be excellent without high
+memory cost. Of course, the approach can also perform poorly. If mem-
+ory cannot contain the working set of necessary translations, each access
+will minimally require an extra ﬂash read to ﬁrst bring in the missing
+mapping before being able to access the data itself. Even worse, to make
+room for the new mapping, the FTL might have to evict an old map-
+ping, and if that mapping is dirty (i.e., not yet written to the ﬂash per-
+sistently), an extra write will also be incurred. However, in many cases,
+the workload will display locality, and this caching approach will both
+reduce memory overheads and keep performance high.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

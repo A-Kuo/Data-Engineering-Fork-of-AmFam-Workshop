@@ -1,0 +1,33 @@
+55
+Access Control
+Chapter by Peter Reiher (UCLA)
+55.1 Introduction
+So we know what our security goals are, we have at least a general
+sense of the security policies we’d like to enforce, and we have some ev-
+idence about who is requesting various system services that might (or
+might not) violate our policies. Now we need to take that information
+and turn it into something actionable, something that a piece of software
+can perform for us.
+There are two important steps here:
+1. Figure out if the request ﬁts within our security policy.
+2. If it does, perform the operation. If not, make sure it isn’t done.
+The ﬁrst step is generally referred to as access control. We will deter-
+mine which system resources or services can be accessed by which par-
+ties in which ways under which circumstances. Basically, it boils down
+to another of those binary decisions that ﬁt so well into our computing
+paradigms: yes or no. But how to make that decision? To make the prob-
+lem more concrete, consider this case. User X wishes to read and write
+ﬁle /var/foo. Under the covers, this case probably implies that a process
+being run under the identity of User X issued a system call such as:
+open(”/var/foo”, O RDWR)
+Note here that we’re not talking about the Linux open() call, which
+is a speciﬁc implementation that handles access control a speciﬁc way.
+We’re talking about the general idea of how you might be able to control
+access to a ﬁle open system call. Hence the different font, to remind you.
+How should the system handle this request from the process, making
+sure that the ﬁle is not opened if the security policy to be enforced forbids
+it, but equally making sure that the ﬁle is opened if the policy allows it?
+We know that the system call will trap to the operating system, giving
+it the opportunity to do something to make this decision. Mechanically
+speaking, what should that “something” be?
+1

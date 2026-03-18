@@ -1,0 +1,49 @@
+FLASH-BASED SSDS
+17
+44.10 Wear Leveling
+Finally, a related background activity that modern FTLs must imple-
+ment is wear leveling, as introduced above. The basic idea is simple:
+because multiple erase/program cycles will wear out a ﬂash block, the
+FTL should try its best to spread that work across all the blocks of the de-
+vice evenly. In this manner, all blocks will wear out at roughly the same
+time, instead of a few “popular” blocks quickly becoming unusable.
+The basic log-structuring approach does a good initial job of spreading
+out write load, and garbage collection helps as well. However, sometimes
+a block will be ﬁlled with long-lived data that does not get over-written;
+in this case, garbage collection will never reclaim the block, and thus it
+does not receive its fair share of the write load.
+To remedy this problem, the FTL must periodically read all the live
+data out of such blocks and re-write it elsewhere, thus making the block
+available for writing again. This process of wear leveling increases the
+write ampliﬁcation of the SSD, and thus decreases performance as extra
+I/O is required to ensure that all blocks wear at roughly the same rate.
+Many different algorithms exist in the literature [A+08, M+14]; read more
+if you are interested.
+44.11 SSD Performance And Cost
+Before closing, let’s examine the performance and cost of modern SSDs,
+to better understand how they will likely be used in persistent storage
+systems. In both cases, we’ll compare to classic hard-disk drives (HDDs),
+and highlight the biggest differences between the two.
+Performance
+Unlike hard disk drives, ﬂash-based SSDs have no mechanical compo-
+nents, and in fact are in many ways more similar to DRAM, in that they
+are “random access” devices. The biggest difference in performance, as
+compared to disk drives, is realized when performing random reads and
+writes; while a typical disk drive can only perform a few hundred ran-
+dom I/Os per second, SSDs can do much better. Here, we use some data
+from modern SSDs to see just how much better SSDs perform; we’re par-
+ticularly interested in how well the FTLs hide the performance issues of
+the raw chips.
+Table 44.4 shows some performance data for three different SSDs and
+one top-of-the-line hard drive; the data was taken from a few different
+online sources [S13, T15]. The left two columns show random I/O per-
+formance, and the right two columns sequential; the ﬁrst three rows show
+data for three different SSDs (from Samsung, Seagate, and Intel), and the
+last row shows performance for a hard disk drive (or HDD), in this case
+a Seagate high-end drive.
+We can learn a few interesting facts from the table. First, and most
+dramatic, is the difference in random I/O performance between the SSDs
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

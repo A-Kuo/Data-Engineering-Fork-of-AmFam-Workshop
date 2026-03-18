@@ -1,0 +1,163 @@
+FLASH-BASED SSDS
+15
+pages 8, 9, 10, 11); assume the contents of the writes to 1000, 1001, 1002,
+and 1003 are a, b, c, and d, respectively.
+Memory
+Flash
+Chip
+Log Table:
+Data Table:
+250
+8
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+i
+01
+i
+02
+i
+03
+i
+04
+i
+05
+i
+06
+i
+07
+i
+08
+a
+V
+09
+b
+V
+10
+c
+V
+11
+d
+V
+Now assume that the client overwrites each of these blocks (with data
+a’, b’, c’, and d’), in the exact same order, in one of the currently avail-
+able log blocks, say physical block 0 (physical pages 0, 1, 2, and 3). In this
+case, the FTL will have the following state:
+Memory
+Flash
+Chip
+Log Table:
+1000
+0
+1001
+1
+1002
+2
+1003
+3
+Data Table:
+250
+8
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+a’
+V
+01
+b’
+V
+02
+c’
+V
+03
+d’
+V
+04
+i
+05
+i
+06
+i
+07
+i
+08
+a
+V
+09
+b
+V
+10
+c
+V
+11
+d
+V
+Because these blocks have been written exactly in the same manner as
+before, the FTL can perform what is known as a switch merge. In this
+case, the log block (0) now becomes the storage location for blocks 0, 1, 2,
+and 3, and is pointed to by a single block pointer; the old block (2) is now
+erased and used as a log block. In this best case, all the per-page pointers
+required replaced by a single block pointer.
+Memory
+Flash
+Chip
+Log Table:
+Data Table:
+250
+0
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+a’
+V
+01
+b’
+V
+02
+c’
+V
+03
+d’
+V
+04
+i
+05
+i
+06
+i
+07
+i
+08
+i
+09
+i
+10
+i
+11
+i
+This switch merge is the best case for a hybrid FTL. Unfortunately,
+sometimes the FTL is not so lucky.
+Imagine the case where we have
+the same initial conditions (logical blocks 1000 ... 1003 stored in physi-
+cal block 2) but then the client overwrites logical blocks 1000 and 1001.
+What do you think happens in this case? Why is it more challenging
+to handle? (think before looking at the result on the next page)
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

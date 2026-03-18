@@ -1,0 +1,49 @@
+FLASH-BASED SSDS
+23
+Homework (Simulation)
+This section introduces ssd.py, a simple SSD simulator you can use
+to understand better how SSDs work. Read the README for details on
+how to run the simulator. It is a long README, so boil a cup of tea (caf-
+feinated likely necessary), put on your reading glasses, let the cat curl up
+on your lap1, and get to work.
+Questions
+1. The homework will mostly focus on the log-structured SSD, which
+is simulated with the “-T log” ﬂag. We’ll use the other types of
+SSDs for comparison. First, run with ﬂags -T log -s 1 -n 10
+-q. Can you ﬁgure out which operations took place? Use -c to
+check your answers (or just use -C instead of -q -c). Use different
+values of -s to generate different random workloads.
+2. Now just show the commands and see if you can ﬁgure out the
+intermediate states of the Flash. Run with ﬂags -T log -s 2 -n
+10 -C to show each command. Now, determine the state of the
+Flash between each command; use -F to show the states and see if
+you were right. Use different random seeds to test your burgeoning
+expertise.
+3. Let’s make this problem ever so slightly more interesting by adding
+the -r 20 ﬂag. What differences does this cause in the commands?
+Use -c again to check your answers.
+4. Performance is determined by the number of erases, programs, and
+reads (we assume here that trims are free). Run the same workload
+again as above, but without showing any intermediate states (e.g.,
+-T log -s 1 -n 10). Can you estimate how long this workload
+will take to complete? (default erase time is 1000 microseconds,
+program time is 40, and read time is 10) Use the -S ﬂag to check
+your answer. You can also change the erase, program, and read
+times with the -E, -W, -R ﬂags.
+5. Now, compare performance of the log-structured approach and the
+(very bad) direct approach (-T direct instead of -T log). First,
+estimate how you think the direct approach will perform, then check
+your answer with the -S ﬂag. In general, how much better will the
+log-structured approach perform than the direct one?
+6. Let us next explore the behavior of the garbage collector. To do
+so, we have to set the high (-G) and low (-g) watermarks appro-
+priately. First, let’s observe what happens when you run a larger
+workload to the log-structured SSD but without any garbage col-
+lection. To do this, run with ﬂags -T log -n 1000 (the high wa-
+1Now you might complain, “But I’m a dog person!” To this, we say, too bad! Get a cat,
+put it on your lap, and do the homework! How else will you learn, if you can’t even follow
+the most basic of instructions?
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,53 @@
+x
+Justinas Petuchovas, Kai Mast (Wisconsin), Karl Schultheisz, Karl Wallinger, Kartik Singhal,
+Katherine Dudenas, Katie Coyle (Georgia Tech), Kaushik Kannan, Kemal Bıc¸akcı, Kevin Liu*,
+Khaled Emara, Kyle Hale (Illinois Institute of Technology), KyoungSoo Park (KAIST), Kyu-
+tae Lee*, Lanyue Lu, Laura Xu, legate (github), Lei Tian (U. Nebraska-Lincoln), Leonardo
+Medici (U. Milan), Leslie Schultz, Liang Yin, Lihao Wang, Looserof, Louie Lu, Luigi Finetti
+(FaMAF, UNC) Luna Gal (Wooster), lyazj (github), Manav Batra (IIIT-Delhi), Manu Awasthi
+(Samsung), Marcel van der Holst, Marco Guazzone (U. Piemonte Orientale), Marco Pedri-
+nazzi (Universita Degli Studi Di Milano), Marius Rodi, Mart Oskamp, Martha Ferris, Masashi
+Kishikawa (Sony), Matt Reichoff, Mat´ıas De Pascuale (FaMAF Universidad Nacional De Cor-
+doba), Matthew Prinz, Matthias St. Pierre, Mattia Monga (U. Milan), Matty Williams, Megan
+Cutrofello, Meng Huang, Michael Machtel (Hochschule Konstanz), Michael Walﬁsh (NYU),
+Michael Wu (UCLA), Mike Griepentrog, Ming Chen (Stonybrook), Mohammed Alali (Delaware),
+Mohamed Omran (GUST), Mondo Gao (Wisconsin), Muhammad Mobeen Movania, Muham-
+mad Yasoob Ullah Khalid, Murat Kerim Aslan, Murugan Kandaswamy, Nadeem Shaikh, Nan
+Xiao, Natasha Eilbert, Natasha Stopa, Nathan Dipiazza, Nathan Sullivan, Neeraj Badlani (N.C.
+State), Neil Perry, Nelson Gomez, Neven Sajko, Nghia Huynh (Texas), Ngu (Nicholas) Q.
+Truong, Nicholas Mandal, Nick Weinandt, Nishin Shouzab, Nizare Leonetti, Noah Jackson,
+Otto Sievert, Patel Pratyush Ashesh (BITS-Pilani), Patricio Jara, Patrick Elsen, Patrizio Palmisano,
+Pavle Kostovic, Perry Kivolowitz, Peter Peterson (Minnesota), Phani Karan, Pieter Kockx, Po-
+Hao Su (Taiwan) Prabhsimrandeep Singh, Prairie Rose Goodwin, Radford Smith, Repon Ku-
+mar Roy, Reynaldo H. Verdejo Pinochet, Riccardo Mutschlechner, Rick Perry, Richard Cam-
+panha (Georgia Tech), Ripudaman Singh, Rita Pia Folisi, Robert Ord´o˜nez and class (South-
+ern Adventist), Robin Li (Cornell), Roger Wattenhofer (ETH), Rohan Das (Toronto)*, Rohan
+Pasalkar (Minnesota), Rohan Puri, Ross Aiken, Ruslan Kiselev, Ryland Herrick, Sam Kelly,
+Sam Noh (UNIST), Sameer Punjal, Samer Al-Kiswany, Sandeep Ummadi (Minnesota), San-
+tiago Marini, Sankaralingam Panneerselvam, Sarvesh Tandon (Wisconsin), Satish Chebrolu
+(NetApp), Satyanarayana Shanmugam*, Scott Catlin, Scott Lee (UCLA), Scott Schoeller, Seth
+Pollen,
+Sharad Punuganti, Shawn Ge, Shivaram Venkataraman, Shreevatsa R., Simon Pratt
+(University of Waterloo), Sirui Chen, Sivaraman Sivaraman*, Song Jiang (Wayne State), Spencer
+Harston (Weber State), Srinivasan Thirunarayanan*, Stardustman (github), Stefan Dekanski,
+Stephen Bye, Stephen Schaub, Suriyhaprakhas Balaram Sankari, Sy Jin Cheah, Teri Zhao (EMC),
+Thanumalayan S. Pillai, thasinaz (github), Thomas Griebel, Thomas John Lesniak (Wisconsin),
+Thomas Scrace, Tianxia Bai, Tobi Popoola (Boise State), Tong He, Tongxin Zheng, Tony Ad-
+kins, Torin Rudeen (Princeton), Tuo Wang, Tyler Couto, Varun Vats, Vegard Stikbakke, Vikas
+Goel, Waciuma Wanjohi, William Royle (Grinnell), Winson Huang (github), Xiang Peng, Xu
+Di, Yanyan Jiang, Yifan Hao, Yuanyuan Chen, Yubin Ruan, Yudong Sun, Yue Zhuo (Texas
+A&M), Yufeng Zhang (UCLA), Yufui Ren, Yuxing Xiang (Peking), Zef RosnBrick, Zeyuan Hu
+(Texas), Zhengguang Zhou (Wisconsin), ZiHan Zheng (USTC), zino23 (github), Zuyu Zhang.
+Special thanks to those marked with an asterisk above, who have gone
+above and beyond in their suggestions for improvement.
+In addition, a hearty thanks to Professor Joe Meehean (Lynchburg) for
+his detailed notes on each chapter, to Professor Jerod Weinman (Grin-
+nell) and his entire class for their incredible booklets, to Professor Chien-
+Chung Shen (Delaware) for his invaluable and detailed reading and com-
+ments, to Adam Drescher (WUSTL) for his careful reading and sugges-
+tions, to Glen Granzow (College of Idaho) for his incredibly detailed com-
+ments and tips, Michael Walﬁsh (NYU) for his enthusiasm and detailed
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

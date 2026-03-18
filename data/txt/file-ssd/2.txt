@@ -1,0 +1,65 @@
+FLASH-BASED SSDS
+3
+44.3 Basic Flash Operations
+Given this ﬂash organization, there are three low-level operations that
+a ﬂash chip supports. The read command is used to read a page from the
+ﬂash; erase and program are used in tandem to write. The details:
+• Read (a page): A client of the ﬂash chip can read any page (e.g.,
+2KB or 4KB), simply by specifying the read command and appro-
+priate page number to the device. This operation is typically quite
+fast, 10s of microseconds or so, regardless of location on the device,
+and (more or less) regardless of the location of the previous request
+(quite unlike a disk). Being able to access any location uniformly
+quickly means the device is a random access device.
+• Erase (a block): Before writing to a page within a ﬂash, the nature
+of the device requires that you ﬁrst erase the entire block the page
+lies within. Erase, importantly, destroys the contents of the block
+(by setting each bit to the value 1); therefore, you must be sure that
+any data you care about in the block has been copied elsewhere
+(to memory, or perhaps to another ﬂash block) before executing the
+erase. The erase command is quite expensive, taking a few millisec-
+onds to complete. Once ﬁnished, the entire block is reset and each
+page is ready to be programmed.
+• Program (a page): Once a block has been erased, the program com-
+mand can be used to change some of the 1’s within a page to 0’s,
+and write the desired contents of a page to the ﬂash. Program-
+ming a page is less expensive than erasing a block, but more costly
+than reading a page, usually taking around 100s of microseconds
+on modern ﬂash chips.
+One way to think about ﬂash chips is that each page has a state asso-
+ciated with it. Pages start in an INVALID state. By erasing the block that
+a page resides within, you set the state of the page (and all pages within
+that block) to ERASED, which resets the content of each page in the block
+but also (importantly) makes them programmable. When you program a
+page, its state changes to VALID, meaning its contents have been set and
+can be read. Reads do not affect these states (although you should only
+read from pages that have been programmed). Once a page has been pro-
+grammed, the only way to change its contents is to erase the entire block
+within which the page resides. Here is an example of states transition
+after various erase and program operations within a 4-page block:
+iiii
+Initial: pages in block are invalid (i)
+Erase()
+→
+EEEE
+State of pages in block set to erased (E)
+Program(0)
+→
+VEEE
+Program page 0; state set to valid (V)
+Program(0)
+→
+error
+Cannot re-program page after programming
+Program(1)
+→
+VVEE
+Program page 1
+Erase()
+→
+EEEE
+Contents erased; all pages programmable
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

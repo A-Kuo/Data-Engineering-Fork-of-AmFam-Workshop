@@ -1,0 +1,38 @@
+viii
+To Students
+If you are a student reading this book, thank you! It is an honor for us
+to provide some material to help you in your pursuit of knowledge about
+operating systems. We both think back fondly towards some textbooks of
+our undergraduate days (e.g., Hennessy and Patterson [HP90], the classic
+book on computer architecture) and hope this book will become one of
+those positive memories for you.
+You may have noticed this book is free and available online4. There
+is one major reason for this: textbooks are generally too expensive. This
+book, we hope, is the ﬁrst of a new wave of free materials to help those
+in pursuit of their education, regardless of which part of the world they
+come from or how much they are willing to spend for a book. Failing
+that, it is one free book, which is better than none.
+We also hope, where possible, to point you to the original sources of
+much of the material in the book: the great papers and persons who have
+shaped the ﬁeld of operating systems over the years. Ideas are not pulled
+out of the air; they come from smart and hard-working people (including
+numerous Turing-award winners5), and thus we should strive to cele-
+brate those ideas and people where possible. In doing so, we hopefully
+can better understand the revolutions that have taken place, instead of
+writing texts as if those thoughts have always been present [K62]. Fur-
+ther, perhaps such references will encourage you to dig deeper on your
+own; reading the famous papers of our ﬁeld is certainly one of the best
+ways to learn.
+4A digression here: “free” in the way we use it here does not mean open source, and it
+does not mean the book is not copyrighted with the usual protections – it is! What it means is
+that you can download the chapters and use them to learn about operating systems. Why not
+an open-source book, just like Linux is an open-source kernel? Well, we believe it is important
+for a book to have a single voice throughout, and have worked hard to provide such a voice.
+When you’re reading it, the book should kind of feel like a dialogue with the person explaining
+something to you. Hence, our approach.
+5The Turing Award is the highest award in Computer Science; it is like the Nobel Prize,
+except that you have never heard of it.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

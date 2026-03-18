@@ -1,0 +1,54 @@
+ACCESS CONTROL
+15
+then neither malice nor carelessness on their part can lead to an accoun-
+tant’s privileges leaking your library code. Least privilege is not just a
+theoretically good idea, but a vital part of building secure systems in the
+real world.
+RBAC sounds a bit like using groups in access control lists, and there
+is some similarity, but RBAC systems are a good deal more powerful than
+mere group access permissions; RBAC systems allow a particular user to
+take on multiple disjoint roles. Perhaps our programmer was promoted
+to a management position, but still needs access to the library, for exam-
+ple when another team member’s code needs to be tested. An RBAC sys-
+tem would allow our programmer to switch between the role of manager
+and programmer, temporarily leaving behind rights associated with the
+manager and gaining rights associated with the programmer role. When
+the manager tested someone else’s new code, the manager would have
+permission to access the library, but would not have permission to ac-
+cess team member performance reviews. Thus, if a sneaky programmer
+slipped malicious code into the library (e.g., that tried to read other team
+members’ performance reviews, or learn their salaries), the manager run-
+ning that code would not unintentionally leak that information; using the
+proper role at the proper time prevents it.
+These systems often require a new authentication step to take on an
+RBAC role, and usually taking on Role A requires relinquishing priv-
+ileges associated with one’s previous role, say Role B. The manager’s
+switch to the code testing role would result in temporarily relinquish-
+ing privileges to examine the performance reviews. On completing the
+testing, the manager would switch back to the role allowing access to the
+reviews, losing privilege to access the library. RBAC systems may also
+offer ﬁner granularity than merely being able to read or write a ﬁle. A
+particular role (Salesperson, for instance) might be permitted to add a pur-
+chase record for a particular product to a ﬁle, but would not be permitted
+to add a re-stocking record for the same product to the same ﬁle, since
+salespeople don’t do re-stocking. This degree of control is sometimes
+called type enforcement. It associates detailed access rules to particular
+objects using what is commonly called a security context for that object.
+How exactly this is done has implications for performance, storage of the
+security context information, and authentication.
+One can build a very minimal RBAC system under Linux and similar
+OSes using ACLs and groups. These systems have a feature in their ac-
+cess control mechanism called privilege escalation. Privilege escalation
+allows careful extension of privileges, typically by allowing a particular
+program to run with a set of privileges beyond those of the user who in-
+vokes them. In Unix and Linux systems, this feature is called setuid,
+and it allows a program to run with privileges associated with a different
+user, generally a user who has privileges not normally available to the
+user who runs the program. However, those privileges are only granted
+during the run of that program and are lost when the program exits. A
+carefully written setuid program will only perform a limited set of oper-
+© 2008–23, ARPACI-DUSSEAU (OSTEP)
+© 2019–23, REIHER (SECURITY)
+THREE
+EASY
+PIECES

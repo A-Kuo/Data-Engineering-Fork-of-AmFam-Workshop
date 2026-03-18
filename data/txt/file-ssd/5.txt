@@ -1,0 +1,50 @@
+6
+FLASH-BASED SSDS
+TIP: THE IMPORTANCE OF BACKWARDS COMPATIBILITY
+Backwards compatibility is always a concern in layered systems.
+By
+deﬁning a stable interface between two systems, one enables innovation
+on each side of the interface while ensuring continued interoperability.
+Such an approach has been quite successful in many domains: operating
+systems have relatively stable APIs for applications, disks provide the
+same block-based interface to ﬁle systems, and each layer in the IP net-
+working stack provides a ﬁxed unchanging interface to the layer above.
+Not surprisingly, there can be a downside to such rigidity, as interfaces
+deﬁned in one generation may not be appropriate in the next. In some
+cases, it may be useful to think about redesigning the entire system en-
+tirely. An excellent example is found in the Sun ZFS ﬁle system [B07];
+by reconsidering the interaction of ﬁle systems and RAID, the creators of
+ZFS envisioned (and then realized) a more effective integrated whole.
+44.5 From Raw Flash to Flash-Based SSDs
+Given our basic understanding of ﬂash chips, we now face our next
+task: how to turn a basic set of ﬂash chips into something that looks like
+a typical storage device. The standard storage interface is a simple block-
+based one, where blocks (sectors) of size 512 bytes (or larger) can be read
+or written, given a block address. The task of the ﬂash-based SSD is to
+provide that standard block interface atop the raw ﬂash chips inside it.
+Internally, an SSD consists of some number of ﬂash chips (for persis-
+tent storage). An SSD also contains some amount of volatile (i.e., non-
+persistent) memory (e.g., SRAM); such memory is useful for caching and
+buffering of data as well as for mapping tables, which we’ll learn about
+below. Finally, an SSD contains control logic to orchestrate device opera-
+tion. See Agrawal et. al for details [A+08]; a simpliﬁed block diagram is
+seen in Figure 44.3 (page 7).
+One of the essential functions of this control logic is to satisfy client
+reads and writes, turning them into internal ﬂash operations as need be.
+The ﬂash translation layer, or FTL, provides exactly this functionality.
+The FTL takes read and write requests on logical blocks (that comprise the
+device interface) and turns them into low-level read, erase, and program
+commands on the underlying physical blocks and physical pages (that com-
+prise the actual ﬂash device). The FTL should accomplish this task with
+the goal of delivering excellent performance and high reliability.
+Excellent performance, as we’ll see, can be realized through a com-
+bination of techniques. One key will be to utilize multiple ﬂash chips
+in parallel; although we won’t discuss this technique much further, suf-
+ﬁce it to say that all modern SSDs use multiple chips internally to obtain
+higher performance. Another performance goal will be to reduce write
+ampliﬁcation, which is deﬁned as the total write trafﬁc (in bytes) issued
+to the ﬂash chips by the FTL divided by the total write trafﬁc (in bytes) is-
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

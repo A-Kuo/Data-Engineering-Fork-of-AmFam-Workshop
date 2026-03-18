@@ -1,0 +1,48 @@
+LABORATORY: TUTORIAL
+3
+machines can really understand), and ﬁnally the link-editor (or linker) ld
+will put it all together into a ﬁnal executable program. Fortunately(!), for
+most purposes, you can blithely be unaware of how gcc works, and just
+use it with the proper ﬂags.
+The result of your compilation above is an executable, named (by de-
+fault) a.out. To then run the program, we simply type:
+prompt> ./a.out
+When we run this program, the OS will set argc and argv properly
+so that the program can process the command-line arguments as need be.
+Speciﬁcally, argc will be equal to 1, argv[0] will be the string “./a.out”,
+and argv[1] will be null, indicating the end of the array.
+F.3 Useful Flags
+Before moving on to the C language, we’ll ﬁrst point out some useful
+compilation ﬂags for gcc.
+prompt> gcc -o hw hw.c
+# -o: to specify the executable name
+prompt> gcc -Wall hw.c
+# -Wall: gives much better warnings
+prompt> gcc -g hw.c
+# -g: to enable debugging with gdb
+prompt> gcc -O hw.c
+# -O: to turn on optimization
+Of course, you may combine these ﬂags as you see ﬁt (e.g., gcc -o
+hw -g -Wall hw.c). Of these ﬂags, you should always use -Wall,
+which gives you lots of extra warnings about possible mistakes. Don’t
+ignore the warnings! Instead, ﬁx them and thus make them blissfully
+disappear.
+F.4 Linking with Libraries
+Sometimes, you may want to use a library routine in your program.
+Because so many routines are available in the C library (which is auto-
+matically linked with every program), all you usually have to do is ﬁnd
+the right #include ﬁle. The best way to do that is via the manual pages,
+usually just called the man pages.
+For example, let’s say you want to use the fork() system call1. By
+typing man fork at the shell prompt, you will get back a text description
+of how fork() works. At the very top will be a short code snippet, and
+that will tell you which ﬁles you need to #include in your program in
+order to get it to compile. In the case of fork(), you need to #include
+the ﬁle unistd.h, which would be accomplished as follows:
+1Note that fork() is a system call, and not just a library routine. However, the C library
+provides C wrappers for all the system calls, each of which simply trap into the operating
+system.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

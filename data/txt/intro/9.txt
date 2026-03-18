@@ -1,0 +1,66 @@
+10
+INTRODUCTION TO OPERATING SYSTEMS
+1
+#include <stdio.h>
+2
+#include <unistd.h>
+3
+#include <assert.h>
+4
+#include <fcntl.h>
+5
+#include <sys/types.h>
+6
+7
+int main(int argc, char *argv[]) {
+8
+int fd = open("/tmp/file",
+9
+O_WRONLY|O_CREAT|O_TRUNC,
+10
+S_IRWXU);
+11
+assert(fd > -1);
+12
+int rc = write(fd, "hello world\n", 12);
+13
+assert(rc == 12);
+14
+close(fd);
+15
+return 0;
+16
+}
+Figure 2.6: A Program That Does I/O (io.c)
+To understand this better, let’s look at some code. Figure 2.6 presents
+code to create a ﬁle (/tmp/file) that contains the string “hello world”.
+To accomplish this task, the program makes three calls into the oper-
+ating system. The ﬁrst, a call to open(), opens the ﬁle and creates it; the
+second, write(), writes some data to the ﬁle; the third, close(), sim-
+ply closes the ﬁle thus indicating the program won’t be writing any more
+data to it. These system calls are routed to the part of the operating sys-
+tem called the ﬁle system, which then handles the requests and returns
+some kind of error code to the user.
+You might be wondering what the OS does in order to actually write
+to disk. We would show you but you’d have to promise to close your
+eyes ﬁrst; it is that unpleasant. The ﬁle system has to do a fair bit of work:
+ﬁrst ﬁguring out where on disk this new data will reside, and then keep-
+ing track of it in various structures the ﬁle system maintains. Doing so
+requires issuing I/O requests to the underlying storage device, to either
+read existing structures or update (write) them. As anyone who has writ-
+ten a device driver8 knows, getting a device to do something on your
+behalf is an intricate and detailed process. It requires a deep knowledge
+of the low-level device interface and its exact semantics. Fortunately, the
+OS provides a standard and simple way to access devices through its sys-
+tem calls. Thus, the OS is sometimes seen as a standard library.
+Of course, there are many more details in how devices are accessed,
+and how ﬁle systems manage data persistently atop said devices. For
+performance reasons, most ﬁle systems ﬁrst delay such writes for a while,
+hoping to batch them into larger groups. To handle the problems of sys-
+tem crashes during writes, most ﬁle systems incorporate some kind of
+8A device driver is some code in the operating system that knows how to deal with a
+speciﬁc device. We will talk more about devices and device drivers later.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

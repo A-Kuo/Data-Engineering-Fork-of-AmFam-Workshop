@@ -1,0 +1,85 @@
+FLASH-BASED SSDS
+13
+bigger page sizes in a virtual memory system; in that case, you use fewer
+bits for the VPN and have a larger offset in each virtual address.
+Unfortunately, using a block-based mapping inside a log-based FTL
+does not work very well for performance reasons. The biggest problem
+arises when a “small write” occurs (i.e., one that is less than the size of
+a physical block). In this case, the FTL must read a large amount of live
+data from the old block and copy it into a new one (along with the data
+from the small write). This data copying increases write ampliﬁcation
+greatly and thus decreases performance.
+To make this issue more clear, let’s look at an example. Assume the
+client previously wrote out logical blocks 2000, 2001, 2002, and 2003 (with
+contents, a, b, c, d), and that they are located within physical block
+1 at physical pages 4, 5, 6, and 7. With per-page mappings, the transla-
+tion table would have to record four mappings for these logical blocks:
+2000→4, 2001→5, 2002→6, 2003→7.
+If, instead, we use block-level mapping, the FTL only needs to record
+a single address translation for all of this data. The address mapping,
+however, is slightly different than our previous examples. Speciﬁcally,
+we think of the logical address space of the device as being chopped into
+chunks that are the size of the physical blocks within the ﬂash. Thus,
+the logical block address consists of two portions: a chunk number and
+an offset. Because we are assuming four logical blocks ﬁt within each
+physical block, the offset portion of the logical addresses requires 2 bits;
+the remaining (most signiﬁcant) bits form the chunk number.
+Logical blocks 2000, 2001, 2002, and 2003 all have the same chunk
+number (500), and have different offsets (0, 1, 2, and 3, respectively).
+Thus, with a block-level mapping, the FTL records that chunk 500 maps
+to block 1 (starting at physical page 4), as shown in this diagram:
+Memory
+Flash
+Chip
+Table:
+500
+4
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+i
+01
+i
+02
+i
+03
+i
+04
+a
+V
+05
+b
+V
+06
+c
+V
+07
+d
+V
+08
+i
+09
+i
+10
+i
+11
+i
+In a block-based FTL, reading is easy. First, the FTL extracts the chunk
+number from the logical block address presented by the client, by taking
+the topmost bits out of the address. Then, the FTL looks up the chunk-
+number to physical-page mapping in the table. Finally, the FTL computes
+the address of the desired ﬂash page by adding the offset from the logical
+address to the physical address of the block.
+For example, if the client issues a read to logical address 2002, the de-
+vice extracts the logical chunk number (500), looks up the translation in
+the mapping table (ﬁnding 4), and adds the offset from the logical ad-
+dress (2) to the translation (4). The resulting physical-page address (6) is
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

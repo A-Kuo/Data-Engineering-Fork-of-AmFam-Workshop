@@ -1,0 +1,28 @@
+G
+Laboratory: Systems Projects
+NOTE: Projects are slowing being added to https://github.com/
+remzi-arpacidusseau/ostep-projects, which includes project
+descriptions and a simple testing framework. Please be sure to check
+that out if interested.
+This chapter presents some ideas for systems projects. We usually do
+about six or seven projects in a 15-week semester, meaning one every two
+weeks or so. The ﬁrst few are usually done by a single student, and the
+last few in groups of size two.
+Each semester, the projects follow this same outline; however, we vary
+the details to keep it interesting and make “sharing” of code across semesters
+more challenging (not that anyone would do that!). We also use the Moss
+tool [M94] to look for this kind of “sharing”.
+As for grading, we’ve tried a number of different approaches, each
+of which have their strengths and weaknesses. Demos are fun but time
+consuming. Automated test scripts are less time intensive but require a
+great deal of care to get them to carefully test interesting corner cases.
+Check the book web page for more details on these projects; if you’d like
+the automated test scripts, we’d be happy to share.
+G.1 Intro Project
+The ﬁrst project is an introduction to systems programming. Typical
+assignments have been to write some variant of the sort utility, with
+different constraints. For example, sorting text data, sorting binary data,
+and other similar projects all make sense. To complete the project, one
+must get familiar with some system calls (and their return error codes),
+use a few simple data structures, and not much else.
+1

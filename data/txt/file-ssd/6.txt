@@ -1,0 +1,52 @@
+FLASH-BASED SSDS
+7
+Interface Logic
+Flash
+Controller
+Memory
+Flash
+Flash
+Flash
+Flash
+Flash
+Flash
+Figure 44.3: A Flash-based SSD: Logical Diagram
+sued by the client to the SSD. As we’ll see below, naive approaches to FTL
+construction will lead to high write ampliﬁcation and low performance.
+High reliability will be achieved through the combination of a few dif-
+ferent approaches. One main concern, as discussed above, is wear out. If
+a single block is erased and programmed too often, it will become unus-
+able; as a result, the FTL should try to spread writes across the blocks of
+the ﬂash as evenly as possible, ensuring that all of the blocks of the device
+wear out at roughly the same time; doing so is called wear leveling and
+is an essential part of any modern FTL.
+Another reliability concern is program disturbance. To minimize such
+disturbance, FTLs will commonly program pages within an erased block
+in order, from low page to high page. This sequential-programming ap-
+proach minimizes disturbance and is widely utilized.
+44.6 FTL Organization: A Bad Approach
+The simplest organization of an FTL would be something we call di-
+rect mapped. In this approach, a read to logical page N is mapped di-
+rectly to a read of physical page N. A write to logical page N is more
+complicated; the FTL ﬁrst has to read in the entire block that page N is
+contained within; it then has to erase the block; ﬁnally, the FTL programs
+the old pages as well as the new one.
+As you can probably guess, the direct-mapped FTL has many prob-
+lems, both in terms of performance as well as reliability. The performance
+problems come on each write: the device has to read in the entire block
+(costly), erase it (quite costly), and then program it (costly). The end re-
+sult is severe write ampliﬁcation (proportional to the number of pages
+in a block) and as a result, terrible write performance, even slower than
+typical hard drives with their mechanical seeks and rotational delays.
+Even worse is the reliability of this approach. If ﬁle system metadata
+or user ﬁle data is repeatedly overwritten, the same block is erased and
+programmed, over and over, rapidly wearing it out and potentially los-
+ing data. The direct mapped approach simply gives too much control
+over wear out to the client workload; if the workload does not spread
+write load evenly across its logical blocks, the underlying physical blocks
+containing popular data will quickly wear out. For both reliability and
+performance reasons, a direct-mapped FTL is a bad idea.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

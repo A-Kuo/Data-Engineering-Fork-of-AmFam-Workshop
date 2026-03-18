@@ -1,0 +1,20 @@
+xii
+and by industry grants. We are especially grateful to the NSF for their
+support over many years, as our research has shaped the content of many
+chapters herein.
+We thank Thomas Griebel, who demanded a better cover for the book.
+Although we didn’t take his speciﬁc suggestion (a dinosaur, can you be-
+lieve it?), the beautiful picture of Halley’s comet would not be found on
+the cover without him.
+A ﬁnal debt of gratitude is also owed to Aaron Brown, who ﬁrst took
+this course many years ago (Spring ’09), then took the xv6 lab course (Fall
+’09), and ﬁnally was a graduate teaching assistant for the course for two
+years or so (Fall ’10 through Spring ’12). His tireless work has vastly im-
+proved the state of the projects (particularly those in xv6 land) and thus
+has helped better the learning experience for countless undergraduates
+and graduates here at Wisconsin. As Aaron would say (in his usual suc-
+cinct manner): “Thx.”
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

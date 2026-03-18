@@ -1,0 +1,103 @@
+8
+FLASH-BASED SSDS
+44.7 A Log-Structured FTL
+For these reasons, most FTLs today are log structured, an idea useful
+in both storage devices (as we’ll see now) and ﬁle systems above them
+(e.g., in log-structured ﬁle systems). Upon a write to logical block N,
+the device appends the write to the next free spot in the currently-being-
+written-to block; we call this style of writing logging. To allow for subse-
+quent reads of block N, the device keeps a mapping table (in its memory,
+and persistent, in some form, on the device); this table stores the physical
+address of each logical block in the system.
+Let’s go through an example to make sure we understand how the
+basic log-based approach works. To the client, the device looks like a
+typical disk, in which it can read and write 512-byte sectors (or groups of
+sectors). For simplicity, assume that the client is reading or writing 4-KB
+sized chunks. Let us further assume that the SSD contains some large
+number of 16-KB sized blocks, each divided into four 4-KB pages; these
+parameters are unrealistic (ﬂash blocks usually consist of more pages) but
+will serve our didactic purposes quite well.
+Assume the client issues the following sequence of operations:
+• Write(100) with contents a1
+• Write(101) with contents a2
+• Write(2000) with contents b1
+• Write(2001) with contents b2
+These logical block addresses (e.g., 100) are used by the client of the
+SSD (e.g., a ﬁle system) to remember where information is located.
+Internally, the device must transform these block writes into the erase
+and program operations supported by the raw hardware, and somehow
+record, for each logical block address, which physical page of the SSD
+stores its data. Assume that all blocks of the SSD are currently not valid,
+and must be erased before any page can be programmed. Here we show
+the initial state of our SSD, with all pages marked INVALID (i):
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+i
+01
+i
+02
+i
+03
+i
+04
+i
+05
+i
+06
+i
+07
+i
+08
+i
+09
+i
+10
+i
+11
+i
+When the ﬁrst write is received by the SSD (to logical block 100), the
+FTL decides to write it to physical block 0, which contains four physical
+pages: 0, 1, 2, and 3. Because the block is not erased, we cannot write to
+it yet; the device must ﬁrst issue an erase command to block 0. Doing so
+leads to the following state:
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+E
+01
+E
+02
+E
+03
+E
+04
+i
+05
+i
+06
+i
+07
+i
+08
+i
+09
+i
+10
+i
+11
+i
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

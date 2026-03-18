@@ -1,0 +1,61 @@
+FLASH-BASED SSDS
+5
+Read
+Program
+Erase
+Device
+(µs)
+(µs)
+(µs)
+SLC
+25
+200-300
+1500-2000
+MLC
+50
+600-900
+˜3000
+TLC
+˜75
+˜900-1350
+˜4500
+Figure 44.2: Raw Flash Performance Characteristics
+44.4 Flash Performance And Reliability
+Because we’re interested in building a storage device out of raw ﬂash
+chips, it is worthwhile to understand their basic performance character-
+istics. Figure 44.2 presents a rough summary of some numbers found in
+the popular press [V12]. Therein, the author presents the basic operation
+latency of reads, programs, and erases across SLC, MLC, and TLC ﬂash,
+which store 1, 2, and 3 bits of information per cell, respectively.
+As we can see from the table, read latencies are quite good, taking just
+10s of microseconds to complete. Program latency is higher and more
+variable, as low as 200 microseconds for SLC, but higher as you pack
+more bits into each cell; to get good write performance, you will have
+to make use of multiple ﬂash chips in parallel. Finally, erases are quite
+expensive, taking a few milliseconds typically. Dealing with this cost is
+central to modern ﬂash storage design.
+Let’s now consider reliability of ﬂash chips. Unlike mechanical disks,
+which can fail for a wide variety of reasons (including the gruesome and
+quite physical head crash, where the drive head actually makes contact
+with the recording surface), ﬂash chips are pure silicon and in that sense
+have fewer reliability issues to worry about. The primary concern is wear
+out; when a ﬂash block is erased and programmed, it slowly accrues a
+little bit of extra charge. Over time, as that extra charge builds up, it
+becomes increasingly difﬁcult to differentiate between a 0 and a 1. At the
+point where it becomes impossible, the block becomes unusable.
+The typical lifetime of a block is currently not well known. Manufac-
+turers rate MLC-based blocks as having a 10,000 P/E (Program/Erase)
+cycle lifetime; that is, each block can be erased and programmed 10,000
+times before failing. SLC-based chips, because they store only a single bit
+per transistor, are rated with a longer lifetime, usually 100,000 P/E cycles.
+However, recent research has shown that lifetimes are much longer than
+expected [BD10].
+One other reliability problem within ﬂash chips is known as distur-
+bance. When accessing a particular page within a ﬂash, it is possible that
+some bits get ﬂipped in neighboring pages; such bit ﬂips are known as
+read disturbs or program disturbs, depending on whether the page is
+being read or programmed, respectively.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

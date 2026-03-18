@@ -1,0 +1,44 @@
+8
+LABORATORY: TUTORIAL
+# this is a generic rule for .o files
+%.o: %.c
+$(CC) $(OPTS) -c $< -o $@
+# and finally, a clean line
+clean:
+rm -f $(OBJS) $(TARG)
+Though we won’t go into the details of make syntax, as you can see,
+this makeﬁle can make your life somewhat easier. For example, it allows
+you to easily add new source ﬁles into your build, simply by adding them
+to the SRCS variable at the top of the makeﬁle. You can also easily change
+the name of the executable by changing the TARG line, and the compiler,
+ﬂags, and library speciﬁcations are all easily modiﬁed.
+One ﬁnal word about make: ﬁguring out a target’s prerequisites is not
+always trivial, especially in large and complex programs. Not surpris-
+ingly, there is another tool that helps with this, called makedepend. Read
+about it on your own and see if you can incorporate it into a makeﬁle.
+F.7 Debugging
+Finally, after you have created a good build environment, and a cor-
+rectly compiled program, you may ﬁnd that your program is buggy. One
+way to ﬁx the problem(s) is to think really hard — this method is some-
+times successful, but often not. The problem is a lack of information; you
+just don’t know exactly what is going on within the program, and there-
+fore cannot ﬁgure out why it is not behaving as expected. Fortunately,
+there is some help: gdb, the GNU debugger.
+Let’s take the following buggy code, saved in the ﬁle buggy.c, and
+compiled into the executable buggy.
+#include <stdio.h>
+struct Data {
+int x;
+};
+int
+main(int argc, char *argv[])
+{
+struct Data *p = NULL;
+printf("%d\n", p->x);
+}
+In this example, the main program dereferences the variable p when
+it is NULL, which will lead to a segmentation fault. Of course, this prob-
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

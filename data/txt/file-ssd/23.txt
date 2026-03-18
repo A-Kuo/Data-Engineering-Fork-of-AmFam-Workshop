@@ -1,0 +1,36 @@
+24
+FLASH-BASED SSDS
+termark default is 10, so the GC won’t run in this conﬁguration).
+What do you think will happen? Use -C and perhaps -F to see.
+7. To turn on the garbage collector, use lower values. The high water-
+mark (-G N) tells the system to start collecting once N blocks have
+been used; the low watermark (-g M) tells the system to stop col-
+lecting once there are only M blocks in use. What watermark values
+do you think will make for a working system? Use -C and -F to
+show the commands and intermediate device states and see.
+8. One other useful ﬂag is -J, which shows what the collector is doing
+when it runs. Run with ﬂags -T log -n 1000 -C -J to see both
+the commands and the GC behavior. What do you notice about the
+GC? The ﬁnal effect of GC, of course, is performance. Use -S to
+look at ﬁnal statistics; how many extra reads and writes occur due
+to garbage collection? Compare this to the ideal SSD (-T ideal);
+how much extra reading, writing, and erasing is there due to the
+nature of Flash? Compare it also to the direct approach; in what
+way (erases, reads, programs) is the log-structured approach supe-
+rior?
+9. One last aspect to explore is workload skew. Adding skew to the
+workload changes writes such that more writes occur to some smaller
+fraction of the logical block space. For example, running with -K
+80/20 makes 80% of the writes go to 20% of the blocks. Pick some
+different skews and perform many randomly-chosen operations (e.g.,
+-n 1000), using ﬁrst -T direct to understand the skew, and then
+-T log to see the impact on a log-structured device. What do you
+expect will happen? One other small skew control to explore is -k
+100; by adding this ﬂag to a skewed workload, the ﬁrst 100 writes
+are not skewed. The idea is to ﬁrst create a lot of data, but then only
+update some of it. What impact might that have upon a garbage
+collector?
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

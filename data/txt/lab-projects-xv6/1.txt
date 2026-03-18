@@ -1,0 +1,39 @@
+2
+LABORATORY: XV6 PROJECTS
+H.3 Intro to Virtual Memory
+The basic idea is to add a new system call that, given a virtual address,
+returns the translated physical address (or reports that the address is not
+valid). This lets students see how the virtual memory system sets up page
+tables without doing too much hard work. Another variant explores how
+to transform xv6 so that a null-pointer dereference actually generates a
+fault.
+H.4 Copy-on-write Mappings
+This project adds the ability to perform a lightweight fork(), called
+vfork(), to xv6. This new call doesn’t simply copy the mappings but
+rather sets up copy-on-write mappings to shared pages. Upon reference
+to such a page, the kernel must then create a real copy and update page
+tables accordingly.
+H.5 Memory mappings
+An alternate virtual memory project is to add some form of memory-
+mapped ﬁles. Probably the easiest thing to do is to perform a lazy page-in
+of code pages from an executable; a more full-blown approach is to build
+an mmap() system call and all of the requisite infrastructure needed to
+fault in pages from disk upon dereference.
+H.6 Kernel Threads
+This project explores how to add kernel threads to xv6. A clone()
+system call operates much like fork but uses the same address space. Stu-
+dents have to ﬁgure out how to implement such a call, and thus how
+to create a real kernel thread. Students also should build a little thread
+library on top of that, providing simple locks.
+H.7 Advanced Kernel Threads
+Students build a full-blown thread library on top of their kernel threads,
+adding different types of locks (spin locks, locks that sleep when the pro-
+cessor is not available) as well as condition variables. Requisite kernel
+support is added as well.
+H.8 Extent-based File System
+This ﬁrst ﬁle system project adds some simple features to the basic
+ﬁle system. For ﬁles of type EXTENT, students change the inode to store
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,46 @@
+LABORATORY: TUTORIAL
+9
+lem should be easy to ﬁx by inspection, but in a more complex program,
+ﬁnding such a problem is not always easy.
+To prepare yourself for a debugging session, recompile your program
+and make sure to pass the -g ﬂag to each compile line. This includes extra
+debugging information in your executable that will be useful during your
+debugging session. Also, don’t turn on optimization (-O); though this
+may work, it may also lead to confusion during debugging.
+After re-compiling with -g, you are ready to use the debugger. Fire
+up gdb at the command prompt as follows:
+prompt> gdb buggy
+This puts you inside an interactive session with the debugger. Note
+that you can also use the debugger to examine “core” ﬁles that were pro-
+duced during bad runs, or to attach to an already-running program; read
+the documentation to learn more about this.
+Once inside, you may see something like this:
+prompt> gdb buggy
+GNU gdb ...
+Copyright 2008 Free Software Foundation, Inc.
+(gdb)
+The ﬁrst thing you might want to do is to go ahead and run the pro-
+gram. To do this, simply type run at gdb command prompt. In this case,
+this is what you might see:
+(gdb) run
+Starting program: buggy
+Program received signal SIGSEGV, Segmentation fault.
+0x8048433 in main (argc=1, argv=0xbffff844) at buggy.c:19
+19
+printf("%d\n", p->x);
+As you can see from the example, in this case, gdb immediately pin-
+points where the problem occurred; a “segmentation fault” was gener-
+ated at the line where we tried to dereference p. This just means that we
+accessed some memory that we weren’t supposed to access. At this point,
+the astute programmer can examine the code, and say “aha! it must be
+that p does not point to anything valid, and thus should not be derefer-
+enced!”, and then go ahead and ﬁx the problem.
+However, if you didn’t know what was going on, you might want to
+examine some variable. gdb allows you to do this interactively during
+the debug session.
+(gdb) print p
+1 = (Data *) 0x0
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

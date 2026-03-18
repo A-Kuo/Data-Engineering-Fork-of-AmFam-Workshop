@@ -1,0 +1,45 @@
+12
+FLASH-BASED SSDS
+ASIDE: A NEW STORAGE API KNOWN AS TRIM
+When we think of hard drives, we usually just think of the most ba-
+sic interface to read and write them: read and write (there is also usu-
+ally some kind of cache ﬂush command, ensuring that writes have actu-
+ally been persisted, but sometimes we omit that for simplicity). With
+log-structured SSDs, and indeed, any device that keeps a ﬂexible and
+changing mapping of logical-to-physical blocks, a new interface is use-
+ful, known as the trim operation.
+The trim operation takes an address (and possibly a length) and simply
+informs the device that the block(s) speciﬁed by the address (and length)
+have been deleted; the device thus no longer has to track any informa-
+tion about the given address range. For a standard hard drive, trim isn’t
+particularly useful, because the drive has a static mapping of block ad-
+dresses to speciﬁc platter, track, and sector(s). For a log-structured SSD,
+however, it is highly useful to know that a block is no longer needed, as
+the SSD can then remove this information from the FTL and later reclaim
+the physical space during garbage collection.
+Although we sometimes think of interface and implementation as sepa-
+rate entities, in this case, we see that the implementation shapes the inter-
+face. With complex mappings, knowledge of which blocks are no longer
+needed makes for a more effective implementation.
+To reduce GC costs, some SSDs overprovision the device [A+08]; by
+adding extra ﬂash capacity, cleaning can be delayed and pushed to the
+background, perhaps done at a time when the device is less busy. Adding
+more capacity also increases internal bandwidth, which can be used for
+cleaning and thus not harm perceived bandwidth to the client. Many
+modern drives overprovision in this manner, one key to achieving excel-
+lent overall performance.
+44.9 Mapping Table Size
+The second cost of log-structuring is the potential for extremely large
+mapping tables, with one entry for each 4-KB page of the device. With a
+large 1-TB SSD, for example, a single 4-byte entry per 4-KB page results
+in 1 GB of memory needed by the device, just for these mappings! Thus,
+this page-level FTL scheme is impractical.
+Block-Based Mapping
+One approach to reduce the costs of mapping is to only keep a pointer per
+block of the device, instead of per page, reducing the amount of mapping
+information by a factor of Sizeblock
+Sizepage . This block-level FTL is akin to having
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

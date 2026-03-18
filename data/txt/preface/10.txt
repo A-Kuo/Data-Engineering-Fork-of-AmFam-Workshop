@@ -1,0 +1,36 @@
+xiii
+Final Words
+Yeats famously said “Education is not the ﬁlling of a pail but the light-
+ing of a ﬁre.” He was right but wrong at the same time6. You do have
+to “ﬁll the pail” a bit, and these notes are certainly here to help with that
+part of your education; after all, when you go to interview at Google, and
+they ask you a trick question about how to use semaphores, it might be
+good to actually know what a semaphore is, right?
+But Yeats’s larger point is obviously on the mark: the real point of
+education is to get you interested in something, to learn something more
+about the subject matter on your own and not just what you have to digest
+to get a good grade in some class. As one of our fathers (Remzi’s dad,
+Vedat Arpaci) used to say, “Learn beyond the classroom”.
+We created these notes to spark your interest in operating systems, to
+read more about the topic on your own, to talk to your professor about all
+the exciting research that is going on in the ﬁeld, and even to get involved
+with that research. It is a great ﬁeld(!), full of exciting and wonderful
+ideas that have shaped computing history in profound and important
+ways. And while we understand this ﬁre won’t light for all of you, we
+hope it does for many, or even a few. Because once that ﬁre is lit, well,
+that is when you truly become capable of doing something great. And
+thus the real point of the educational process: to go forth, to study many
+new and fascinating topics, to learn, to mature, and most importantly, to
+ﬁnd something that lights a ﬁre for you.
+Andrea and Remzi
+Married couple
+Professors of Computer Science at the University of Wisconsin
+Chief Lighters of Fires, hopefully7
+6If he actually said this; as with many famous quotes, the history of this gem is murky.
+7If this sounds like we are admitting some past history as arsonists, you are probably
+missing the point. Probably. If this sounds cheesy, well, that’s because it is, but you’ll just have
+to forgive us for that.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

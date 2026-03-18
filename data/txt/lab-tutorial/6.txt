@@ -1,0 +1,49 @@
+LABORATORY: TUTORIAL
+7
+hw.c has been modiﬁed more recently than hw.o has been created, make
+will know that hw.o is out of date and should be generated anew; in that
+case, it will execute the command line, gcc -O -Wall -c hw.c, which
+generates hw.o. Thus, if you are compiling a large program, make will
+know which object ﬁles need to be re-generated based on their depen-
+dencies, and will only do the necessary amount of work to recreate the
+executable. Also note that hw.o will be created in the case that it does
+not exist at all.
+Continuing along, helper.o may also be regenerated or created, based
+on the same criteria as deﬁned above.
+When both of the object ﬁles
+have been created, make is now ready to execute the command to cre-
+ate the ﬁnal executable, and goes back and does so: gcc -o hw hw.o
+helper.o -lm.
+Up until now, we’ve been ignoring the clean target in the makeﬁle.
+To use it, you have to ask for it explicitly. Type
+prompt> make clean
+This will execute the command on the command line. Because there
+are no prerequisites for the clean target, typing make clean will al-
+ways result in the command(s) being executed. In this case, the clean
+target is used to remove the object ﬁles and executable, quite handy if
+you wish to rebuild the entire program from scratch.
+Now you might be thinking, “well, this seems OK, but these makeﬁles
+sure are cumbersome!” And you’d be right — if they always had to be
+written like this. Fortunately, there are a lot of shortcuts that make make
+even easier to use. For example, this makeﬁle has the same functionality
+but is a little nicer to use:
+# specify all source files here
+SRCS = hw.c helper.c
+# specify target here (name of executable)
+TARG = hw
+# specify compiler, compile flags, and needed libs
+CC
+= gcc
+OPTS = -Wall -O
+LIBS = -lm
+# this translates .c files in src list to .o’s
+OBJS = $(SRCS:.c=.o)
+# all is not really needed, but is used to generate the target
+all: $(TARG)
+# this generates the target executable
+$(TARG): $(OBJS)
+$(CC) -o $(TARG) $(OBJS) $(LIBS)
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

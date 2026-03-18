@@ -1,0 +1,52 @@
+ACCESS CONTROL
+13
+ASIDE: THE ANDROID ACCESS CONTROL MODEL
+The Android system is one of the leading software platforms for today’s mobile
+computing devices, especially smart phones. These devices pose different access
+control challenges than classic server computers, or even personal desktop com-
+puters or laptops. Their functionality is based on the use of many relatively small
+independent applications, commonly called apps, that are downloaded, installed,
+and run on a device belonging to only a single user. Thus, there is no issue of
+protecting multiple users on one machine from each other. If one used a standard
+access control model, these apps would run under that user’s identity. But apps
+are developed by many entities, and some may be malicious. Further, most apps
+have no legitimate need for most of the resources on the device. If they are granted
+too many privileges, a malicious app can access the phone owner’s contacts, make
+phone calls, or buy things over the network, among many other undesirable be-
+haviors. The principle of least privilege implies that we should not give apps the
+full privileges belonging to owner, but they must have some privileges if they are
+to do anything interesting.
+Android runs on top of a version of Linux, and an application’s access limitations
+are achieved in part by generating a new user ID for each installed app. The app
+runs under that ID and its accesses can be controlled on that basis. However, the
+Android middleware offers additional facilities for controlling access. Application
+developers deﬁne accesses required by their app. When a user considers installing
+an app on their device, they are shown what permissions it requires. The user can
+either grant the app those permissions, not install the app, or limit its permissions,
+though the latter choice may also limit app utility. Also, the developer speciﬁes
+ways in which other apps can communicate with the new app. The data structure
+used to encode this access information is called a permission label. An app’s
+permission labels (both what it can access and what it provides to others) are set
+at app design time, and encoded into a particular Android system at the moment
+the app is installed on that machine.
+Permission labels are thus like capabilities, since possession of them by the app
+allows the app to do something, while lacking a label prevents the app from doing
+that thing. An app’s set of permission labels is set statically at install time. The user
+can subsequently change those permissions, although limiting them may damage
+app functionality. Permission labels are a form of mandatory access control. The
+Android security model is discussed in detail by Enck et al. [E+09].
+The Android security approach is interesting, but not perfect. In particular, users
+are not always aware of the implications of granting an application access to some-
+thing, and, faced with the choice of granting the access or not being able to effec-
+tively use the app, they will often grant it. This behavior can be problematic, if the
+app is malicious.
+If desired, the owner can alter that initial ACL, but experience shows
+that users rarely do. This tendency demonstrates the importance of prop-
+erly chosen defaults. Here, as in many other places in an operating sys-
+tem, a theoretically changeable or tunable setting will, in practice, be used
+unaltered by almost everyone almost always.
+© 2008–23, ARPACI-DUSSEAU (OSTEP)
+© 2019–23, REIHER (SECURITY)
+THREE
+EASY
+PIECES

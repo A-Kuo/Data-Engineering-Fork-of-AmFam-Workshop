@@ -1,0 +1,50 @@
+iv
+you comprehend what takes place when a journaling ﬁle system writes a
+block to disk, you have taken the ﬁrst steps towards mastery of storage
+systems.
+There are also numerous asides and tips throughout the text, adding
+a little color to the mainline presentation. Asides tend to discuss some-
+thing relevant (but perhaps not essential) to the main text; tips tend to be
+general lessons that can be applied to systems you build. An index at the
+end of the book lists all of these tips and asides (as well as cruces, the odd
+plural of crux) for your convenience.
+We use one of the oldest didactic methods, the dialogue, throughout
+the book, as a way of presenting some of the material in a different light.
+These are used to introduce the major thematic concepts (in a peachy way,
+as we will see), as well as to review material every now and then. They
+are also a chance to write in a more humorous style. Whether you ﬁnd
+them useful, or humorous, well, that’s another matter entirely.
+At the beginning of each major section, we’ll ﬁrst present an abstrac-
+tion that an operating system provides, and then work in subsequent
+chapters on the mechanisms, policies, and other support needed to pro-
+vide the abstraction. Abstractions are fundamental to all aspects of Com-
+puter Science, so it is perhaps no surprise that they are also essential in
+operating systems.
+Throughout the chapters, we try to use real code (not pseudocode)
+where possible, so for virtually all examples, you should be able to type
+them up yourself and run them. Running real code on real systems is the
+best way to learn about operating systems, so we encourage you to do
+so when you can. We are also making code available for your viewing
+pleasure2.
+In various parts of the text, we have sprinkled in a few homeworks
+to ensure that you are understanding what is going on. Many of these
+homeworks are little simulations of pieces of the operating system; you
+should download the homeworks, and run them to quiz yourself. The
+homework simulators have the following feature: by giving them a dif-
+ferent random seed, you can generate a virtually inﬁnite set of problems;
+the simulators can also be told to solve the problems for you. Thus, you
+can test and re-test yourself until you have achieved a good level of un-
+derstanding.
+The most important addendum to this book is a set of projects in
+which you learn about how real systems work by designing, implement-
+ing, and testing your own code. All projects (as well as the code exam-
+ples, mentioned above) are in the C programming language [KR88]; C is
+a simple and powerful language that underlies most operating systems,
+and thus worth adding to your tool-chest of languages. Two types of
+projects are available (see the online appendix for ideas). The ﬁrst type
+is systems programming projects; these projects are great for those who
+2https://github.com/remzi-arpacidusseau/ostep-code
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

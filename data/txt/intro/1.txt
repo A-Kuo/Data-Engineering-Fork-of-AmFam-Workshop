@@ -1,0 +1,48 @@
+2
+INTRODUCTION TO OPERATING SYSTEMS
+THE CRUX OF THE PROBLEM:
+HOW TO VIRTUALIZE RESOURCES
+One central question we will answer in this book is quite simple: how
+does the operating system virtualize resources? This is the crux of our
+problem. Why the OS does this is not the main question, as the answer
+should be obvious: it makes the system easier to use. Thus, we focus on
+the how: what mechanisms and policies are implemented by the OS to
+attain virtualization? How does the OS do so efﬁciently? What hardware
+support is needed?
+We will use the “crux of the problem”, in shaded boxes such as this one,
+as a way to call out speciﬁc problems we are trying to solve in building
+an operating system. Thus, within a note on a particular topic, you may
+ﬁnd one or more cruces (yes, this is the proper plural) which highlight the
+problem. The details within the chapter, of course, present the solution,
+or at least the basic parameters of a solution.
+is called the operating system (OS)3, as it is in charge of making sure the
+system operates correctly and efﬁciently in an easy-to-use manner.
+The primary way the OS does this is through a general technique that
+we call virtualization. That is, the OS takes a physical resource (such as
+the processor, or memory, or a disk) and transforms it into a more gen-
+eral, powerful, and easy-to-use virtual form of itself. Thus, we sometimes
+refer to the operating system as a virtual machine.
+Of course, in order to allow users to tell the OS what to do and thus
+make use of the features of the virtual machine (such as running a pro-
+gram, or allocating memory, or accessing a ﬁle), the OS also provides
+some interfaces (APIs) that you can call. A typical OS, in fact, exports
+a few hundred system calls that are available to applications. Because
+the OS provides these calls to run programs, access memory and devices,
+and other related actions, we also sometimes say that the OS provides a
+standard library to applications.
+Finally, because virtualization allows many programs to run (thus shar-
+ing the CPU), and many programs to concurrently access their own in-
+structions and data (thus sharing memory), and many programs to access
+devices (thus sharing disks and so forth), the OS is sometimes known as
+a resource manager. Each of the CPU, memory, and disk is a resource
+of the system; it is thus the operating system’s role to manage those re-
+sources, doing so efﬁciently or fairly or indeed with many other possible
+goals in mind. To understand the role of the OS a little bit better, let’s take
+a look at some examples.
+3Another early name for the OS was the supervisor or even the master control program.
+Apparently, the latter sounded a little overzealous (see the movie Tron for details) and thus,
+thankfully, “operating system” caught on instead.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

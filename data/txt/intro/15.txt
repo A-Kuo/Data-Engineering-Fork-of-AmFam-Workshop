@@ -1,0 +1,44 @@
+16
+INTRODUCTION TO OPERATING SYSTEMS
+ASIDE: AND THEN CAME LINUX
+Fortunately for UNIX, a young Finnish hacker named Linus Torvalds de-
+cided to write his own version of UNIX which borrowed heavily on the
+principles and ideas behind the original system, but not from the code
+base, thus avoiding issues of legality. He enlisted help from many others
+around the world, took advantage of the sophisticated GNU tools that
+already existed [G85], and soon Linux was born (as well as the modern
+open-source software movement).
+As the internet era came into place, most companies (such as Google,
+Amazon, Facebook, and others) chose to run Linux, as it was free and
+could be readily modiﬁed to suit their needs; indeed, it is hard to imag-
+ine the success of these new companies had such a system not existed.
+As smart phones became a dominant user-facing platform, Linux found
+a stronghold there too (via Android), for many of the same reasons. And
+Steve Jobs took his UNIX-based NeXTStep operating environment with
+him to Apple, thus making UNIX popular on desktops (though many
+users of Apple technology are probably not even aware of this fact). Thus
+UNIX lives on, more important today than ever before. The computing
+gods, if you believe in them, should be thanked for this wonderful out-
+come.
+ory. The ﬁrst generations of the Mac OS (v9 and earlier) took a coopera-
+tive approach to job scheduling; thus, a thread that accidentally got stuck
+in an inﬁnite loop could take over the entire system, forcing a reboot. The
+painful list of OS features missing in this generation of systems is long,
+too long for a full discussion here.
+Fortunately, after some years of suffering, the old features of mini-
+computer operating systems started to ﬁnd their way onto the desktop.
+For example, Mac OS X/macOS has UNIX at its core, including all of the
+features one would expect from such a mature system. Windows has sim-
+ilarly adopted many of the great ideas in computing history, starting in
+particular with Windows NT, a great leap forward in Microsoft OS tech-
+nology. Even today’s cell phones run operating systems (such as Linux)
+that are much more like what a minicomputer ran in the 1970s than what
+a PC ran in the 1980s (thank goodness); it is good to see that the good
+ideas developed in the heyday of OS development have found their way
+into the modern world. Even better is that these ideas continue to de-
+velop, providing more features and making modern systems even better
+for users and applications.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

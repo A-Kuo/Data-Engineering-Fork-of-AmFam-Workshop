@@ -1,0 +1,83 @@
+14
+FLASH-BASED SSDS
+where the data is located; the FTL can then issue the read to that physical
+address and obtain the desired data (c).
+But what if the client writes to logical block 2002 (with contents c’)?
+In this case, the FTL must read in 2000, 2001, and 2003, and then write
+out all four logical blocks in a new location, updating the mapping table
+accordingly. Block 1 (where the data used to reside) can then be erased
+and reused, as shown here.
+Memory
+Flash
+Chip
+Table:
+500
+8
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+i
+01
+i
+02
+i
+03
+i
+04
+E
+05
+E
+06
+E
+07
+E
+08
+a
+V
+09
+b
+V
+10
+c’
+V
+11
+d
+V
+As you can see from this example, while block level mappings greatly
+reduce the amount of memory needed for translations, they cause signif-
+icant performance problems when writes are smaller than the physical
+block size of the device; as real physical blocks can be 256KB or larger,
+such writes are likely to happen quite often. Thus, a better solution is
+needed. Can you sense that this is the part of the chapter where we tell
+you what that solution is? Better yet, can you ﬁgure it out yourself, before
+reading on?
+Hybrid Mapping
+To enable ﬂexible writing but also reduce mapping costs, many modern
+FTLs employ a hybrid mapping technique. With this approach, the FTL
+keeps a few blocks erased and directs all writes to them; these are called
+log blocks. Because the FTL wants to be able to write any page to any
+location within the log block without all the copying required by a pure
+block-based mapping, it keeps per-page mappings for these log blocks.
+The FTL thus logically has two types of mapping table in its memory: a
+small set of per-page mappings in what we’ll call the log table, and a larger
+set of per-block mappings in the data table. When looking for a particular
+logical block, the FTL will ﬁrst consult the log table; if the logical block’s
+location is not found there, the FTL will then consult the data table to ﬁnd
+its location and then access the requested data.
+The key to the hybrid mapping strategy is keeping the number of log
+blocks small. To keep the number of log blocks small, the FTL has to pe-
+riodically examine log blocks (which have a pointer per page) and switch
+them into blocks that can be pointed to by only a single block pointer.
+This switch is accomplished by one of three main techniques, based on
+the contents of the block [KK+02].
+For example, let’s say the FTL had previously written out logical pages
+1000, 1001, 1002, and 1003, and placed them in physical block 2 (physical
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

@@ -1,0 +1,26 @@
+LABORATORY: TUTORIAL
+13
+F.9 Suggested Readings
+Other than the man and info pages, there are a number of useful books
+out there. Note that a lot of this information is available for free on-line;
+however, sometimes having something in book form seems to make it
+easier to learn. Also, always look for O’Reilly books on topics you are
+interested in; they are almost always of high quality.
+• “The C Programming Language”, by Brian Kernighan and Dennis
+Ritchie. This is the deﬁnitive C book to have.
+• “Managing Projects with make”, by Andrew Oram and Steve Tal-
+bott. A reasonable and short book on make.
+• “Debugging with GDB: The GNU Source-Level Debugger”, by Richard
+M. Stallman, Roland H. Pesch. A little book on using GDB.
+• “Advanced Programming in the UNIX Environment”, by W. Richard
+Stevens and Steve Rago. Stevens wrote some excellent books, and
+this is a must for UNIX hackers. He also has an excellent set of books
+on TCP/IP and Sockets programming.
+• “Expert C Programming”, by Peter Van der Linden. A lot of the
+useful tips about compilers, etc., above are stolen directly from here.
+Read this! It is a great and eye-opening book, even though a little
+out of date.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

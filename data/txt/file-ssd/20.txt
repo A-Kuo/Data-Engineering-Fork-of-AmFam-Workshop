@@ -1,0 +1,58 @@
+FLASH-BASED SSDS
+21
+References
+[A+08] “Design Tradeoffs for SSD Performance” by N. Agrawal, V. Prabhakaran, T. Wobber, J.
+D. Davis, M. Manasse, R. Panigrahy. USENIX ’08, San Diego California, June 2008. An excellent
+overview of what goes into SSD design.
+[AD14a] “Operating Systems: Three Easy Pieces” by Chapters: Crash Consistency: FSCK and
+Journaling and Log-Structured File Systems. Remzi Arpaci-Dusseau and Andrea Arpaci-Dusseau.
+A lot more detail here about how logging can be used in ﬁle systems; some of the same ideas can be ap-
+plied inside devices too as need be.
+[AD14a] “Operating Systems: Three Easy Pieces” by Chapters: Locality and the Fast File System
+and File System Implementation. Remzi Arpaci-Dusseau and Andrea Arpaci-Dusseau. These
+chapters cover how to build a basic ﬁle system for a hard drive. Amazingly, some of these ideas work
+perfectly well on SSDs! See if you can ﬁgure out which design techniques are appropriate, and which
+are less needed.
+[A15] “Amazon Pricing Study” by Remzi Arpaci-Dusseau. February, 2015. This is not an actual
+paper, but rather one of the authors going to Amazon and looking at current prices of hard drives and
+SSDs. You too can repeat this study, and see what the costs are today. Do it!
+[B+12] “CORFU: A Shared Log Design for Flash Clusters” by M. Balakrishnan, D. Malkhi, V.
+Prabhakaran, T. Wobber, M. Wei, J. D. Davis. NSDI ’12, San Jose, California, April 2012. A new
+way to think about designing a high-performance replicated log for clusters using Flash.
+[BD10] “Write Endurance in Flash Drives: Measurements and Analysis” by Simona Boboila,
+Peter Desnoyers. FAST ’10, San Jose, California, February 2010. A cool paper that reverse en-
+gineers ﬂash-device lifetimes. Endurance sometimes far exceeds manufacturer predictions, by up to
+100×.
+[B07] “ZFS: The Last Word in File Systems” by Jeff Bonwick and Bill Moore. Available here:
+http://www.ostep.org/Citations/zfs_last.pdf. Was this the last word in ﬁle sys-
+tems? No, but maybe it’s close.
+[CG+09] “Gordon: Using Flash Memory to Build Fast, Power-efﬁcient Clusters for Data-intensive
+Applications” by Adrian M. Caulﬁeld, Laura M. Grupp, Steven Swanson. ASPLOS ’09, Wash-
+ington, D.C., March 2009. Early research on assembling ﬂash into larger-scale clusters; deﬁnitely
+worth a read.
+[CK+09] “Understanding Intrinsic Characteristics and System Implications of Flash Memory
+based Solid State Drives” by Feng Chen, David A. Koufaty, and Xiaodong Zhang. SIGMET-
+RICS/Performance ’09, Seattle, Washington, June 2009. An excellent overview of SSD performance
+problems circa 2009 (though now a little dated).
+[G14] “The SSD Endurance Experiment” by Geoff Gasior. The Tech Report, September 19,
+2014. Available: http://techreport.com/review/27062. A nice set of simple experiments
+measuring performance of SSDs over time. There are many other similar studies; use google to ﬁnd
+more.
+[GC+09] “Characterizing Flash Memory: Anomalies, Observations, and Applications” by L.
+M. Grupp, A. M. Caulﬁeld, J. Coburn, S. Swanson, E. Yaakobi, P. H. Siegel, J. K. Wolf. IEEE
+MICRO ’09, New York, New York, December 2009. Another excellent characterization of ﬂash
+performance.
+[GY+09] “DFTL: a Flash Translation Layer Employing Demand-Based Selective Caching of
+Page-Level Address Mappings” by Aayush Gupta, Youngjae Kim, Bhuvan Urgaonkar. ASP-
+LOS ’09, Washington, D.C., March 2009. This paper gives an excellent overview of different strategies
+for cleaning within hybrid SSDs as well as a new scheme which saves mapping table space and improves
+performance under many workloads.
+[HK+17] “The Unwritten Contract of Solid State Drives” by Jun He, Sudarsun Kannan, Andrea
+C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. EuroSys ’17, Belgrade, Serbia, April 2017. Our
+own paper which lays out ﬁve rules clients should follow in order to get the best performance out of
+modern SSDs. The rules are request scale, locality, aligned sequentiality, grouping by death time, and
+uniform lifetime. Read the paper for details!
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

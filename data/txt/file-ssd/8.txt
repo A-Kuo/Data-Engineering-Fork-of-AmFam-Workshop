@@ -1,0 +1,147 @@
+FLASH-BASED SSDS
+9
+Block 0 is now ready to be programmed. Most SSDs will write pages
+in order (i.e., low to high), reducing reliability problems related to pro-
+gram disturbance. The SSD then directs the write of logical block 100
+into physical page 0:
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+a1
+V
+01
+E
+02
+E
+03
+E
+04
+i
+05
+i
+06
+i
+07
+i
+08
+i
+09
+i
+10
+i
+11
+i
+But what if the client wants to read logical block 100? How can it ﬁnd
+where it is? The SSD must transform a read issued to logical block 100
+into a read of physical page 0. To accommodate such functionality, when
+the FTL writes logical block 100 to physical page 0, it records this fact in
+an in-memory mapping table. We will track the state of this mapping
+table in the diagrams as well:
+Memory
+Flash
+Chip
+Table:
+100
+0
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+a1
+V
+01
+E
+02
+E
+03
+E
+04
+i
+05
+i
+06
+i
+07
+i
+08
+i
+09
+i
+10
+i
+11
+i
+Now you can see what happens when the client writes to the SSD.
+The SSD ﬁnds a location for the write, usually just picking the next free
+page; it then programs that page with the block’s contents, and records
+the logical-to-physical mapping in its mapping table. Subsequent reads
+simply use the table to translate the logical block address presented by
+the client into the physical page number required to read the data.
+Let’s now examine the rest of the writes in our example write stream:
+101, 2000, and 2001. After writing these blocks, the state of the device is:
+Memory
+Flash
+Chip
+Table:
+100
+0
+101
+1
+2000
+2
+2001
+3
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+a1
+V
+01
+a2
+V
+02
+b1
+V
+03
+b2
+V
+04
+i
+05
+i
+06
+i
+07
+i
+08
+i
+09
+i
+10
+i
+11
+i
+The log-based approach by its nature improves performance (erases
+only being required once in a while, and the costly read-modify-write of
+the direct-mapped approach avoided altogether), and greatly enhances
+reliability. The FTL can now spread writes across all pages, performing
+what is called wear leveling and increasing the lifetime of the device;
+we’ll discuss wear leveling further below.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

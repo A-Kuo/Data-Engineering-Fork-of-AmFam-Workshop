@@ -1,0 +1,25 @@
+H
+Laboratory: xv6 Projects
+NOTE: Projects are slowing being added to https://github.com/
+remzi-arpacidusseau/ostep-projects, which includes project
+descriptions and a simple testing framework. Please be sure to check
+that out if interested.
+This chapter presents some ideas for projects related to the xv6 kernel.
+The kernel is available from MIT and is quite fun to play with; doing
+these projects also make the in-class material more directly relevant to
+the projects. These projects (except perhaps the ﬁrst couple) are usually
+done in pairs, making the hard task of staring at the kernel a little easier.
+H.1 Intro Project
+The introduction adds a simple system call to xv6. Many variants are
+possible, including a system call to count how many system calls have
+taken place (one counter per system call), or other information-gathering
+calls. Students learn about how a system call actually takes place.
+H.2 Processes and Scheduling
+Students build a more complicated scheduler than the default round
+robin. Many variants are possible, including a Lottery scheduler or multi-
+level feedback queue. Students learn how schedulers actually work, as
+well as how a context switch takes place. A small addendum is to also
+require students to ﬁgure out how to make processes return a proper error
+code when exiting, and to be able to access that error code through the
+wait() system call.
+1

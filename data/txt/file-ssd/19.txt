@@ -1,0 +1,39 @@
+20
+FLASH-BASED SSDS
+ASIDE: KEY SSD TERMS
+• A ﬂash chip consists of many banks, each of which is organized into
+erase blocks (sometimes just called blocks). Each block is further
+subdivided into some number of pages.
+• Blocks are large (128KB–2MB) and contain many pages, which are
+relatively small (1KB–8KB).
+• To read from ﬂash, issue a read command with an address and
+length; this allows a client to read one or more pages.
+• Writing ﬂash is more complex. First, the client must erase the en-
+tire block (which deletes all information within the block). Then,
+the client can program each page exactly once, thus completing the
+write.
+• A new trim operation is useful to tell the device when a particular
+block (or range of blocks) is no longer needed.
+• Flash reliability is mostly determined by wear out; if a block is
+erased and programmed too often, it will become unusable.
+• A ﬂash-based solid-state storage device (SSD) behaves as if it were
+a normal block-based read/write disk; by using a ﬂash translation
+layer (FTL), it transforms reads and writes from a client into reads,
+erases, and programs to underlying ﬂash chips.
+• Most FTLs are log-structured, which reduces the cost of writing
+by minimizing erase/program cycles. An in-memory translation
+layer tracks where logical writes were located within the physical
+medium.
+• One key problem with log-structured FTLs is the cost of garbage
+collection, which leads to write ampliﬁcation.
+• Another problem is the size of the mapping table, which can be-
+come quite large.
+Using a hybrid mapping or just caching hot
+pieces of the FTL are possible remedies.
+• One last problem is wear leveling; the FTL must occasionally mi-
+grate data from blocks that are mostly read in order to ensure said
+blocks also receive their share of the erase/program load.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

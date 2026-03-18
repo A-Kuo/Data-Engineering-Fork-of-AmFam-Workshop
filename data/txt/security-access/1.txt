@@ -1,0 +1,47 @@
+2
+ACCESS CONTROL
+THE CRUX OF THE PROBLEM:
+HOW TO DETERMINE IF AN ACCESS REQUEST SHOULD BE GRANTED?
+How can the operating system decide if a particular request made by
+a particular process belonging to a particular user at some given moment
+should or should not be granted? What information will be used to make
+this decision? How can we set this information to encode the security
+policies we want to enforce for our system?
+55.2 Important Aspects Of The Access Control Problem
+As usual, the system will run some kind of algorithm to make this
+decision. It will take certain inputs and produce a binary output, a yes-or-
+no decision on granting access. At the high level, access control is usually
+spoken of in terms of subjects, objects, and access. A subject is the entity
+that wants to perform the access, perhaps a user or a process. An object
+is the thing the subject wants to access, perhaps a ﬁle or a device. Access
+is some particular mode of dealing with the object, such as reading it or
+writing it. So an access control decision is about whether a particular
+subject is allowed to perform a particular mode of access on a particular
+object. We sometimes refer to the process of determining if a particular
+subject is allowed to perform a particular form of access on a particular1
+object as authorization.
+One relevant issue is when will access control decisions be made? The
+system must run whatever algorithm it uses every time it makes such a
+decision. The code that implements this algorithm is called a reference
+monitor, and there is an obvious incentive to make sure it is implemented
+both correctly and efﬁciently. If it’s not correct, you make the wrong ac-
+cess decisions – obviously bad. Its efﬁciency is important because it will
+inject some overhead whenever it is used. Perhaps we wish to minimize
+these overheads by not checking access control on every possible oppor-
+tunity. On the other hand, remember that principle of complete medi-
+ation we introduced a couple of chapters back? That principle said we
+should check security conditions every time someone asked for some-
+thing.
+Clearly, we’ll need to balance costs against security beneﬁts. But if
+we can ﬁnd some beneﬁcial special cases where we can achieve low cost
+without compromising security, we can possibly manage to avoid trading
+off one for the other, at least in those cases.
+One way to do so is to give subjects objects that belong only to them.
+If the object is inherently theirs, by its very nature and unchangeably so,
+the system can let the subject (a process, in the operating system case) ac-
+1Wow. You know how hard it is to get so many instances of the word “particular” to line
+up like this? It’s a column of particulars! But, perhaps, not particularly interesting.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

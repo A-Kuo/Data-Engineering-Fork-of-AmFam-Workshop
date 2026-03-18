@@ -1,0 +1,46 @@
+2
+LABORATORY: TUTORIAL
+/* header files go up here */
+/* note that C comments are enclosed within a slash and
+a star, and may wrap over lines */
+// two slashes work too (and may be preferred)
+#include <stdio.h>
+// main returns an integer
+int main(int argc, char *argv[]) {
+/* printf is our output function;
+by default, writes to standard out */
+/* printf returns an integer, but we ignore that */
+printf("hello, world\n");
+/* return 0 to indicate all went well */
+return(0);
+}
+an integer argc, which is a count of the number of arguments on the com-
+mand line, and an array of pointers to characters (argv), each of which
+contain a word from the command line, and the last of which is null.
+There will be more on pointers and arrays below.
+The program then simply prints the string “hello, world” and ad-
+vances the output stream to the next line, courtesy of the backslash fol-
+lowed by an “n” at the end of the call to printf(). Afterwards, the pro-
+gram completes by returning a value, which is passed back to the shell
+that executed the program. A script or the user at the terminal could
+check this value (in csh and tcsh shells, it is stored in the status vari-
+able), to see whether the program exited cleanly or with an error.
+F.2 Compilation and Execution
+We’ll now learn how to compile the program. Note that we will use
+gcc as our example, though on some platforms you may be able to use a
+different (native) compiler, cc.
+At the shell prompt, you just type:
+prompt> gcc hw.c
+gcc is not really the compiler, but rather the program called a “com-
+piler driver”; thus it coordinates the many steps of the compilation. Usu-
+ally there are four to ﬁve steps. First, gcc will execute cpp, the C pre-
+processor, to process certain directives (such as #define and #include).
+The program cpp is just a source-to-source translator, so its end-product
+is still just source code (i.e., a C ﬁle). Then the real compilation will begin,
+usually a command called cc1. This will transform source-level C code
+into low-level assembly code, speciﬁc to the host machine. The assem-
+bler as will then be executed, generating object code (bits and things that
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

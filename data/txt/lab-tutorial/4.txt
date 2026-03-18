@@ -1,0 +1,46 @@
+LABORATORY: TUTORIAL
+5
+the /foo/bar directory. One common directory to specify in this manner
+is “.” (called “dot”), which is UNIX shorthand for the current directory.
+Note that the -I ﬂag should go on a compile line, and the -L ﬂag on the
+link line.
+F.5 Separate Compilation
+Once a program starts to get large enough, you may want to split
+it into separate ﬁles, compiling each separately, and then link them to-
+gether. For example, say you have two ﬁles, hw.c and helper.c, and
+you wish to compile them individually, and then link them together.
+# we are using -Wall for warnings, -O for optimization
+prompt> gcc -Wall -O -c hw.c
+prompt> gcc -Wall -O -c helper.c
+prompt> gcc -o hw hw.o helper.o -lm
+The -c ﬂag tells the compiler just to produce an object ﬁle — in this
+case, ﬁles called hw.o and helper.o. These ﬁles are not executables,
+but just machine-level representations of the code within each source
+ﬁle. To combine the object ﬁles into an executable, you have to “link”
+them together; this is accomplished with the third line gcc -o hw hw.o
+helper.o). In this case, gcc sees that the input ﬁles speciﬁed are not
+source ﬁles (.c), but instead are object ﬁles (.o), and therefore skips right
+to the last step and invoked the link-editor ld to link them together into a
+single executable. Because of its function, this line is often called the “link
+line”, and would be where you specify link-speciﬁc commands such as
+-lm. Analogously, ﬂags such as -Wall and -O are only needed in the
+compile phase, and therefore need not be included on the link line but
+rather only on compile lines.
+Of course, you could just specify all the C source ﬁles on a single line
+to gcc (gcc -Wall -O -o hw hw.c helper.c), but this requires the
+system to recompile every source-code ﬁle, which can be a time-consuming
+process. By compiling each individually, you can save time by only re-
+compiling those ﬁles that have changed during your editing, and thus
+increase your productivity. This process is best managed by another pro-
+gram, make, which we now describe.
+F.6 Makeﬁles
+The program make lets you automate much of your build process,
+and is thus a crucially important tool for any serious program (and pro-
+grammer). Let’s take a look at a simple example, saved in a ﬁle called
+Makefile.
+To build your program, now all you have to do is type make at the
+command line.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,10 @@
+4
+LABORATORY: SYSTEMS PROJECTS
+References
+[M94] “Moss: A System for Detecting Software Plagiarism”
+Alex Aiken
+Available: http://theory.stanford.edu/˜aiken/moss/
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

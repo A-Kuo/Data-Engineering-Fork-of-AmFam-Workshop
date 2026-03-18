@@ -1,0 +1,49 @@
+10
+LABORATORY: TUTORIAL
+By using the print primitive, we can examine p, and see both that it is
+a pointer to a struct of type Data, and that it is currently set to NULL (or
+zero, or hex zero which is shown here as “0x0”).
+Finally, you can also set breakpoints within your program to have the
+debugger stop the program at a certain routine. After doing this, it is
+often useful to step through the execution (one line at a time), and see
+what is happening.
+(gdb) break main
+Breakpoint 1 at 0x8048426: file buggy.c, line 17.
+(gdb) run
+Starting program: /homes/hacker/buggy
+Breakpoint 1, main (argc=1, argv=0xbffff844) at buggy.c:17
+17
+struct Data *p = NULL;
+(gdb) next
+19
+printf("%d\n", p->x);
+(gdb) next
+Program received signal SIGSEGV, Segmentation fault.
+0x8048433 in main (argc=1, argv=0xbffff844) at buggy.c:19
+19
+printf("%d\n", p->x);
+In the example above, a breakpoint is set at the main() routine; thus,
+when we run the program, the debugger almost immediately stops exe-
+cution at main. At that point in the example, a “next” command is issued,
+which executes the next source-level command. Both “next” and “step”
+are useful ways to advance through a program — read about them in the
+documentation for more details 2.
+This discussion really does not do gdb justice; it is a rich and ﬂexi-
+ble debugging tool, with many more features than can be described in
+the limited space here. Read more about it on your own and become an
+expert in your copious spare time.
+F.8 Documentation
+To learn a lot more about all of these things, you have to do two things:
+the ﬁrst is to use these tools, and the second is to read more about them
+on your own. One way to ﬁnd out more about gcc, gmake, and gdb is to
+read their man pages; type man gcc, man gmake, or man gdb at your
+command prompt. You can also use man -k to search the man pages for
+keywords, though that doesn’t always work as well as it might; googling
+is probably a better approach here.
+One tricky thing about man pages: typing man XXX may not result
+in the thing you want, if there is more than one thing called XXX. For
+2In particular, you can use the interactive “help” command while debugging with gdb
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

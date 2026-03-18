@@ -1,0 +1,46 @@
+22
+FLASH-BASED SSDS
+[H+14] “An Aggressive Worn-out Flash Block Management Scheme To Alleviate SSD Perfor-
+mance Degradation” by Ping Huang, Guanying Wu, Xubin He, Weijun Xiao. EuroSys ’14,
+2014. Recent work showing how to really get the most out of worn-out ﬂash blocks; neat!
+[J10] “Failure Mechanisms and Models for Semiconductor Devices” by Unknown author. Re-
+port JEP122F, November 2010. Available on the internet at this exciting so-called web site:
+http://www.jedec.org/sites/default/files/docs/JEP122F.pdf. A highly detailed
+discussion of what is going on at the device level and how such devices fail. Only for those not faint of
+heart. Or physicists. Or both.
+[KK+02] “A Space-Efﬁcient Flash Translation Layer For Compact Flash Systems” by Jesung
+Kim, Jong Min Kim, Sam H. Noh, Sang Lyul Min, Yookun Cho. IEEE Transactions on Con-
+sumer Electronics, Volume 48, Number 2, May 2002. One of the earliest proposals to suggest
+hybrid mappings.
+[L+07] “A Log Buffer-Based Flash Translation Layer by Using Fully-Associative Sector Trans-
+lation. ” Sang-won Lee, Tae-Sun Chung, Dong-Ho Lee, Sangwon Park, Ha-Joo Song. ACM
+Transactions on Embedded Computing Systems, Volume 6, Number 3, July 2007 A terriﬁc paper
+about how to build hybrid log/block mappings.
+[M+14] “A Survey of Address Translation Technologies for Flash Memories” by Dongzhe Ma,
+Jianhua Feng, Guoliang Li. ACM Computing Surveys, Volume 46, Number 3, January 2014.
+Probably the best recent survey of ﬂash and related technologies.
+[S13] “The Seagate 600 and 600 Pro SSD Review” by Anand Lal Shimpi. AnandTech, May 7,
+2013. Available: http://www.anandtech.com/show/6935/seagate-600-ssd-review.
+One of many SSD performance measurements available on the internet. Haven’t heard of the internet?
+No problem. Just go to your web browser and type “internet” into the search tool. You’ll be amazed at
+what you can learn.
+[T15] “Performance Charts Hard Drives” by Tom’s Hardware. January 2015. Available here:
+http://www.tomshardware.com/charts/enterprise-hdd-charts.
+Yet another site
+with performance data, this time focusing on hard drives.
+[V12] “Understanding TLC Flash” by Kristian Vatto. AnandTech, September, 2012. Available:
+http://www.anandtech.com/show/5067/understanding-tlc-nand. A short descrip-
+tion about TLC ﬂash and its characteristics.
+[W15] “List of Ships Sunk by Icebergs” by Many authors. Available at this location on the
+“web”: http://en.wikipedia.org/wiki/List of ships sunk by icebergs. Yes, there
+is a wikipedia page about ships sunk by icebergs. It is a really boring page and basically everyone knows
+the only ship the iceberg-sinking-maﬁa cares about is the Titanic.
+[Z+12] “De-indirection for Flash-based SSDs with Nameless Writes” by Yiying Zhang, Leo
+Prasath Arulraj, Andrea C. Arpaci-Dusseau, Remzi H. Arpaci-Dusseau. FAST ’13, San Jose,
+California, February 2013. Our research on a new idea to reduce mapping table space; the key is to
+re-use the pointers in the ﬁle system above to store locations of blocks, instead of adding another level of
+indirection.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

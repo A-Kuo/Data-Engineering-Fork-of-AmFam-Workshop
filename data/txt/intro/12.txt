@@ -1,0 +1,50 @@
+INTRODUCTION TO OPERATING SYSTEMS
+13
+handling code, the “OS” would provide such APIs, and thus make life
+easier for the developer.
+Usually, on these old mainframe systems, one program ran at a time,
+as controlled by a human operator. Much of what you think a modern
+OS would do (e.g., deciding what order to run jobs in) was performed by
+this operator. If you were a smart developer, you would be nice to this
+operator, so that they might move your job to the front of the queue.
+This mode of computing was known as batch processing, as a number
+of jobs were set up and then run in a “batch” by the operator. Computers,
+as of that point, were not used in an interactive manner, because of cost:
+it was simply too expensive to let a user sit in front of the computer and
+use it, as most of the time it would just sit idle then, costing the facility
+hundreds of thousands of dollars per hour [BH00].
+Beyond Libraries: Protection
+In moving beyond being a simple library of commonly-used services, op-
+erating systems took on a more central role in managing machines. One
+important aspect of this was the realization that code run on behalf of the
+OS was special; it had control of devices and thus should be treated dif-
+ferently than normal application code. Why is this? Well, imagine if you
+allowed any application to read from anywhere on the disk; the notion of
+privacy goes out the window, as any program could read any ﬁle. Thus,
+implementing a ﬁle system (to manage your ﬁles) as a library makes little
+sense. Instead, something else was needed.
+Thus, the idea of a system call was invented, pioneered by the Atlas
+computing system [K+61,L78]. Instead of providing OS routines as a li-
+brary (where you just make a procedure call to access them), the idea here
+was to add a special pair of hardware instructions and hardware state to
+make the transition into the OS a more formal, controlled process.
+The key difference between a system call and a procedure call is that
+a system call transfers control (i.e., jumps) into the OS while simultane-
+ously raising the hardware privilege level. User applications run in what
+is referred to as user mode which means the hardware restricts what ap-
+plications can do; for example, an application running in user mode can’t
+typically initiate an I/O request to the disk, access any physical memory
+page, or send a packet on the network. When a system call is initiated
+(usually through a special hardware instruction called a trap), the hard-
+ware transfers control to a pre-speciﬁed trap handler (that the OS set up
+previously) and simultaneously raises the privilege level to kernel mode.
+In kernel mode, the OS has full access to the hardware of the system and
+thus can do things like initiate an I/O request or make more memory
+available to a program. When the OS is done servicing the request, it
+passes control back to the user via a special return-from-trap instruction,
+which reverts to user mode while simultaneously passing control back to
+where the application left off.
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

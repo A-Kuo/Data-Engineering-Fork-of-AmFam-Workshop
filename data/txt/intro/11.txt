@@ -1,0 +1,48 @@
+12
+INTRODUCTION TO OPERATING SYSTEMS
+vide virtualization and other OS features without excessive overheads.
+These overheads arise in a number of forms: extra time (more instruc-
+tions) and extra space (in memory or on disk). We’ll seek solutions that
+minimize one or the other or both, if possible. Perfection, however, is not
+always attainable, something we will learn to notice and (where appro-
+priate) tolerate.
+Another goal will be to provide protection between applications, as
+well as between the OS and applications.
+Because we wish to allow
+many programs to run at the same time, we want to make sure that the
+malicious or accidental bad behavior of one does not harm others; we
+certainly don’t want an application to be able to harm the OS itself (as
+that would affect all programs running on the system). Protection is at
+the heart of one of the main principles underlying an operating system,
+which is that of isolation; isolating processes from one another is the key
+to protection and thus underlies much of what an OS must do.
+The operating system must also run non-stop; when it fails, all appli-
+cations running on the system fail as well. Because of this dependence,
+operating systems often strive to provide a high degree of reliability. As
+operating systems grow evermore complex (sometimes containing mil-
+lions of lines of code), building a reliable operating system is quite a chal-
+lenge — and indeed, much of the on-going research in the ﬁeld (including
+some of our own work [BS+09, SS+10]) focuses on this exact problem.
+Other goals make sense: energy-efﬁciency is important in our increas-
+ingly green world; security (an extension of protection, really) against
+malicious applications is critical, especially in these highly-networked
+times; mobility is increasingly important as OSes are run on smaller and
+smaller devices. Depending on how the system is used, the OS will have
+different goals and thus likely be implemented in at least slightly differ-
+ent ways. However, as we will see, many of the principles we will present
+on how to build an OS are useful on a range of different devices.
+2.6 Some History
+Before closing this introduction, let us present a brief history of how
+operating systems developed. Like any system built by humans, good
+ideas accumulated in operating systems over time, as engineers learned
+what was important in their design. Here, we discuss a few major devel-
+opments. For a richer treatment, see Brinch Hansen’s excellent history of
+operating systems [BH00].
+Early Operating Systems: Just Libraries
+In the beginning, the operating system didn’t do too much. Basically,
+it was just a set of libraries of commonly-used functions; for example,
+instead of having each programmer of the system write low-level I/O
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

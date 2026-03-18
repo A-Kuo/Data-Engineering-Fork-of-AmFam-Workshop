@@ -1,0 +1,50 @@
+INTRODUCTION TO OPERATING SYSTEMS
+15
+ASIDE: THE IMPORTANCE OF UNIX
+It is difﬁcult to overstate the importance of UNIX in the history of oper-
+ating systems. Inﬂuenced by earlier systems (in particular, the famous
+Multics system from MIT), UNIX brought together many great ideas and
+made a system that was both simple and powerful.
+Underlying the original “Bell Labs” UNIX was the unifying principle of
+building small powerful programs that could be connected together to
+form larger workﬂows. The shell, where you type commands, provided
+primitives such as pipes to enable such meta-level programming, and
+thus it became easy to string together programs to accomplish a big-
+ger task.
+For example, to ﬁnd lines of a text ﬁle that have the word
+“foo” in them, and then to count how many such lines exist, you would
+type: grep foo file.txt|wc -l, thus using the grep and wc (word
+count) programs to achieve your task.
+The UNIX environment was friendly for programmers and developers
+alike, also providing a compiler for the new C programming language.
+Making it easy for programmers to write their own programs, as well as
+share them, made UNIX enormously popular. And it probably helped a
+lot that the authors gave out copies for free to anyone who asked, an early
+form of open-source software.
+Also of critical importance was the accessibility and readability of the
+code. Having a beautiful, small kernel written in C invited others to play
+with the kernel, adding new and cool features. For example, an enter-
+prising group at Berkeley, led by Bill Joy, made a wonderful distribution
+(the Berkeley Systems Distribution, or BSD) which had some advanced
+virtual memory, ﬁle system, and networking subsystems. Joy later co-
+founded Sun Microsystems.
+Unfortunately, the spread of UNIX was slowed a bit as companies tried to
+assert ownership and proﬁt from it, an unfortunate (but common) result
+of lawyers getting involved. Many companies had their own variants:
+SunOS from Sun Microsystems, AIX from IBM, HPUX (a.k.a. “H-Pucks”)
+from HP, and IRIX from SGI. The legal wrangling among AT&T/Bell
+Labs and these other players cast a dark cloud over UNIX, and many
+wondered if it would survive, especially as Windows was introduced and
+took over much of the PC market...
+as their low-cost enabled one machine per desktop instead of a shared
+minicomputer per workgroup.
+Unfortunately, for operating systems, the PC at ﬁrst represented a
+great leap backwards, as early systems forgot (or never knew of) the
+lessons learned in the era of minicomputers. For example, early operat-
+ing systems such as DOS (the Disk Operating System, from Microsoft)
+didn’t think memory protection was important; thus, a malicious (or per-
+haps just a poorly-programmed) application could scribble all over mem-
+© 2008–25, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

@@ -1,0 +1,51 @@
+ACCESS CONTROL
+11
+herits the identity of its parent process, also inheriting all of the privileges
+of that principal. It’s hard to give the process just a subset of the parent’s
+privileges. Either you need to create a new principal with those limited
+privileges, change a bunch of access control lists, and set the new pro-
+cess’s identity to that new principal, or you need some extension to your
+access control model that doesn’t behave quite the way access control lists
+ordinarily do. With capabilities, it’s easy. If the parent has capabilities for
+X, Y, and Z, but only wants the child process to have the X and Y capabil-
+ities, when the child is created, the parent transfers X and Y, not Z.
+In practice, user-visible access control mechanisms tend to use access
+control lists, not capabilities, for a number of reasons. However, under
+the covers operating systems make extensive use of capabilities. For ex-
+ample, in a typical Linux system, that open() call we were discussing
+uses ACLs for access control. However, assuming the Linux open() was
+successful, as long as the process keeps the ﬁle open, the ACL is not ex-
+amined on subsequent reads and writes. Instead, Linux creates a data
+structure that amounts to a capability indicating that the process has read
+and write privileges for that ﬁle. This structure is attached to the process’s
+PCB. On each read or write operation, the OS can simply consult this data
+structure to determine if reading and writing are allowed, without hav-
+ing to ﬁnd the ﬁle’s access control list. If the ﬁle is closed, this capability-
+like structure is deleted from the PCB and the process can no longer access
+the ﬁle without performing another open() which goes back to the ACL.
+Similar techniques can be used to control access to hardware devices and
+IPC channels, especially since UNIX-like systems treat these resources as
+if they were ﬁles. This combined use of ACLs and capabilities allows the
+system to avoid some of the problems associated with each mechanism.
+The cost of checking an access control list on every operation is saved be-
+cause this form of capability is easy to check, being merely the presence
+or absence of a pointer in an operating system data structure. The cost of
+managing capabilities for all accessible objects is avoided because the ca-
+pability is only set up after a successful ACL check. If the object is never
+accessed by a process, the ACL is never checked and no capability is re-
+quired. Since any given process typically opens only a tiny fraction of all
+the ﬁles it is permitted to open, the scaling issue doesn’t usually arise.
+55.5 Mandatory And Discretionary Access Control
+Who gets to decide what the access control on a computer resource
+should be? For most people, the answer seems obvious: whoever owns
+the resource. In the case of a user’s ﬁle, the user should determine access
+control settings. In the case of a system resource, the system administra-
+tor, or perhaps the owner of the computer, should determine them. How-
+ever, for some systems and some security policies, that’s not the right an-
+swer. In particular, the parties who care most about information security
+sometimes want tighter controls than that.
+© 2008–23, ARPACI-DUSSEAU (OSTEP)
+© 2019–23, REIHER (SECURITY)
+THREE
+EASY
+PIECES

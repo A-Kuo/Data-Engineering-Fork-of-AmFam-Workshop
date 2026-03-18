@@ -1,0 +1,33 @@
+44
+Flash-based SSDs
+After decades of hard-disk drive dominance, a new form of persistent
+storage device has recently gained signiﬁcance in the world.
+Generi-
+cally referred to as solid-state storage, such devices have no mechani-
+cal or moving parts like hard drives; rather, they are simply built out of
+transistors, much like memory and processors. However, unlike typical
+random-access memory (e.g., DRAM), such a solid-state storage device
+(a.k.a., an SSD) retains information despite power loss, and thus is an
+ideal candidate for use in persistent storage of data.
+The technology we’ll focus on is known as ﬂash (more speciﬁcally,
+NAND-based ﬂash), which was created by Fujio Masuoka in the 1980s
+[M+14]. Flash, as we’ll see, has some unique properties. For example, to
+write to a given chunk of it (i.e., a ﬂash page), you ﬁrst have to erase a big-
+ger chunk (i.e., a ﬂash block), which can be quite expensive. In addition,
+writing too often to a page will cause it to wear out. These two properties
+make construction of a ﬂash-based SSD an interesting challenge:
+CRUX: HOW TO BUILD A FLASH-BASED SSD
+How can we build a ﬂash-based SSD? How can we handle the expen-
+sive nature of erasing? How can we build a device that lasts a long time,
+given that repeated overwrite will wear the device out? Will the march of
+progress in technology ever cease? Or cease to amaze?
+44.1 Storing a Single Bit
+Flash chips are designed to store one or more bits in a single transis-
+tor; the level of charge trapped within the transistor is mapped to a binary
+value. In a single-level cell (SLC) ﬂash, only a single bit is stored within
+a transistor (i.e., 1 or 0); with a multi-level cell (MLC) ﬂash, two bits are
+encoded into different levels of charge, e.g., 00, 01, 10, and 11 are repre-
+sented by low, somewhat low, somewhat high, and high levels. There is
+even triple-level cell (TLC) ﬂash, which encodes 3 bits per cell. Overall,
+SLC chips achieve higher performance and are more expensive.
+1

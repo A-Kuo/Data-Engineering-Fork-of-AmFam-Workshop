@@ -1,0 +1,35 @@
+2
+Introduction to Operating Systems
+If you are taking an undergraduate operating systems course, you
+should already have some idea of what a computer program does when
+it runs. If not, this book (and the corresponding course) is going to be
+difﬁcult — so you should probably stop reading this book, or run to the
+nearest bookstore and quickly consume the necessary background mate-
+rial before continuing (both Patt & Patel [PP03] and Bryant & O’Hallaron
+[BOH10] are pretty great books).
+So what happens when a program runs?
+Well, a running program does one very simple thing: it executes in-
+structions. Many millions (and these days, even billions) of times ev-
+ery second, the processor fetches an instruction from memory, decodes
+it (i.e., ﬁgures out which instruction this is), and executes it (i.e., it does
+the thing that it is supposed to do, like add two numbers together, access
+memory, check a condition, jump to a function, and so forth). After it is
+done with this instruction, the processor moves on to the next instruction,
+and so on, and so on, until the program ﬁnally completes1.
+Thus, we have just described the basics of the Von Neumann model of
+computing2. Sounds simple, right? But in this class, we will be learning
+that while a program runs, a lot of other wild things are going on with
+the primary goal of making the system easy to use.
+There is a body of software, in fact, that is responsible for making it
+easy to run programs (even allowing you to seemingly run many at the
+same time), allowing programs to share memory, enabling programs to
+interact with devices, and other fun stuff like that. That body of software
+1Of course, modern processors do many bizarre and frightening things underneath the
+hood to make programs run faster, e.g., executing multiple instructions at once, and even issu-
+ing and completing them out of order! But that is not our concern here; we are just concerned
+with the simple model most programs assume: that instructions seemingly execute one at a
+time, in an orderly and sequential fashion.
+2Von Neumann was one of the early pioneers of computing systems. He also did pioneer-
+ing work on game theory and atomic bombs, and played in the NBA for six years. OK, one of
+those things isn’t true.
+1

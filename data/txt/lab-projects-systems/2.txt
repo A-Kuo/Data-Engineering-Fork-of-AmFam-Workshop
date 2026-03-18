@@ -1,0 +1,20 @@
+LABORATORY: SYSTEMS PROJECTS
+3
+G.7 File System Defragmenter
+This project explores on-disk data structures and their performance
+implications. The project should give some particular ﬁle-system images
+to students with known fragmentation problems; students should then
+crawl through the image, and look for ﬁles that are not laid out sequen-
+tially. Write out a new “defragmented” image that ﬁxes this problem,
+perhaps reporting some statistics.
+G.8 Concurrent File Server
+This project combines concurrency and ﬁle systems and even a little
+bit of networking and distributed systems. Students build a simple con-
+current ﬁle server. The protocol should look something like NFS, with
+lookups, reads, writes, and stats. Store ﬁles within a single disk image
+(designed as a ﬁle). Variants are manifold, with different suggested on-
+disk formats and network protocols.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

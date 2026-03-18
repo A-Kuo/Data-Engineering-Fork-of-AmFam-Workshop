@@ -1,0 +1,49 @@
+4
+LABORATORY: TUTORIAL
+#include <unistd.h>
+However, some library routines do not reside in the C library, and
+therefore you will have to do a little more work. For example, the math
+library has many useful routines, such as sines, cosines, tangents, and the
+like. If you want to include the routine tan() in our code, you should
+again ﬁrst check the man page. At the top of the Linux man page for tan,
+you will see the following two lines:
+#include <math.h>
+...
+Link with -lm.
+The ﬁrst line you already should understand — you need to #include
+the math library, which is found in the standard location in the ﬁle system
+(i.e., /usr/include/math.h). However, what the next line is telling
+you is how to “link” your program with the math library. A number
+of useful libraries exist and can be linked with; many of those reside in
+/usr/lib; it is indeed where the math library is found.
+There are two types of libraries: statically-linked libraries (which end
+in .a), and dynamically-linked ones (which end in .so). Statically-linked
+libraries are combined directly into your executable; that is, the low-level
+code for the library is inserted into your executable by the linker, and re-
+sults in a much larger binary object. Dynamic linking improves on this
+by just including the reference to a library in your program executable;
+when the program is run, the operating system loader dynamically links
+in the library. This method is preferred over the static approach because
+it saves disk space (no unnecessarily large executables are made) and al-
+lows applications to share library code and static data in memory. In the
+case of the math library, both static and dynamic versions are available,
+with the static version called /usr/lib/libm.a and the dynamic one
+/usr/lib/libm.so.
+In any case, to link with the math library, you need to specify the li-
+brary to the link-editor; this can be achieved by invoking gcc with the
+right ﬂags.
+prompt> gcc -o hw hw.c -Wall -lm
+The -lXXX ﬂag tells the linker to look for libXXX.so or libXXX.a,
+probably in that order. If for some reason you insist on the static library
+over the dynamic one, there is another ﬂag you can use — see if you can
+ﬁnd out what it is. People sometimes prefer the static version of a library
+because of the slight performance cost associated with using dynamic li-
+braries.
+One ﬁnal note: if you want the compiler to search for headers in a dif-
+ferent path than the usual places, or want it to link with libraries that you
+specify, you can use the compiler ﬂag -I/foo/bar to look for headers in
+the directory /foo/bar, and the -L/foo/bar ﬂag to look for libraries in
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

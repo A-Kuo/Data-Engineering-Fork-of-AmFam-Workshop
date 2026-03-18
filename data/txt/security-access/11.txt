@@ -1,0 +1,51 @@
+12
+ACCESS CONTROL
+The military is the most obvious example. We’ve all heard of Top Se-
+cret information, and probably all understand that even if you are al-
+lowed to see Top Secret information, you’re not supposed to let other
+people see it, too. And that’s true even if the information in question is in
+a ﬁle that you created yourself, such as a report that contains statistics or
+quotations from some other Top Secret document. In these cases, the sim-
+ple answer of the creator controlling access permissions isn’t right. Who-
+ever is in overall charge of information security in the organization needs
+to make those decisions, which implies that principal has the power to
+set the access controls for information created by and belonging to other
+users, and that those users can’t override his decisions. The more com-
+mon case is called discretionary access control. Whether almost anyone
+or almost no one is given access to a resource is at the discretion of the
+owning user. The more restrictive case is called mandatory access con-
+trol. At least some elements of the access control decisions in such sys-
+tems are mandated by an authority, who can override the desires of the
+owner of the information. The choice of discretionary or mandatory ac-
+cess control is orthogonal to whether you use ACLs or capabilities, and
+is often independent of other aspects of the access control mechanism,
+such as how access information is stored and handled. A mandatory ac-
+cess control system can also include discretionary elements, which allow
+further restriction (but not loosening) of mandatory controls.
+Many people will never work with a system running mandatory ac-
+cess controls, so we won’t go further into how they work, beyond ob-
+serving that clearly the operating system is going to be involved in en-
+forcing them. Should you ever need to work in an environment where
+mandatory access control is important, you can be sure you will hear
+about it. You should learn more about it at that point, since when some-
+one cares enough to use mandatory access control mechanisms, they also
+care enough to punish users who don’t follow the rules. Loscocco [L01]
+describes a special version of Linux that incorporates mandatory access
+control. This is a good paper to start with if you want to learn more about
+the characteristics of such systems.
+55.6 Practicalities Of Access Control Mechanisms
+Most systems expose either a simple or more powerful access control
+list mechanism to their users, and most of them use discretionary access
+control. However, given that a modern computer can easily have hun-
+dreds of thousands, or even millions of ﬁles, having human users indi-
+vidually set access control permissions on them is infeasible. Generally,
+the system allows each user to establish a default access permission that
+is used for every ﬁle he creates. If one uses the Linux open() call to cre-
+ate a ﬁle, one can specify which access permissions to initially assign to
+that ﬁle. Access permissions on newly created ﬁles in Unix/Linux sys-
+tems can be further controlled by the umask() call, which applies to all
+new ﬁle creations by the process that performed it.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

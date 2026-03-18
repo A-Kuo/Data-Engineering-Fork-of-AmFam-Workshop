@@ -1,0 +1,52 @@
+14
+ACCESS CONTROL
+However, while many will never touch access controls on their re-
+sources, for an important set of users and systems these controls are of
+vital importance to achieve their security goals. Even if you mostly rely
+on defaults, many software installation packages use some degree of care
+in setting access controls on executables and conﬁguration ﬁles they cre-
+ate. Generally, you should exercise caution in ﬁddling around with access
+controls in your system. If you don’t know what you’re doing, you might
+expose sensitive information or allow attackers to alter critical system set-
+tings. If you tighten existing access controls, you might suddenly cause a
+bunch of daemon programs running in the background to stop working.
+One practical issue that many large institutions discovered when try-
+ing to use standard access control methods to implement their security
+policies is that people performing different roles within the organization
+require different privileges. For example, in a hospital, all doctors might
+have a set of privileges not given to all pharmacists, who themselves have
+privileges not given to the doctors. Organizing access control on the ba-
+sis of such roles and then assigning particular users to the roles they are
+allowed to perform makes implementation of many security policies eas-
+ier. This approach is particularly valuable if certain users are permitted to
+switch roles depending on the task they are currently performing, since
+then one need not worry about setting or changing the individual’s access
+permissions on the ﬂy, but simply switch their role from one to another.
+Usually they will hold the role’s permission only as long as they maintain
+that role. Once they exit the particular role (perhaps to enter a different
+role with different privileges), they lose the privileges of the role they exit.
+This observation led to the development of Role-Based Access Con-
+trol, or RBAC. The core ideas had been around for some time before
+they were more formally laid out in a research paper by Ferraiolo and
+Kuhn [FK92]. Now RBAC is in common use in many organizations, par-
+ticularly large ones. Large organizations face more serious management
+challenges than small ones, so approaches like RBAC that allow groups of
+users to be dealt with in one operation can signiﬁcantly ease the manage-
+ment task. For example, if a company determines that all programmers
+should be granted access to a new library that has been developed, but
+accountants should not, RBAC would achieve this effect with a single op-
+eration that assigns the necessary privilege to the Programmer role. If a
+programmer is promoted to a management position for which access to
+the library is unnecessary, the company can merely remove the Program-
+mer role from the set of roles the manager could take on.
+Such restrictions do not necessarily imply that you suspect your ac-
+countants of being dishonest and prone to selling your secret library code
+to competitors7. Remember the principle of least privilege: when you
+give someone access to something, you are relying not just on their hon-
+esty, but on their caution. If accountants can’t access the library at all,
+7Dishonest accountants are generally good to avoid, so you probably did your best to hire
+honest ones, after all. Unless you’re Bernie Madoff [W20], perhaps...
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

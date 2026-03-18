@@ -1,0 +1,51 @@
+ix
+Acknowledgments
+This section will contain thanks to those who helped us put the book
+together. The important thing for now: your name could go here! But,
+you have to help. So send us some feedback and help debug this book.
+And you could be famous! Or, at least, have your name in some book.
+The people who have helped so far include: Aaron Gember (Colgate), Aashrith
+H Govindraj (USF), Abdallah Ahmed, Abhinav Mehra, Abhinay Reddy, Abhirami Senthilku-
+maran*, Abhishek Bhattacherjee (NITR), Adam Drescher* (WUSTL), Adam Eggum, Adam
+Morrison, Aditya Venkataraman, Adriana Iamnitchi and class (USF), Ahmad Jarara, Ahmed
+Fikri*, Ajaykrishna Raghavan, Akiel Khan, Alain Clark (github), Alex Curtis, Alex Giorev, Alex
+Wyler, Alex Zhao (U. Colorado at Colorado Springs), Alexander Nordin (MIT), Ali Razeen
+(Duke), Alistair Martin, AmirBehzad Eslami, Anand Mundada, Andrei Bozˆantan, Andrew
+Mahler, Andrew Moss, Andrew Valencik (Saint Mary’s), Angela Demke Brown (Toronto), An-
+tonella Bernobich (UoPeople)*, Arek Bulski, Arun Rajan (Stonybrook), Aryan Arora, Axel So-
+lis Trompler (KIT), B. Brahmananda Reddy (Minnesota), Bala Subrahmanyam Kambala, Bart
+Miller (Wisconsin), Basti Ortiz (github), Ben Kushigian (U. Mass), Benita Bose, Benjamin Wil-
+helm (Konstanz), Bill Yang, Biswajit Mazumder (Clemson), Bo Liu (UCSD), Bobby Jack, Bj¨orn
+Lindberg, Brandon Harshe (U. Minn), Brennan Payne, Brian Gorman, Brian Kroth, Calder
+White (University of Waterloo), Caleb Sumner (Southern Adventist), Cara Lauritzen, Charlotte
+Kissinger, Chen Huo (Shippensburg University), Chris Simionovici (U. Toronto), Cheng Su,
+Chien Chi, Chien-Chung Shen (Delaware)*, chriskorosu (github), Christian Stober, Christoph
+Jaeger (HTWK Leipzig), C.J. Stanbridge (Memorial U. of Newfoundland), Cody Hanson, Con-
+stantinos Georgiades, Dakota Cookenmaster (Southern Adventist), Dakota Crane (U. Washington-
+Tacoma), Dan Soendergaard (U. Aarhus), Dan Tsafrir (Technion), Daniel J Williams (IBM)*,
+Daniela Ferreira Franco Moura, Danilo Bruschi (Universita Degli Studi Di Milano), Darby
+Asher Noam Haller, David Hanle (Grinnell), David Hartman, Dawn Flood, Deepika Muthuku-
+mar, Demir Delic, Dennis Zhou, Dheeraj Shetty (North Carolina State), Diego Oleiarz (FaMAF
+UNC), dominikw1 (github), Dominic White, Dorian Arnold (New Mexico), Dustin Metzler,
+Dustin Passofaro, Dylan Kaplan, Eduardo Stelmaszczyk, Efkan S. Goktepe, Emad Sadeghi,
+Emil Hessman, Emily Jacobson, Emmett Witchel (Texas), Eric Freudenthal (UTEP), Erik Hjelm˚as
+Eric Kleinberg, Eric Johansson, Erik Turk, Ernst Biersack (France), Ethan Wood, Evan Leung,
+Fangjun Kuang (U. Stuttgart), Feng Zhang (IBM), Finn Kuusisto*, Francesco Piccoli, Gavin In-
+glis (Notre Dame), Gia Hoang Tran, Giovanni Di Santi, Giovanni Lagorio (DIBRIS), Giovanni
+Moricca, Glenn Bruns (CSU Monterey Bay), Glen Granzow (College of Idaho), Greggory Van
+Dycke, Guilherme Baptista, gurugio (github), Tian Guo (WPI), Hamid Reza Ghasemi, Hao
+Chen, Hao Liu, Hein Meling (Stavanger), Helen Gaiser (HTWG Konstanz), Henry Abbey,
+Hilmar G´ustafsson (Aalborg University), Holly Johnson (USF), Hrishikesh Amur, Huanchen
+Zhang*, Huseyin Sular, Hugo Diaz, Hyrum Carroll (Columbus State), Ilya Oblomkov, Itai Hass
+(Toronto), Jack Xu (Wisconsin), Jackson “Jake” Haenchen (Texas), Jacob Levinson (UCLA),
+Jaeyoung Cho (SKKU), Jagannathan Eachambadi, Jake Gillberg, Jakob Olandt, James Earley,
+James Perry (U. Michigan-Dearborn)*, Jan Reineke (Universit¨at des Saarlandes), Jason MacLaf-
+ferty (Southern Adventist), Jason Waterman (Vassar), Jay Lim, Jerod Weinman (Grinnell), Jer-
+sey Deng (UCLA), Jhih-Cheng Luo, Jiao Dong (Rutgers), Jia-Shen Boon, Jiawen Bao, Jidong
+Xiao (Boise State), Jingxin Li, jmcruzGH (github), Joe Jean (NYU), Joel Kuntz (Saint Mary’s),
+Joel Hassan (U. Helsinki), Joel Sommers (Colgate), John Brady (Grinnell), John Komenda,
+John McEachen (NPS), Jonathan Perry (MIT), Joshua Carpenter (NCSU), Josip Cavar, Jun He,
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

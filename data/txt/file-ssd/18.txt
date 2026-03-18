@@ -1,0 +1,30 @@
+FLASH-BASED SSDS
+19
+44.12 Summary
+Flash-based SSDs are becoming a common presence in laptops, desk-
+tops, and servers inside the datacenters that power the world’s economy.
+Thus, you should probably know something about them, right?
+Here’s the bad news: this chapter (like many in this book) is just the
+ﬁrst step in understanding the state of the art. Some places to get some
+more information about the raw technology include research on actual
+device performance (such as that by Chen et al. [CK+09] and Grupp et
+al. [GC+09]), issues in FTL design (including works by Agrawal et al.
+[A+08], Gupta et al. [GY+09], Huang et al. [H+14], Kim et al. [KK+02],
+Lee et al. [L+07], and Zhang et al. [Z+12]), and even distributed systems
+comprised of ﬂash (including Gordon [CG+09] and CORFU [B+12]). And,
+if we may say so, a really good overview of all the things you need to do
+to extract high performance from an SSD can be found in a paper on the
+“unwritten contract” [HK+17].
+Don’t just read academic papers; also read about recent advances in
+the popular press (e.g., [V12]). Therein you’ll learn more practical (but
+still useful) information, such as Samsung’s use of both TLC and SLC cells
+within the same SSD to maximize performance (SLC can buffer writes
+quickly) as well as capacity (TLC can store more bits per cell). And this
+is, as they say, just the tip of the iceberg. Dive in and learn more about
+this “iceberg” of research on your own, perhaps starting with Ma et al.’s
+excellent (and recent) survey [M+14]. Be careful though; icebergs can sink
+even the mightiest of ships [W15].
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

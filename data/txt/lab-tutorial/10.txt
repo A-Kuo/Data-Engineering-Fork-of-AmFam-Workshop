@@ -1,0 +1,48 @@
+LABORATORY: TUTORIAL
+11
+example, if you are looking for the kill() system call man page, and
+if you just type man kill at the prompt, you will get the wrong man
+page, because there is a command-line program called kill. Man pages
+are divided into sections, and by default, man will return the man page
+in the lowest section that it ﬁnds, which in this case is section 1. Note that
+you can tell which man page you got by looking at the top of the page:
+if you see kill(2), you know you are in the right man page in Section
+2, where system calls live. Type man man to learn more about what is
+stored in each of the different sections of the man pages. Also note that
+man -a kill can be used to cycle through all of the different man pages
+named “kill”.
+Man pages are useful for ﬁnding out a number of things. In particular,
+you will often want to look up what arguments to pass to a library call,
+or what header ﬁles need to be included to use a library call. All of this
+should be available in the man page. For example, if you look up the
+open() system call, you will see:
+SYNOPSIS
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+int open(const char *path, int oflag, /* mode_t mode */...);
+That tells you to include the headers sys/types.h, sys/stat.h,
+and fcntl.h in order to use the open call. It also tells you about the
+parameters to pass to open, namely a string called path, and integer ﬂag
+oflag, and an optional argument to specify the mode of the ﬁle. If there
+were any libraries you needed to link with to use the call, it would tell
+you that here too.
+Man pages require some effort to use effectively. They are often di-
+vided into a number of standard sections. The main body will describe
+how you can pass different parameters in order to have the function be-
+have differently.
+One particularly useful section is called the RETURN VALUES part of
+the man page, and it tells you what the function will return under success
+or failure. From the open() man page again:
+RETURN VALUES
+Upon successful completion, the open() function opens the
+file and return a non-negative integer representing the
+lowest numbered unused file descriptor. Otherwise, -1 is
+returned, errno is set to indicate the error, and no files
+are created or modified.
+Thus, by checking what open returns, you can see if the open suc-
+ceeded or not. If it didn’t, open (and many standard library routines) will
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES

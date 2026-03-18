@@ -1,0 +1,46 @@
+12
+LABORATORY: TUTORIAL
+set a global variable called errno to a value to tell you about the error.
+See the ERRORS section of the man page for more details.
+Another thing you might want to do is to look for the deﬁnition of a
+structure that is not speciﬁed in the man page itself. For example, the
+man page for gettimeofday() has the following synopsis:
+SYNOPSIS
+#include <sys/time.h>
+int gettimeofday(struct timeval *restrict tp,
+void *restrict tzp);
+From this page, you can see that the time is put into a structure of
+type timeval, but the man page may not tell you what ﬁelds that struct
+has! (in this case, it does, but you may not always be so lucky) Thus, you
+may have to hunt for it. All include ﬁles are found under the directory
+/usr/include, and thus you can use a tool like grep to look for it. For
+example, you might type:
+prompt> grep ’struct timeval’ /usr/include/sys/*.h
+This lets you look for the deﬁnition of the structure in all ﬁles that
+end with .h in /usr/include/sys. Unfortunately, this may not always
+work, as that include ﬁle may include others which are found elsewhere.
+A better way to do this is to use a tool at your disposal, the com-
+piler. Write a program that includes the header time.h, let’s say called
+main.c. Then, instead of compiling it, use the compiler to invoke the
+preprocessor. The preprocessor processes all the directives in your ﬁle,
+such as #define commands and #include commands. To do this, type
+gcc -E main.c. The result of this is a C ﬁle that has all of the needed
+structures and prototypes in it, including the deﬁnition of the timeval
+struct.
+Probably an even better way to ﬁnd these things out: google. You
+should always google things you don’t know about — it’s amazing how
+much you can learn simply by looking it up!
+Info Pages
+Also quite useful in the hunt for documentation are the info pages, which
+provide much more detailed documentation on many GNU tools. You
+can access the info pages by running the program info, or via emacs,
+the preferred editor of hackers, by executing Meta-x info. A program
+like gcc has hundreds of ﬂags, and some of them are surprisingly useful
+to know about. gmake has many more features that will improve your
+build environment. Finally, gdb is quite a sophisticated debugger. Read
+the man and info pages, try out features that you hadn’t tried before, and
+become a power user of your programming tools.
+OPERATING
+SYSTEMS
+[VERSION 1.10]
+WWW.OSTEP.ORG

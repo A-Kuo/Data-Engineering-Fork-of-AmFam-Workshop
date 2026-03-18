@@ -1,0 +1,90 @@
+FLASH-BASED SSDS
+11
+The problem we have now should be obvious: physical pages 0 and
+1, although marked VALID, have garbage in them, i.e., the old versions
+of blocks 100 and 101. Because of the log-structured nature of the de-
+vice, overwrites create garbage blocks, which the device must reclaim to
+provide free space for new writes to take place.
+The process of ﬁnding garbage blocks (also called dead blocks) and
+reclaiming them for future use is called garbage collection, and it is an
+important component of any modern SSD. The basic process is simple:
+ﬁnd a block that contains one or more garbage pages, read in the live
+(non-garbage) pages from that block, write out those live pages to the
+log, and (ﬁnally) reclaim the entire block for use in writing.
+Let’s now illustrate with an example. The device decides it wants to
+reclaim any dead pages within block 0 above. Block 0 has two dead blocks
+(pages 0 and 1) and two live blocks (pages 2 and 3, which contain blocks
+2000 and 2001, respectively). To do so, the device will:
+• Read live data (pages 2 and 3) from block 0
+• Write live data to end of the log
+• Erase block 0 (freeing it for later usage)
+For the garbage collector to function, there must be enough informa-
+tion within each block to enable the SSD to determine whether each page
+is live or dead. One natural way to achieve this end is to store, at some
+location within each block, information about which logical blocks are
+stored within each page. The device can then use the mapping table to
+determine whether each page within the block holds live data or not.
+From our example above (before the garbage collection has taken place),
+block 0 held logical blocks 100, 101, 2000, 2001. By checking the mapping
+table (which, before garbage collection, contained 100->4, 101->5,
+2000->2, 2001->3), the device can readily determine whether each
+of the pages within the SSD block holds live information. For example,
+pages 2 and 3 are clearly still pointed to by the map; pages 0 and 1 are not
+and therefore are candidates for garbage collection.
+When this garbage collection process is complete in our example, the
+state of the device is:
+Memory
+Flash
+Chip
+Table:
+100
+4
+101
+5
+2000
+6
+2001
+7
+0
+1
+2
+Block:
+Page:
+Content:
+State:
+00
+E
+01
+E
+02
+E
+03
+E
+04
+c1
+V
+05
+c2
+V
+06
+b1
+V
+07
+b2
+V
+08
+i
+09
+i
+10
+i
+11
+i
+As you can see, garbage collection can be expensive, requiring reading
+and rewriting of live data. The ideal candidate for reclamation is a block
+that consists of only dead pages; in this case, the block can immediately
+be erased and used for new data, without expensive data migration.
+© 2008–23, ARPACI-DUSSEAU
+THREE
+EASY
+PIECES
