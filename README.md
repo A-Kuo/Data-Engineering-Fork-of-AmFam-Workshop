@@ -166,9 +166,34 @@ All synthetic data and fictional policies were created specifically for this por
 
 ---
 
-## Related Work
+## Related Work & Research
 
-- **[Hallucinations](https://github.com/A-Kuo/Hallucinations)** — Complementary research repository on information-theoretic hallucination detection (entropy, KL divergence, spectral features) and self-data training pipelines. v1 covers attention-based metrics; v2 extends to 18D feature classifiers.
+### Complementary Repositories
+
+- **[Hallucinations](https://github.com/A-Kuo/Hallucinations)** — Information-theoretic hallucination detection using attention pattern analysis. Features two implementations: (v1) statistical Z-test on entropy + KL divergence; (v2) trained 18D-feature classifier with lookback ratio, frequency domain, and spectral features. Uses open-source models (Pythia, Llama, Mistral) and Claude for labeling.
+
+### Hallucination Detection Research
+
+This portfolio's attention-based hallucination detection aligns with recent advances in using transformer attention patterns for hallucination identification:
+
+- **Chuang et al. (EMNLP 2024)** — "Lookback» attention ratio analysis for detecting factual inconsistencies in LLM outputs. [Implementation in Hallucinations v2]
+- **Qi et al. (2026)** — Frequency-domain attention analysis for hallucination detection. [Implementation in Hallucinations v2]
+- **Barbero et al. (2025)** — Spectral and Laplacian features for attention-based hallucination detection. [Implementation in Hallucinations v2]
+
+### AI Safety & RAG Systems
+
+- **MDPI 2025 Tutorial** — Multi-layer hallucination mitigation (prompt engineering, RAG, fine-tuning). Aligns with the defense-in-depth security approach and RAG + judge validation stack in this portfolio.
+- **ACL 2025 GenAI-K Workshop** — GraphRAG for financial/regulatory text. Graph-based retrieval methods showing gains over vanilla RAG for structured domain documents.
+
+### Insurance AI & Fraud Detection
+
+- **arXiv:2308.11659** — "Synthetic Fraud Network Simulation Engine" for insurance fraud data generation. Addresses the scarcity of public labeled fraud datasets and motivates the synthetic data approach used in `tabular_claims_fraud_ml.ipynb`.
+- **NAIC Model Bulletin on AI by Insurers** — [NAIC guidance](https://content.naic.org/article/naic-members-approve-model-bulletin-use-ai-insurers) on written AI programs, validation, testing, bias analysis, and accountability. The evaluation frameworks in this portfolio (ROC/AUC, bootstrap CIs, Wilson intervals, ablation studies) directly address these governance requirements.
+
+### Industry RAG Implementations
+
+- **GEICO RagRails / ZenML LLMOps Database** — [Implementation guide](https://www.zenml.io/llmops-database/implementing-rag-and-ragrails-for-reliable-conversational-ai-in-insurance) for reliable conversational AI in insurance, covering RAG guardrails, grounding validation, and safety layers. Mirrors the defense-in-depth and judge-validation patterns in this portfolio.
+- **AmFam ML Research** — [ai-ml-amfam.com](https://www.ai-ml-amfam.com/) — American Family Insurance's ML research group, demonstrating industry investment in AI/ML capabilities aligned with this portfolio's focus areas.
 
 ---
 
