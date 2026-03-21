@@ -14,3 +14,7 @@ wheels/
 
 data/
 chroma/
+
+# Local eval artifacts (optional: remove these lines if you want to commit logs)
+outputs/eval_logs/
+outputs/chroma_synthetic_policy/
