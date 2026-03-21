@@ -1,18 +1,18 @@
-# AmFam AI & Data Engineering Portfolio
+# AmFam AI & Data Engineering Modification
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![uv](https://img.shields.io/badge/uv-astral-purple.svg)](https://docs.astral.sh/uv/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A production-oriented exploration of **retrieval-augmented generation (RAG)**, **vector databases**, **LLM evaluation**, **AI safety**, and **adversarial robustness**—applied to the data engineering and AI challenges relevant to the insurance industry.
+Modification of AmFam AI Workshop repository, a production-oriented exploration of **retrieval-augmented generation (RAG)**, **vector databases**, **LLM evaluation**, **AI safety**, and **adversarial robustness**—applied to the data engineering and AI challenges relevant to the insurance industry.
 
 > **Purpose:** This portfolio demonstrates end-to-end AI engineering capabilities for building trustworthy, auditable, and secure AI systems—directly aligned with the challenges faced by American Family Insurance and the broader P&C insurance sector.
 
 ---
 
-## Why This Matters for Insurance
+## Abstract
 
-Insurance companies deploying AI face unique challenges that general-purpose ML tutorials rarely address:
+Currently, insurance companies deploying AI face unique challenges that general-purpose ML tutorials rarely address:
 
 | Challenge | Industry Impact | This Portfolio |
 |-----------|-----------------|----------------|
@@ -24,7 +24,7 @@ Insurance companies deploying AI face unique challenges that general-purpose ML 
 
 ---
 
-## Repository Structure
+## Repository Worktree
 
 ```
 .
