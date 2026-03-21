@@ -170,9 +170,9 @@ All synthetic data and fictional policies were created specifically for this por
 
 ### Complementary Repositories
 
-- **[Hallucinations](https://github.com/A-Kuo/Hallucinations)** — Information-theoretic hallucination detection using attention pattern analysis. Features two implementations: (v1) statistical Z-test on entropy + KL divergence; (v2) trained 18D-feature classifier with lookback ratio, frequency domain, and spectral features. Uses open-source models (Pythia, Llama, Mistral) and Claude for labeling.
+- **[Hallucination Detection via Drifting Entropy](https://github.com/A-Kuo/Language-Model-Hallucination-Detection-via-Entropy-Divergence)** — Complementary research repository on information-theoretic hallucination detection (entropy, KL divergence, spectral features) and self-data training pipelines. v1 covers attention-based metrics; v2 extends to 18D feature classifiers.
 
-### Hallucination Detection Research
+
 
 This portfolio's attention-based hallucination detection aligns with recent advances in using transformer attention patterns for hallucination identification:
 
@@ -194,6 +194,11 @@ This portfolio's attention-based hallucination detection aligns with recent adva
 
 - **GEICO RagRails / ZenML LLMOps Database** — [Implementation guide](https://www.zenml.io/llmops-database/implementing-rag-and-ragrails-for-reliable-conversational-ai-in-insurance) for reliable conversational AI in insurance, covering RAG guardrails, grounding validation, and safety layers. Mirrors the defense-in-depth and judge-validation patterns in this portfolio.
 - **AmFam ML Research** — [ai-ml-amfam.com](https://www.ai-ml-amfam.com/) — American Family Insurance's ML research group, demonstrating industry investment in AI/ML capabilities aligned with this portfolio's focus areas.
+
+### Other
+- **[Sebastian Raschka](https://github.com/rasbt/LLMs-from-scratch)** Sebastian Raschka is a former PhD Researcher at UW Madison with public repositories on AI Exploration
+
+- **[Related Data Workflow] (https://github.com/A-Kuo/Pro-Data-Workflow)** A workflow I based this fork on
 
 ---
 
