@@ -1,5 +1,6 @@
 # AmFam AI & Data Engineering Modification
 
+[![CI](https://github.com/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/actions/workflows/ci.yml/badge.svg)](https://github.com/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/actions/workflows/ci.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![uv](https://img.shields.io/badge/uv-astral-purple.svg)](https://docs.astral.sh/uv/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -110,8 +111,8 @@ Currently, insurance companies deploying AI face unique challenges that general-
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/A-Kuo/MadData-2026-AmFam-Workshop.git
-cd MadData-2026-AmFam-Workshop
+git clone https://github.com/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop.git
+cd Data-Engineering-Fork-of-AmFam-Workshop
 uv sync
 ```
 
@@ -172,11 +173,9 @@ All synthetic data and fictional policies were created specifically for this por
 
 - **[Hallucination Detection via Drifting Entropy](https://github.com/A-Kuo/Language-Model-Hallucination-Detection-via-Entropy-Divergence)** — Complementary research repository on information-theoretic hallucination detection (entropy, KL divergence, spectral features) and self-data training pipelines. v1 covers attention-based metrics; v2 extends to 18D feature classifiers.
 
-
-
 This portfolio's attention-based hallucination detection aligns with recent advances in using transformer attention patterns for hallucination identification:
 
-- **Chuang et al. (EMNLP 2024)** — "Lookback» attention ratio analysis for detecting factual inconsistencies in LLM outputs. [Implementation in Hallucinations v2]
+- **Chuang et al. (EMNLP 2024)** — "Lookback" attention ratio analysis for detecting factual inconsistencies in LLM outputs. [Implementation in Hallucinations v2]
 - **Qi et al. (2026)** — Frequency-domain attention analysis for hallucination detection. [Implementation in Hallucinations v2]
 - **Barbero et al. (2025)** — Spectral and Laplacian features for attention-based hallucination detection. [Implementation in Hallucinations v2]
 
@@ -198,7 +197,7 @@ This portfolio's attention-based hallucination detection aligns with recent adva
 ### Other
 - **[Sebastian Raschka](https://github.com/rasbt/LLMs-from-scratch)** Sebastian Raschka is a former PhD Researcher at UW Madison with public repositories on AI Exploration
 
-- **[Related Data Workflow] (https://github.com/A-Kuo/Pro-Data-Workflow)** A workflow I based this fork on
+- **[Related Data Workflow](https://github.com/A-Kuo/Pro-Data-Workflow)** — A data workflow project this fork builds on
 
 ---
 
