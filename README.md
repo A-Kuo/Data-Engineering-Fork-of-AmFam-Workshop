@@ -59,6 +59,39 @@ Currently, insurance companies deploying AI face unique challenges that general-
 └── outputs/                  # Eval logs, synthetic policy vector stores (gitignored)
 ```
 
+### Dependency Chain
+
+```mermaid
+flowchart LR
+    HF[hugging_face_chromadb_demo] --> D[(data/)]
+    HF --> C[(chroma/)]
+    D & C --> Gem[gemini_rag_pipeline_demo]
+    C & D & Gem --> RAGHall[rag_hallucination_scoring]
+    C & Gem --> SelfData[self_data_hallucination_classifier]
+    Safety[ai_safety_evals_demo] --> SC[(chroma_security/)]
+    SC --> Bench[ai_security_benchmarking_demo]
+```
+
+> **Standalone** (no OSTEP download or Gemini API key required): `tabular_claims_fraud_ml`, `fairness_basics_demo`, `attention_hallucination_demo`, `synthetic_policy_rag_walkthrough`, `rag_eval_logging`, `adversarial_prompt_crafting_lab`
+
+### Notebooks at a Glance
+
+| Notebook | Description | Run |
+|----------|-------------|-----|
+| `foundations/hugging_face_chromadb_demo` | PDF → text → embeddings → ChromaDB | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/foundations/hugging_face_chromadb_demo.ipynb) |
+| `foundations/gemini_rag_pipeline_demo` | RAG with Gemini + LLM-as-judge grounding | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/foundations/gemini_rag_pipeline_demo.ipynb) |
+| `explorations/ai_safety_evals_demo` | Embedding anomaly detection + threat models | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/explorations/ai_safety_evals_demo.ipynb) |
+| `explorations/ai_security_benchmarking_demo` | Red teaming, defense-in-depth, bootstrap CIs | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/explorations/ai_security_benchmarking_demo.ipynb) |
+| `explorations/rag_hallucination_scoring` | 3-tier grounding: RAG + citation + judge | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/explorations/rag_hallucination_scoring.ipynb) |
+| `explorations/attention_hallucination_demo` | Attention entropy + KL divergence, no labels needed | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/explorations/attention_hallucination_demo.ipynb) |
+| `explorations/self_data_hallucination_classifier` | Self-data → judge labels → LR classifier | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/explorations/self_data_hallucination_classifier.ipynb) |
+| `explorations/tabular_claims_fraud_ml` | Imbalanced fraud detection, PR-AUC | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/explorations/tabular_claims_fraud_ml.ipynb) |
+| `explorations/synthetic_policy_rag_walkthrough` | Fictional policy → ChromaDB → coverage Q&A | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/explorations/synthetic_policy_rag_walkthrough.ipynb) |
+| `explorations/rag_eval_logging` | JSONL observability per query for governance | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/explorations/rag_eval_logging.ipynb) |
+| `explorations/fairness_basics_demo` | Demographic parity on synthetic groups | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/explorations/fairness_basics_demo.ipynb) |
+| `playground/adversarial_prompt_crafting_lab` | CTF-style injection + jailbreak exercises | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/playground/adversarial_prompt_crafting_lab.ipynb) |
+| `walkthrough/what_we_learn_from_this_repo` | Portfolio map + interview talking points | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/A-Kuo/Data-Engineering-Fork-of-AmFam-Workshop/blob/main/walkthrough/what_we_learn_from_this_repo.ipynb) |
+
 ---
 
 ## Technical Highlights
@@ -195,7 +228,7 @@ This portfolio's attention-based hallucination detection aligns with recent adva
 - **AmFam ML Research** — [ai-ml-amfam.com](https://www.ai-ml-amfam.com/) — American Family Insurance's ML research group, demonstrating industry investment in AI/ML capabilities aligned with this portfolio's focus areas.
 
 ### Other
-- **[Sebastian Raschka](https://github.com/rasbt/LLMs-from-scratch)** Sebastian Raschka is a former PhD Researcher at UW Madison with public repositories on AI Exploration
+- **[Sebastian Raschka — LLMs from Scratch](https://github.com/rasbt/LLMs-from-scratch)** — Former UW-Madison researcher and author of *Build a Large Language Model (From Scratch)*; his open repository on building LLMs step by step is directly relevant to the transformer internals underlying this portfolio's attention-based hallucination detection work.
 
 - **[Related Data Workflow](https://github.com/A-Kuo/Pro-Data-Workflow)** — A data workflow project this fork builds on
 
