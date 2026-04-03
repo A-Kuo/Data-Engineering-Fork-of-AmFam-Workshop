@@ -161,18 +161,18 @@ GCP_LOCATION=us-central1
 
 ### 3. Run Order
 
-**Path A: Insurance-Style Stack (No External Downloads Required)**
+**Path A: Insurance-Style Stack — no API key required**
 1. `explorations/tabular_claims_fraud_ml.ipynb` — Imbalanced fraud ML
 2. `explorations/synthetic_policy_rag_walkthrough.ipynb` — Policy RAG with synthetic data
 3. `explorations/rag_eval_logging.ipynb` — Observability patterns
 4. `explorations/fairness_basics_demo.ipynb` — Fairness measurement
 5. `explorations/attention_hallucination_demo.ipynb` — Standalone hallucination detection (GPT-2)
 
-**Path B: Full RAG Pipeline (Requires OSTEP Textbook Download)**
+**Path B: Full RAG Pipeline — requires GCP/Vertex AI (step 2) + OSTEP download**
 1. `foundations/hugging_face_chromadb_demo.ipynb` — Build vector store from OSTEP PDFs
 2. `foundations/gemini_rag_pipeline_demo.ipynb` — RAG with grounding validation
 
-**Path C: Security & Advanced Hallucination Research**
+**Path C: Security & Advanced Hallucination Research — requires GCP/Vertex AI (step 2)**
 1. `explorations/ai_safety_evals_demo.ipynb` — Build `chroma_security/` anomaly detector
 2. `explorations/ai_security_benchmarking_demo.ipynb` — Red team benchmarking
 3. `explorations/rag_hallucination_scoring.ipynb` — RAG grounding scores
